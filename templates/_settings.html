@@ -1,0 +1,73 @@
+{% import "_includes/forms" as forms %}
+
+{% set name		= craft.doxter.getName(true) %}
+{% set alias	= craft.doxter.getName() %}
+{% set version	= craft.doxter.getVersion() %}
+
+{%- set syntaxSnippet -%}
+	{% if settings.syntaxSnippet is not empty %}
+		{{- settings.syntaxSnippet -}}
+	{% else %}
+		{{- "<pre><code class=\"{languageClass}\">{sourceCode}</code></pre>" -}}
+	{% endif %}
+{% endset %}
+
+{% block content %}
+	<div id="doxterSettings">
+		<h2>
+			<a href="{{ craft.doxter.getUrl }}">
+				{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span>
+			</a>
+		</h2>
+		<p>
+			<em>{{ name }}</em> is an advanced <strong>markdown</strong> parser written for <strong>Craft</strong>
+		</p>
+
+		<div class="doxterSection">
+			<h3 class="ico syntax">Parsing Settings</h3>
+			{{
+				forms.textareaField({
+					id:				"syntaxSnippet",
+					name:			"syntaxSnippet",
+					class:			"code",
+					rows:			5,
+					label:			"Syntax Highlighter Snippet",
+					instructions:	"A snippet to wrap your <em>code</em> and <em>language</em> class if using fenced code blocks",
+					value:			syntaxSnippet,
+					error:			""
+				})
+			}}
+		</div>
+
+		<div class="doxterSection">
+			<h3 class="ico settings">Plugin Settings</h3>
+			<p>Display Plugin Tab?</p>
+			{{
+				forms.lightswitch({
+					name:		"enableCpTab",
+					on:			settings.enableCpTab
+				})
+			}}
+			{{
+				forms.textField({
+					id:				"pluginAlias",
+					name:			"pluginAlias",
+					label:			"Plugin Alias"|t,
+					instructions:	"Allows you to rename <strong>"~name~"</strong> to something more meaningful while retaining its name internally."|t,
+					value:			alias,
+					errors:			""
+				})
+			}}
+		</div>
+
+		<div class="doxterSection credits">
+			<p>
+				&copy; {{ "now" | date("Y") }}
+				<strong>Patrol <span class="subtle">({{ version }})</span></strong>
+				<em>by</em>
+				<a href="http://twitter.com/selvinortiz" title="@selvinortiz" target="_blank">Selvin Ortiz</a>
+			</p>
+		</div>
+	</div>
+
+{% endblock %}

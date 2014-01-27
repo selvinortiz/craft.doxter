@@ -1,0 +1,29 @@
+{% import "_includes/forms" as forms %}
+
+<hr>
+
+<p>Enable Word Wrap?</p>
+{{
+	forms.lightswitch({
+		name:		"enableWordWrap",
+		on:			settings.enableWordWrap
+	})
+}}
+
+<p>Convert Tabs To Spaces?</p>
+{{
+	forms.lightswitch({
+		name:		"enableSoftTabs",
+		on:			settings.enableSoftTabs
+	})
+}}
+{{
+	forms.textField({
+		id:				"tabSize",
+		name:			"tabSize",
+		size:			true,
+		label:			"Tab Size"|t,
+		value:			settings.tabSize ? settings.tabSize : 4,
+		errors:			""
+	})
+}}

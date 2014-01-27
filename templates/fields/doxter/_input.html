@@ -1,0 +1,23 @@
+{% import "_includes/forms" as forms %}
+
+{% set snippetJs %}
+	var doxterEditorConfig = {
+		textarea: document.getElementById("fields-markdown"),
+		replaceTab: true,
+		softTabs: {{ settings.enableSoftTabs }},
+		tabSize: {{ settings.tabSize }},
+		autoOpen: true,
+		overwrite: true,
+		autoStrip: true,
+		autoIndent: true,
+		fence: false
+	}
+{% endset %}
+
+<div id="doxter">
+	<textarea class="text fullwidth editor code" wrap="{{ enableWordWrap ? 'on' : 'off' }}" id="markdown" name="{{ name }}">{{ value }}</textarea>
+	<hr>
+	<div class="preview"></div>
+</div>
+
+{% includeJs snippetJs %}
