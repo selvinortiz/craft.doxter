@@ -30,7 +30,10 @@ _Doxter_ is a **markdown** plugin designed to improve the workflow for writing _
 ----
 
 ### Usage
-You can use **doxter** to parse _markdown_ from a `string` and/or inside **Doxter Markdown**, **Scrawl**, **Plain Text** fields.
+You can use the **Doxter Markdown** fieldtype in the same way you use [Scrawl](https://github.com/builtbysplash/craft-scrawl)
+though you don't have to because **Doxter** will parse pretty much any **markdown** with the `doxter` filter/function.
+
+That means that you can use **Scrawl Markdown** or a **Plain Text** field to write/store your markdown and **doxter** will parse it.
 
 ### Notes
 **Doxter** is fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl)

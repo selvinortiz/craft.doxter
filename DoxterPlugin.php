@@ -97,4 +97,9 @@ class DoxterPlugin extends BasePlugin
 
 		return new DoxterTwigExtension();
 	}
+
+	public function onAfterInstall()
+	{
+		craft()->request->redirect(sprintf('/%s/settings/plugins/doxter', craft()->config->get('cpTrigger')));
+	}
 }
