@@ -1,5 +1,3 @@
-{% import "_includes/forms" as forms %}
-
 {% set snippetJs %}
 	var doxterEditorConfig = {
 		textarea: document.getElementById("fields-markdown"),
@@ -15,9 +13,24 @@
 {% endset %}
 
 <div id="doxter">
-	<textarea class="text fullwidth editor code" wrap="{{ enableWordWrap ? 'on' : 'off' }}" id="markdown" name="{{ name }}">{{ value }}</textarea>
+	<ul class="doxter-tabs">
+		<li class="doxter-tab">
+			<a href="#fields-editor-tab" class="btn submit">Write</a>
+		</li>
+		<li class="doxter-tab">
+			<a href="#fields-preview-tab" class="btn submit">Preview</a>
+		</li>
+	</ul>
 	<hr>
-	<div class="preview"></div>
+	<div id="editor-tab">
+		<textarea
+			{{ false == enableWordWrap ? 'wrap="off"' : '' }}
+			class="text fullwidth editor code"
+			id="markdown" name="{{ name }}">{{ value }}</textarea>
+	</div>
+	<div id="preview-tab">
+		<div class="preview"></div>
+	</div>
 </div>
 
 {% includeJs snippetJs %}

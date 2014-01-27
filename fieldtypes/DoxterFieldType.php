@@ -25,6 +25,7 @@ class DoxterFieldType extends BaseFieldType
 			craft()->templates->includeJsResource('doxter/js/min/jquery.min.js');
 			craft()->templates->includeJsResource('doxter/js/min/jquery.caret.min.js');
 			craft()->templates->includeJsResource('doxter/js/min/jquery.scroll.min.js');
+			craft()->templates->includeJsResource('doxter/js/min/easytabs.min.js');
 			craft()->templates->includeJsResource('doxter/js/min/marked.min.js');
 			craft()->templates->includeJsResource('doxter/js/min/rainbow.min.js');
 			craft()->templates->includeJsResource('doxter/js/min/crevasse.min.js');
@@ -33,8 +34,8 @@ class DoxterFieldType extends BaseFieldType
 		}
 		else
 		{
-			craft()->templates->includeCssResource('doxter/min/doxter.css');
-			craft()->templates->includeJsResource('doxter/min/doxter.js');
+			craft()->templates->includeCssResource('doxter/doxter.css');
+			craft()->templates->includeJsResource('doxter/doxter.js');
 		}
 
 		return craft()->templates->render(
@@ -89,7 +90,10 @@ class DoxterFieldType extends BaseFieldType
 		return $value;
 	}
 
-	public function prepValue($value) { return $value; }
+	public function prepValue($value)
+	{
+		return $value;
+	}
 
 	/**
 	 * @EVENTS

@@ -1,7 +1,6 @@
 ![Doxter](resources/img/doxter.png)
 
-
-## Doxter 0.4.0
+## Doxter 0.5.0
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
  ----
@@ -10,12 +9,12 @@ _Doxter_ is a **markdown** plugin designed to improve the workflow for writing _
 
 ### Features
 * Extends [PHP Markdown](https://github.com/michelf/php-markdown) _by_ **Michel Fortin**
-* Lets you parse **markdown** with the **doxter** filter/function
-* Lets you parse **github** style _fenced code blocks_
-* Fully compatible with [Scrawl]([Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
-* Gives you a **Doxter Markdown** fieldtype featuring a simple **textarea** with full editor behaviour
-* Gives you full control of parsing output via the **syntaxSnippet** setting/parameter
-* Simply use it as a replacement for the `markdown filer` in **twig**
+* Parses _extended_ **markdown** with `"_markdown_"|doxter` and/or `doxter("_markdown_", params)`)
+* Parses **github** style _fenced code blocks_ with language class assignment
+* Gives you full control over the parsing output via the **syntaxSnippet** _setting/parameter_
+* Enables **Doxter Markdown** fieldtype via a simple **textarea** with full editor behaviour and preview mode
+* Uses a _tabbed_ UI for **write/preview** modes
+* Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
 
 ### Minimum Requirements
 - PHP 5.3.2
@@ -41,9 +40,16 @@ so if that's what you use to write your _docs_, adding syntax highlighting to yo
 ### Changelog
 
 ----
+#### 0.5.0
+* Adds _tabbed_ UI for **write/preview** modes
+* Fixes path issues with production resources
+* Fixes word wrap, white space, and tab size issues  @ #1
+* Improves the speed of `getDevMode()` by avoiding system call
+* Improves template rendering speed by removing the form macro
+
 #### 0.4.0
 * Adds a **Doxter Markdown** fieldtype
-* Adds test suite skeleton to flesh out on **0.5.0**
+* Adds test suite skeleton to flesh out on **1.0.0**
 * Adds uncommitted **build** directory to manage distributions
 
 #### 0.3.0

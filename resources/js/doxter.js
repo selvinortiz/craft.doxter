@@ -3,13 +3,13 @@ var Doxter = {
 
 		$(".editor").crevasse({
 			previewer: $(".preview"),
-			editorStyle: "editorStyle"
+			convertTabsToSpaces: false
 		});
 
 		var behaved = new Behave(doxterEditorConfig);
+
+		$("#fields-doxter").css("visibility", "visible").easytabs();
 	}
 };
 
-$(document).ready(function() {
-	Doxter.loadEditor();
-});
+$(document).ready(function() { Doxter.loadEditor(); });
