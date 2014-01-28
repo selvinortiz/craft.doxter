@@ -1,6 +1,6 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.0
+## Doxter 0.5.1
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
  ----
@@ -9,10 +9,11 @@ _Doxter_ is a **markdown** plugin designed to improve the workflow for writing _
 
 ### Features
 * Extends [PHP Markdown](https://github.com/michelf/php-markdown) _by_ **Michel Fortin**
-* Parses _extended_ **markdown** with `"_markdown_"|doxter` and/or `doxter("_markdown_", params)`)
+* Parses _extended_ **markdown** with `"_markdown_"|doxter` and/or `doxter("_markdown_", params)`
 * Parses **github** style _fenced code blocks_ with language class assignment
 * Gives you full control over the parsing output via the **syntaxSnippet** _setting/parameter_
 * Enables **Doxter Markdown** fieldtype via a simple **textarea** with full editor behaviour and preview mode
+* Supports multiple field type instances within the same section without any issues
 * Uses a _tabbed_ UI for **write/preview** modes
 * Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
 
@@ -43,6 +44,10 @@ so if that's what you use to write your _docs_, adding syntax highlighting to yo
 ### Changelog
 
 ----
+#### 0.5.1
+* Adds support for multiple instances of **Doxter Markdown** within a single entry type
+* Improves button styling for **write/preview** modes
+
 #### 0.5.0
 * Adds _tabbed_ UI for **write/preview** modes
 * Fixes path issues with production resources

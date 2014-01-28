@@ -1,6 +1,6 @@
 {% set snippetJs %}
-	var doxterEditorConfig = {
-		textarea: document.getElementById("fields-markdown"),
+	var {{ name }}Config = {
+		textarea: document.getElementById("fields-{{ name }}Editor"),
 		replaceTab: true,
 		softTabs: {{ settings.enableSoftTabs }},
 		tabSize: {{ settings.tabSize }},
@@ -10,27 +10,56 @@
 		autoIndent: true,
 		fence: false
 	}
+	var {{ name }}Object = {
+		loadEditor: function() {
+
+			$("#fields-{{ name }}Editor").crevasse({
+				previewer: $("#fields-{{ name }}Preview"),
+				convertTabsToSpaces: false
+			});
+
+			var {{ name }}Behave = new Behave({{ name }}Config);
+
+			$("#fields-{{ name }}Canvas").css("visibility", "visible").easytabs();
+		}
+	};
+	$(document).ready(function() { {{ name }}Object.loadEditor(); });
 {% endset %}
 
-<div id="doxter">
-	<ul class="doxter-tabs">
-		<li class="doxter-tab">
-			<a href="#fields-editor-tab" class="btn submit">Write</a>
-		</li>
-		<li class="doxter-tab">
-			<a href="#fields-preview-tab" class="btn submit">Preview</a>
-		</li>
-	</ul>
-	<hr>
-	<div id="editor-tab">
-		<textarea
-			{{ false == enableWordWrap ? 'wrap="off"' : '' }}
-			class="text fullwidth editor code"
-			id="markdown" name="{{ name }}">{{ value }}</textarea>
-	</div>
-	<div id="preview-tab">
-		<div class="preview"></div>
+{% set snippetCss %}
+	#fields-{{ name }}Canvas {
+		visibility: hidden;
+	}
+	#fields-{{ name }}Editor,
+	#fields-{{ name }}Preview {
+		width: 100%;
+		height: 400px;
+		display: inline-block;
+	}
+{% endset %}
+
+<div class="doxterCanvasWrapper">
+	<div id="{{ name }}Canvas">
+		<ul class="doxter-tabs">
+			<li class="doxter-tab">
+				<a href="#fields-{{ name }}EditorTab" class="btn icon edit">Write</a>
+			</li>
+			<li class="doxter-tab">
+				<a href="#fields-{{ name }}PreviewTab" class="btn icon" data-icon="refresh">Preview</a>
+			</li>
+		</ul>
+		<hr>
+		<div id="{{ name }}EditorTab">
+			<textarea
+				{{ false == enableWordWrap ? 'wrap="off"' : '' }}
+				class="text fullwidth editor code"
+				id="{{ name }}Editor" name="{{ name }}">{{ value }}</textarea>
+		</div>
+		<div id="{{ name }}PreviewTab">
+			<div id="{{ name }}Preview"></div>
+		</div>
 	</div>
 </div>
 
+{% includeCss snippetCss %}
 {% includeJs snippetJs %}

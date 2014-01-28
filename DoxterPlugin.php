@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter 0.5.0
+ * Doxter 0.5.1
  *
  * Doxter is a markdown parser designed to help you write better docs
  *
@@ -42,7 +42,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.5.0';
+		return '0.5.1';
 	}
 
 	public function getDeveloper()

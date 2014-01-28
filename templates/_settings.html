@@ -8,7 +8,7 @@
 	{% if settings.syntaxSnippet is not empty %}
 		{{- settings.syntaxSnippet -}}
 	{% else %}
-		{{- "<pre><code class=\"{languageClass}\">{sourceCode}</code></pre>" -}}
+		{{- "<pre><code data-language=\"{languageClass}\">{sourceCode}</code></pre>" -}}
 	{% endif %}
 {% endset %}
 
@@ -33,6 +33,7 @@
 					rows:			5,
 					label:			"Syntax Highlighter Snippet",
 					instructions:	"A snippet to wrap your <em>code</em> and <em>language</em> class if using fenced code blocks",
+					placeholder:	syntaxSnippet,
 					value:			syntaxSnippet,
 					error:			""
 				})
@@ -63,7 +64,7 @@
 		<div class="doxterSection credits">
 			<p>
 				&copy; {{ "now" | date("Y") }}
-				<strong>Patrol <span class="subtle">({{ version }})</span></strong>
+				<strong>{{ name }} <span class="subtle">({{ version }})</span></strong>
 				<em>by</em>
 				<a href="http://twitter.com/selvinortiz" title="@selvinortiz" target="_blank">Selvin Ortiz</a>
 			</p>

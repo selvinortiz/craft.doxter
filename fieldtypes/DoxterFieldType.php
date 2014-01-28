@@ -38,12 +38,16 @@ class DoxterFieldType extends BaseFieldType
 			craft()->templates->includeJsResource('doxter/doxter.js');
 		}
 
+		$id = craft()->templates->formatInputId($name);
+
 		return craft()->templates->render(
 			'doxter/fields/doxter/_input',
 			array(
+				'id'				=> $id,
 				'name'				=> $name,
 				'value'				=> $value,
 				'settings'			=> $this->getSettings(),
+				'namespacedId'		=> craft()->templates->namespaceInputId($id),
 				'enableWordWrap'	=> $this->getSettings()->enableWordWrap
 			)
 		);
