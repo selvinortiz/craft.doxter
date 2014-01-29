@@ -15,12 +15,12 @@
 {% block content %}
 	<div id="doxterSettings">
 		<h2>
-			<a href="{{ craft.doxter.getUrl }}">
+			<a href="{{ craft.doxter.getUrl() }}">
 				{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span>
 			</a>
 		</h2>
 		<p>
-			<em>{{ name }}</em> is an advanced <strong>markdown</strong> parser written for <strong>Craft</strong>
+			<em>{{ name }}</em> is a <strong>markdown</strong> plugin designed to improve your workflow for writing docs
 		</p>
 
 		<div class="doxterSection">

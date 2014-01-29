@@ -1,11 +1,16 @@
-.doxter-show {
-	visibility: visible;
+.doxterHidden {
+	visibility: hidden;
 }
-.doxter-tabs {
-	margin: 10px 0 0 0;
+.doxterEditor, .doxterPreview {
+	width: 100%;
+	height: 300px;
+	display: inline-block;
+}
+.doxterTabs {
+	margin: 0;
 	padding: 0;
 }
-.doxter-tab {
+.doxterTab {
 	display: inline-block;
 	zoom:1;
 	*display:inline;
@@ -17,17 +22,16 @@
 		outline: none;
 		font-weight: bold;
 	}
+
 	a.active { background: #fff !important; color: #bbb !important; }
 }
-
-// Customize default editor theme
+pre {
+	margin-top: 20px;
+}
 .crevasse_editor.default_theme {
 	color: #111;
 	font-size: 13px;
 	line-height: 1.5em;
 	padding: 5px 10px;
 	resize: none;
-}
-pre {
-	margin-top: 20px;
 }

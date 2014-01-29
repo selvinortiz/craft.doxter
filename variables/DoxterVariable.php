@@ -22,6 +22,6 @@ class DoxterVariable
 
 	public function getUrl()
 	{
-		return sprintf('/%s/%s', craft()->config->get('cpTrigger'), 'doxter');
+		return sprintf('/%s/doxter', craft()->config->get('cpTrigger'));
 	}
 }

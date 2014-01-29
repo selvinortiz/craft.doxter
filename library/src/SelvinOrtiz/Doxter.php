@@ -81,7 +81,7 @@ class Doxter extends \Michelf\MarkdownExtra
 		}
 
 		// When non of the above
-		return '<pre><code class="{languageClass}">{sourceCode}</code></pre>';
+		return '<pre><code data-language="{languageClass}">{sourceCode}</code></pre>';
 	}
 
 	protected function renderString($str, array $vars=array())
@@ -105,7 +105,8 @@ class Doxter extends \Michelf\MarkdownExtra
 		$regexp = array(
 			'/',
 			'\<pre\>',
-			'\<code class\="([a-z\-_]+)\"\>',
+			'\<code class\=\"([a-z\-_ ]+)\"\>',
+			'\s*?',
 			'(.+?)',
 			'\<\/code\>',
 			'\<\/pre\>',
@@ -124,7 +125,7 @@ class Doxter extends \Michelf\MarkdownExtra
 	{
 		$lang	= $matches[1] ?: '';
 		$code	= $matches[2] ?: '';
-		$code	= preg_replace('/^\<br\s?\/?\>/', '', $code, 1); // Removes annoying <br /> from start of code block
+		$code	= preg_replace('/^\<br\s?\/?\>/i', '', $code, 1); // Removes annoying <br /> from start of code block
 		$id		= md5( $code );
 
 		$this->addCodeBlock($id, $code, $lang);
@@ -134,7 +135,8 @@ class Doxter extends \Michelf\MarkdownExtra
 
 	protected function addCodeBlock($id, $code, $lang)
 	{
-		$this->codeBlocks[] = array( 'id'=>$id, 'code'=>$code, 'lang'=>$lang );
+		$code = htmlentities(preg_replace('/^\<br\s*?\/?\>/is', '', $code));
+		$this->codeBlocks[] = array('id'=>$id, 'code'=>$code, 'lang'=>$lang );
 
 		return $this;
 	}

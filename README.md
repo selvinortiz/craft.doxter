@@ -1,19 +1,20 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.1
+## Doxter 0.5.2
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
- ----
+----
 ### Description
-_Doxter_ is a **markdown** plugin designed to improve the workflow for writing _docs_.
+_Doxter_ is a **markdown** plugin designed to improve your workflow for writing _docs_.
 
 ### Features
 * Extends [PHP Markdown](https://github.com/michelf/php-markdown) _by_ **Michel Fortin**
-* Parses _extended_ **markdown** with `"_markdown_"|doxter` and/or `doxter("_markdown_", params)`
+* Parses _extended_ **markdown** with `"markdown" | doxter ` and `doxter("markdown", params)`
 * Parses **github** style _fenced code blocks_ with language class assignment
 * Gives you full control over the parsing output via the **syntaxSnippet** _setting/parameter_
 * Enables **Doxter Markdown** fieldtype via a simple **textarea** with full editor behaviour and preview mode
-* Supports multiple field type instances within the same section without any issues
+* Supports multiple **Doxter Markdown** instances
+* Supports multiple **Doxter Markdown** instances withing **Matrix Fields**
 * Uses a _tabbed_ UI for **write/preview** modes
 * Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
 
@@ -36,6 +37,12 @@ though you don't have to because **Doxter** will parse pretty much any **markdow
 
 That means that you can use **Scrawl Markdown** or a **Plain Text** field to write/store your markdown and **doxter** will parse it.
 
+### Example
+
+``` twig
+{{ "My **markdown** is well written!" | doxter }}
+```
+
 ### Notes
 **Doxter** is fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl)
 so if that's what you use to write your _docs_, adding syntax highlighting to your code blocks via a javascript library like
@@ -44,6 +51,11 @@ so if that's what you use to write your _docs_, adding syntax highlighting to yo
 ### Changelog
 
 ----
+#### 0.5.2
+* Adds support for **Matrix**
+* Fixes a few rendering issues related to JS
+* Fixes many styling issues related to CSS
+
 #### 0.5.1
 * Adds support for multiple instances of **Doxter Markdown** within a single entry type
 * Improves button styling for **write/preview** modes

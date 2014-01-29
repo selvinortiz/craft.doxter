@@ -15,7 +15,10 @@ class DoxterFieldType extends BaseFieldType
 
 	public function getInputHtml($name, $value)
 	{
-		$plugin = craft()->plugins->getPlugin('doxter');
+		$plugin		= craft()->plugins->getPlugin('doxter');
+		$inputId	= craft()->templates->formatInputId($name);
+		$targetId	= craft()->templates->namespaceInputId($inputId);
+		$snippetJs	= $this->getDoxterMarkdownJs($targetId, $this->getSettings());
 
 		if ($plugin->getDevMode())
 		{
@@ -38,17 +41,17 @@ class DoxterFieldType extends BaseFieldType
 			craft()->templates->includeJsResource('doxter/doxter.js');
 		}
 
-		$id = craft()->templates->formatInputId($name);
+		// Using the lovely Craft queue/buffer to support matrix fields: )
+		craft()->templates->includeJs($snippetJs);
 
 		return craft()->templates->render(
 			'doxter/fields/doxter/_input',
 			array(
-				'id'				=> $id,
+				'id'				=> $targetId,
 				'name'				=> $name,
 				'value'				=> $value,
-				'settings'			=> $this->getSettings(),
-				'namespacedId'		=> craft()->templates->namespaceInputId($id),
-				'enableWordWrap'	=> $this->getSettings()->enableWordWrap
+				'inputId'			=> $inputId,
+				'settings'			=> $this->getSettings()
 			)
 		);
 	}
@@ -65,11 +68,16 @@ class DoxterFieldType extends BaseFieldType
 	public function getSettingsHtml()
 	{
 		return craft()->templates->render(
-			'doxter/fields/doxter/_settings.html',
+			'doxter/fields/doxter/_settings',
 			array(
 				'settings' => $this->getSettings()
 			)
 		);
+	}
+
+	public function getDoxterMarkdownJs($id, $settings)
+	{
+		return "Doxter.createDoxterMarkdown('{$id}', {$settings->tabSize}, {$settings->enableSoftTabs});";
 	}
 
 	public function prepSettings($settings)

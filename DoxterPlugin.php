@@ -2,9 +2,9 @@
 namespace Craft;
 
 /**
- * Doxter 0.5.1
+ * Doxter 0.5.2
  *
- * Doxter is a markdown parser designed to help you write better docs
+ * Doxter is a markdown plugin designed to improve your workflow for writing docs
  *
  * @author		Selvin Ortiz - http://twitter.com/selvinortiz
  * @package		Doxter
@@ -42,7 +42,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.5.1';
+		return '0.5.2';
 	}
 
 	public function getDeveloper()
@@ -57,12 +57,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getDevMode()
 	{
-		if (!$this->devMode)
-		{
-			return false;
-		}
-
-		return is_readable(craft()->path->getPluginsPath().'doxter/resources/js/doxter.js');
+		return $this->devMode;
 	}
 
 	public function hasCpSection()
@@ -84,7 +79,7 @@ class DoxterPlugin extends BasePlugin
 		craft()->templates->includeCssResource('doxter/css/doxter.css');
 
 		return craft()->templates->render(
-			'doxter/_settings.html',
+			'doxter/_settings',
 			array(
 				'settings' => $this->getSettings()
 			)

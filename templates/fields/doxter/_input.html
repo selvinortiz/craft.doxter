@@ -1,65 +1,14 @@
-{% set snippetJs %}
-	var {{ name }}Config = {
-		textarea: document.getElementById("fields-{{ name }}Editor"),
-		replaceTab: true,
-		softTabs: {{ settings.enableSoftTabs }},
-		tabSize: {{ settings.tabSize }},
-		autoOpen: true,
-		overwrite: true,
-		autoStrip: true,
-		autoIndent: true,
-		fence: false
-	}
-	var {{ name }}Object = {
-		loadEditor: function() {
+<div id="{{ inputId }}Canvas" class="doxterHidden">
+	<p>
+		<a id="{{ inputId }}WriteBtn" href="#{{ id }}" class="btn icon" data-icon="edit">Write</a>
+		<a id="{{ inputId }}PreviewBtn" href="#{{ id }}" class="btn icon" data-icon="refresh">Preview</a>
+	</p>
 
-			$("#fields-{{ name }}Editor").crevasse({
-				previewer: $("#fields-{{ name }}Preview"),
-				convertTabsToSpaces: false
-			});
+	<div id="{{ inputId }}EditorPane">
+		<textarea  id="{{ inputId }}" class="text fullwidth code doxterEditor"{{ settings.enableWordWrap is not empty ? ' wrap="off"' : '' }} name="{{ name }}">{{ value }}</textarea>
+	</div>
 
-			var {{ name }}Behave = new Behave({{ name }}Config);
-
-			$("#fields-{{ name }}Canvas").css("visibility", "visible").easytabs();
-		}
-	};
-	$(document).ready(function() { {{ name }}Object.loadEditor(); });
-{% endset %}
-
-{% set snippetCss %}
-	#fields-{{ name }}Canvas {
-		visibility: hidden;
-	}
-	#fields-{{ name }}Editor,
-	#fields-{{ name }}Preview {
-		width: 100%;
-		height: 400px;
-		display: inline-block;
-	}
-{% endset %}
-
-<div class="doxterCanvasWrapper">
-	<div id="{{ name }}Canvas">
-		<ul class="doxter-tabs">
-			<li class="doxter-tab">
-				<a href="#fields-{{ name }}EditorTab" class="btn icon edit">Write</a>
-			</li>
-			<li class="doxter-tab">
-				<a href="#fields-{{ name }}PreviewTab" class="btn icon" data-icon="refresh">Preview</a>
-			</li>
-		</ul>
-		<hr>
-		<div id="{{ name }}EditorTab">
-			<textarea
-				{{ false == enableWordWrap ? 'wrap="off"' : '' }}
-				class="text fullwidth editor code"
-				id="{{ name }}Editor" name="{{ name }}">{{ value }}</textarea>
-		</div>
-		<div id="{{ name }}PreviewTab">
-			<div id="{{ name }}Preview"></div>
-		</div>
+	<div id="{{ inputId }}PreviewPane">
+		<div id="{{ inputId }}Preview" class="doxterPreview"></div>
 	</div>
 </div>
-
-{% includeCss snippetCss %}
-{% includeJs snippetJs %}

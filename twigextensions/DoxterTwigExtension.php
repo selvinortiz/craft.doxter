@@ -11,22 +11,22 @@ class DoxterTwigExtension extends Twig_Extension
 		return 'Doxter';
 	}
 
-	public function doxter($source='')
+	public function doxter($source='', array $params=array())
 	{
-		return craft()->doxter->transform($source);
+		return craft()->doxter->transform($source, $params);
 	}
 
 	public function getFilters()
 	{
 		return array(
-			'doxter'	=> new Twig_SimpleFilter('doxter', array($this, 'doxter'), array('is_safe', true))
+			'doxter' => new Twig_SimpleFilter('doxter', array($this, 'doxter'), array('is_safe', true))
 		);
 	}
 
 	public function getFunctions()
 	{
 		return array(
-			'doxter'	=> new Twig_SimpleFilter('doxter', array($this, 'doxter'), array('is_safe', true))
+			'doxter' => new Twig_SimpleFilter('doxter', array($this, 'doxter'), array('is_safe', true))
 		);
 	}
 }
