@@ -12,10 +12,9 @@ _Doxter_ is a **markdown** plugin designed to improve your workflow for writing 
 * Parses _extended_ **markdown** with `"markdown" | doxter ` and `doxter("markdown", params)`
 * Parses **github** style _fenced code blocks_ with language class assignment
 * Gives you full control over the parsing output via the **syntaxSnippet** _setting/parameter_
-* Enables **Doxter Markdown** fieldtype via a simple **textarea** with full editor behaviour and preview mode
-* Supports multiple **Doxter Markdown** instances
-* Supports multiple **Doxter Markdown** instances withing **Matrix Fields**
-* Uses a _tabbed_ UI for **write/preview** modes
+* Enables a **Doxter Markdown** fieldtype which is a simple **textarea** with full editor behaviour and preview mode
+* Supports multiple **Doxter Markdown** instances within sections and **Matrix Fields**
+* Uses a _tabbed_ UI to toggle **Write/Preview** modes
 * Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
 
 ### Minimum Requirements
@@ -39,7 +38,7 @@ That means that you can use **Scrawl Markdown** or a **Plain Text** field to wri
 
 ### Example
 
-``` twig
+```twig
 {{ "My **markdown** is well written!" | doxter }}
 ```
 
