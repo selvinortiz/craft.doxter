@@ -11,7 +11,7 @@ _Doxter_ is a **markdown** plugin designed to improve your workflow for writing 
 * Built on top of [Parsedown](https://github.com/erusev/parsedown) _by_ **Emanuil Rusev**
 * Enables you to **write markdown** in a simple text area with **editor behavior** enabled
 * Parses your **fenced code blocks** in a very intelligent way and sets them up for proper highlighting
-* Lets you focus on writing markdown and preview it using **Live View**
+* Lets you focus on writing markdown and see it using **Live Preview**
 * Lets you parse markdown intelligently with the **doxter** filter and the **doxter(source, params)** function
 * You can have as many _doxter markdown_ **field type instances** as you want within a single entry type
 * You can event have multiple _doxter markdown_ field types within a **Matrix** field type
@@ -31,23 +31,10 @@ _Doxter_ is a **markdown** plugin designed to improve your workflow for writing 
 
 ----
 ### Usage
-You can use the **Doxter Markdown** field type in the same way you would a **Rich Text** field type or the [Scrawl](https://github.com/builtbysplash/craft-scrawl)
+You can use the **Doxter Markdown** field type in the same way you would use a **Rich Text** field type or [Scrawl](https://github.com/builtbysplash/craft-scrawl)
+
 Using the **Doxter Markdown** field type is not required because the **doxter** filter/function doesn't care where it comes from as long as it is valid markdown;)
-
 That means that you can use **Scrawl Markdown** or a **Plain Text** field type to write/store your markdown and **doxter** will parse it.
-
-### Example
-
-```twig
-{{ "My **markdown** is well written!" | doxter }}
-{#  Will output: <p>My <strong>markdown</strong> is well written! #}
-
-{% set params = {syntaxSnippet: '<pre><code data-language="{languageClass}">{sourceCode}</code></pre>'} %}
-{{ doxter("```php echo 'My markdown is well written!';```", params }}
-{# Will output:
-<pre><code data-language="php">echo 'My markdown is well written!';</pre>
-#}
-```
 
 ### Changelog
 
@@ -55,7 +42,7 @@ That means that you can use **Scrawl Markdown** or a **Plain Text** field type t
 #### 0.5.4 RC1
 * Adds build automation to aid in distribution
 * Removes **Markdown Extra** and adds **Parsedown**
-* Revmoes the use of `devMode` to embed resources
+* Removes the use of `devMode` to embed resources
 * Improves parsing performance and consistency
 * Fixes a few rendering issues related to JS event binding
 * Fixes many styling issues related to name collision in CSS

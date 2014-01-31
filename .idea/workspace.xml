@@ -4,7 +4,11 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="568f6ed2-827b-4e4c-b026-e651d08c6d76" name="Default" comment="" />
+    <list default="true" id="568f6ed2-827b-4e4c-b026-e651d08c6d76" name="Default" comment="Doxter 0.5.4&#10;* Adds full live preview support&#10;* Adds the PHPStorm project directory (.idea)&#10;* Adds the build script for craft plugins by Selvin Ortiz (me)&#10;* Removes the use of devMode to include resources&#10;* Fixes stability issues where saving an entry will yield to a blank page&#10; * Fixes a bug where pressing [tab] inside the textarea cycled through inputs&#10; * Improves rendering speed by binding to event that occur less often&#10; * Improves plugin devMode error reporting if source files are missing&#10; * Improves the way default settings for the field type are saved&#10; * Updates README with better docs and up to date info&#10;">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/doxter.v0.5.4.zip" afterPath="$PROJECT_DIR$/build/doxter.v0.5.4.zip" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="doxter.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,7 +38,20 @@
     <favorites_list name="doxter" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="77" column="65" selection-start="3322" selection-end="3322" vertical-scroll-proportion="0.5477273" vertical-offset="1145" max-vertical-offset="1800">
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -385,19 +402,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fieldtypes/DoxterFieldType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="0" selection-start="1045" selection-end="1045" vertical-scroll-proportion="0.5832061" vertical-offset="356" max-vertical-offset="1584" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="0" selection-start="4576" selection-end="4576" vertical-scroll-proportion="-23.807692" vertical-offset="1307" max-vertical-offset="2034">
+        <state line="77" column="65" selection-start="3322" selection-end="3322" vertical-scroll-proportion="0.5477273" vertical-offset="1145" max-vertical-offset="1800">
           <folding />
         </state>
       </provider>
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fieldtypes/DoxterFieldType.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="1045" selection-end="1045" vertical-scroll-proportion="0.5832061" vertical-offset="356" max-vertical-offset="1584" />
       </provider>
     </entry>
   </component>
