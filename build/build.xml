@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Doxter" default="build">
+
+    <property name="jsPath" value="../resources/js/" />
+    <property name="cssPath" value="../resources/css/" />
+    <property name="minPath" value="../resources/" />
+    <property name="pluginName" value="doxter" />
+    <property name="pluginVersion" value="v0.5.4" />
+
+    <target name="clean">
+        <echo msg="Running cleaning task..." />
+        <delete file="${minPath}${pluginName}.js" verbose="false" failonerror="false" />
+        <delete file="${minPath}${pluginName}.css" verbose="false" failonerror="false" />
+    </target>
+
+    <target name="concatenate" depends="clean">
+        <echo msg="Combining JS and CSS..." />
+        <append destfile="${minPath}${pluginName}.js">
+            <filelist dir="${jsPath}" listfile="js.txt" />
+        </append>
+        <append destfile="${minPath}${pluginName}.css">
+            <filelist dir="${cssPath}" listfile="css.txt" />
+        </append>
+    </target>
+
+    <target name="minify" depends="concatenate">
+        <echo msg="Minifying combined sources..." />
+        <exec command="java -jar YUI2.4.8.jar ${minPath}${pluginName}.js -o ${minPath}${pluginName}.js" />
+        <exec command="java -jar YUI2.4.8.jar ${minPath}${pluginName}.css -o ${minPath}${pluginName}.css" />
+    </target>
+
+    <target name="build" depends="minify">
+        <echo msg="Finishing up..." />
+    </target>
+
+    <target name="release">
+        <echo msg="Preparing release distro..." />
+        <zip destfile="${pluginName}.${pluginVersion}.zip">
+            <fileset dir="../../">
+                <include name="${pluginName}/" />
+                <exclude name="${pluginName}/build/" />
+                <exclude name="${pluginName}/resources/css/" />
+                <exclude name="${pluginName}/resources/js/" />
+                <exclude name="${pluginName}/.git/" />
+                <exclude name="${pluginName}/.idea/" />
+                <exclude name="${pluginName}/.gitignore" />
+            </fileset>
+        </zip>
+        <echo msg="Release for (${pluginName}) has been created!" />
+    </target>
+
+    <target name="use" depends="release">
+        <adhoc-plugin-unzip
+                source="${pluginName}.${pluginVersion}.zip"
+                dest="use.json"
+                />
+        <echo msg="Distro was unzip properly: )" />
+    </target>
+
+    <adhoc-task name="adhoc-plugin-unzip"><![CDATA[
+        class Plugin_Unzip extends Task
+        {
+            protected $dest     = null;
+            protected $source   = null;
+
+            function setSource($source)
+            {
+                $this->source = $source;
+            }
+
+            function setDest($dest)
+            {
+                $this->dest = $dest;
+            }
+
+            function main()
+            {
+                $zip = new ZipArchive;
+
+                if (file_exists($this->source) && is_readable($this->source))
+                {
+                    $opened = $zip->open($this->source);
+
+                    if (true === $opened)
+                    {
+                        $dests = @json_decode(file_get_contents($this->dest));
+
+                        if ($dests && count($dests))
+                        {
+                            $basePath = array_shift(explode(DIRECTORY_SEPARATOR, getcwd()));
+                            foreach ($dests as $dest)
+                            {
+                                if (stripos($dest, '/') === 0)
+                                {
+                                    $dest = str_replace('/', DIRECTORY_SEPARATOR, $basePath).$dest;
+                                }
+
+                                if (is_writable($dest))
+                                {
+                                    $zip->extractTo($dest);
+                                }
+                                else
+                                {
+                                    throw new Exception('That destination is not readable: '.$dest);
+                                }
+                            }
+
+                            $zip->close();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception('Failed to extract the zip');
+                    }
+                }
+                else
+                {
+                    throw new Exception('Source archive '.$sourceArchive.' not found/readable');
+                }
+            }
+        }
+      ]]></adhoc-task>
+</project>
