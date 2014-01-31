@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter 0.5.2
+ * Doxter 0.5.4
  *
  * Doxter is a markdown plugin designed to improve your workflow for writing docs
  *
@@ -15,10 +15,9 @@ namespace Craft;
 
 class DoxterPlugin extends BasePlugin
 {
-	protected $devMode = true;
-
 	public function init()
 	{
+		require_once craft()->path->getPluginsPath().'doxter/helpers/DoxterHelper.php';
 		require_once craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
 	}
 
@@ -30,10 +29,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getName($real=false)
 	{
-		if ($real)
-		{
-			return 'Doxter';
-		}
+		if ($real) { return 'Doxter'; }
 
 		$alias = $this->getSettings()->pluginAlias;
 
@@ -42,7 +38,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.5.2';
+		return '0.5.4';
 	}
 
 	public function getDeveloper()
@@ -55,9 +51,21 @@ class DoxterPlugin extends BasePlugin
 		return 'http://twitter.com/selvinortiz';
 	}
 
-	public function getDevMode()
+	public function getSettingsHtml()
 	{
-		return $this->devMode;
+		craft()->templates->includeCssResource('doxter/doxter.css');
+		craft()->templates->includeJsResource('doxter/doxter.js');
+
+		$snippetJs = 'Doxter.addEditorBehavior("syntaxSnippet", 4, false)';
+
+		craft()->templates->includeJs($snippetJs);
+
+		return craft()->templates->render(
+			'doxter/_settings',
+			array(
+				'settings' => $this->getSettings()
+			)
+		);
 	}
 
 	public function hasCpSection()
@@ -74,18 +82,6 @@ class DoxterPlugin extends BasePlugin
 		);
 	}
 
-	public function getSettingsHtml()
-	{
-		craft()->templates->includeCssResource('doxter/css/doxter.css');
-
-		return craft()->templates->render(
-			'doxter/_settings',
-			array(
-				'settings' => $this->getSettings()
-			)
-		);
-	}
-
 	public function addTwigExtension()
 	{
 		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
@@ -95,6 +91,11 @@ class DoxterPlugin extends BasePlugin
 
 	public function onAfterInstall()
 	{
-		craft()->request->redirect(sprintf('/%s/settings/plugins/doxter', craft()->config->get('cpTrigger')));
+		craft()->request->redirect(
+			sprintf(
+				'/%s/settings/plugins/doxter',
+				craft()->config->get('cpTrigger')
+			)
+		);
 	}
 }

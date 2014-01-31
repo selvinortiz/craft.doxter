@@ -2,7 +2,7 @@
 
 <hr>
 
-<p>Enable Word Wrap?</p>
+<p>{{ "Enable Word Wrapping"|t }}</p>
 {{
 	forms.lightswitch({
 		name:		"enableWordWrap",
@@ -10,7 +10,7 @@
 	})
 }}
 
-<p>Convert Tabs To Spaces?</p>
+<p>{{ "Convert Tabs To Spaces?"|t }}</p>
 {{
 	forms.lightswitch({
 		name:		"enableSoftTabs",
@@ -24,6 +24,16 @@
 		size:			true,
 		label:			"Tab Size"|t,
 		value:			settings.tabSize ? settings.tabSize : 4,
+		errors:			""
+	})
+}}
+{{
+	forms.textField({
+		id:				"rows",
+		name:			"rows",
+		size:			true,
+		label:			"Textarea Rows"|t,
+		value:			settings.rows ? settings.rows : 20,
 		errors:			""
 	})
 }}

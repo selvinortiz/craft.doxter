@@ -7,9 +7,9 @@ class DoxterService extends BaseApplicationComponent
 {
 	public function transform($source, array $params=array())
 	{
-			$doxter = new Doxter($params);
+		$doxter = new Doxter($params);
 
-			return $this->safeOutput($doxter->setSource($source)->parse()->compile());
+		return $this->safeOutput($doxter->setSource($source)->parse()->compile());
 	}
 
 	public function getBoolFromLightSwitch($value)

@@ -1,6 +1,6 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.2
+## Doxter 0.5.4
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ----
@@ -8,14 +8,15 @@
 _Doxter_ is a **markdown** plugin designed to improve your workflow for writing _docs_.
 
 ### Features
-* Extends [PHP Markdown](https://github.com/michelf/php-markdown) _by_ **Michel Fortin**
-* Parses _extended_ **markdown** with `"markdown" | doxter ` and `doxter("markdown", params)`
-* Parses **github** style _fenced code blocks_ with language class assignment
-* Gives you full control over the parsing output via the **syntaxSnippet** _setting/parameter_
-* Enables a **Doxter Markdown** fieldtype which is a simple **textarea** with full editor behaviour and preview mode
-* Supports multiple **Doxter Markdown** instances within sections and **Matrix Fields**
-* Uses a _tabbed_ UI to toggle **Write/Preview** modes
-* Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** fields
+* Built on top of [Parsedown](https://github.com/erusev/parsedown) _by_ **Emanuil Rusev**
+* Enables you to **write markdown** in a simple text area with **editor behavior** enabled
+* Parses your **fenced code blocks** in a very intelligent way and sets them up for proper highlighting
+* Lets you focus on writing markdown and preview it using **Live View**
+* Lets you parse markdown intelligently with the **doxter** filter and the **doxter(source, params)** function
+* You can have as many _doxter markdown_ **field type instances** as you want within a single entry type
+* You can event have multiple _doxter markdown_ field types within a **Matrix** field type
+* Gives you full control over the parsing output via the **syntaxSnippet** setting and parameter
+* Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** field types
 
 ### Minimum Requirements
 - PHP 5.3.2
@@ -26,30 +27,42 @@ _Doxter_ is a **markdown** plugin designed to improve your workflow for writing 
 2. Extract the archive and place `doxter` inside your `craft/plugins` directory
 3. Adjust file permissions as necessary
 4. Install **Doxter** from the **Control Panel**
-5. Set up your **Syntaxt Snippet** via the plugin settings to wrap your code blocks in
+5. Set up your **Syntaxt Snippet** via the plugin settings to wrap your code blocks
 
 ----
-
 ### Usage
-You can use the **Doxter Markdown** fieldtype in the same way you use [Scrawl](https://github.com/builtbysplash/craft-scrawl)
-though you don't have to because **Doxter** will parse pretty much any **markdown** with the `doxter` filter/function.
+You can use the **Doxter Markdown** field type in the same way you would a **Rich Text** field type or the [Scrawl](https://github.com/builtbysplash/craft-scrawl)
+Using the **Doxter Markdown** field type is not required because the **doxter** filter/function doesn't care where it comes from as long as it is valid markdown;)
 
-That means that you can use **Scrawl Markdown** or a **Plain Text** field to write/store your markdown and **doxter** will parse it.
+That means that you can use **Scrawl Markdown** or a **Plain Text** field type to write/store your markdown and **doxter** will parse it.
 
 ### Example
 
 ```twig
 {{ "My **markdown** is well written!" | doxter }}
-```
+{#  Will output: <p>My <strong>markdown</strong> is well written! #}
 
-### Notes
-**Doxter** is fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl)
-so if that's what you use to write your _docs_, adding syntax highlighting to your code blocks via a javascript library like
-[RainbowJS](https://github.com/ccampbell/rainbow) will be a piece of cake: )
+{% set params = {syntaxSnippet: '<pre><code data-language="{languageClass}">{sourceCode}</code></pre>'} %}
+{{ doxter("```php echo 'My markdown is well written!';```", params }}
+{# Will output:
+<pre><code data-language="php">echo 'My markdown is well written!';</pre>
+#}
+```
 
 ### Changelog
 
 ----
+#### 0.5.4 RC1
+* Adds build automation to aid in distribution
+* Removes **Markdown Extra** and adds **Parsedown**
+* Revmoes the use of `devMode` to embed resources
+* Improves parsing performance and consistency
+* Fixes a few rendering issues related to JS event binding
+* Fixes many styling issues related to name collision in CSS
+
+#### 0.5.3
+Merged with 0.5.4 RC1, see above!
+
 #### 0.5.2
 * Adds support for **Matrix**
 * Fixes a few rendering issues related to JS
@@ -79,6 +92,14 @@ Initial preview release
 
 ### Help & Feedback
 If you have questions, comments, or concerns feel free to reach out to me on twitter [@selvinortiz](http://twitter.com/selvinortiz)
+
+### Credits
+_Doxter_ was lovingly **crafted** using these third party tools, special thanks to their developers and maintainers.
+
+- [Parsedown](http://parsedown.org "The Better Markdown Parser in PHP") for fast and consistent markdown parsing
+- [Behave JS](http://jakiestfu.github.io/Behave.js "Editor Behavior") to add editor behavior features in our simple textbox
+
+A special thanks goes to my loyal followers and crafters that have helped me test and improve **Doxter** and provided me with useful feedback!
 
 ### Licence
 **Doxter** is open source software licensed under the [MIT License](http://opensource.org/licenses/MIT)

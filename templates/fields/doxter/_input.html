@@ -1,14 +1,8 @@
 <div id="{{ inputId }}Canvas" class="doxterHidden">
-	<p>
-		<a id="{{ inputId }}WriteBtn" href="#{{ id }}" class="btn icon" data-icon="edit">Write</a>
-		<a id="{{ inputId }}PreviewBtn" href="#{{ id }}" class="btn icon" data-icon="refresh">Preview</a>
-	</p>
-
-	<div id="{{ inputId }}EditorPane">
-		<textarea  id="{{ inputId }}" class="text fullwidth code doxterEditor"{{ settings.enableWordWrap is not empty ? ' wrap="off"' : '' }} name="{{ name }}">{{ value }}</textarea>
-	</div>
-
-	<div id="{{ inputId }}PreviewPane">
-		<div id="{{ inputId }}Preview" class="doxterPreview"></div>
-	</div>
+	<textarea
+		id="{{ inputId }}"
+		name="{{ name }}"
+		rows="{{ settings.rows is not empty ? settings.rows : 20 }}"
+		class="text fullwidth code doxterEditor"
+		{{ settings.enableWordWrap ? "" : "wrap=\"off\"" }}>{{ value }}</textarea>
 </div>

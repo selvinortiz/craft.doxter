@@ -1,16 +1,8 @@
 <?php
 namespace SelvinOrtiz;
 
-/**
- * A Markdown parser built on parsedown
- *
- * Class Doxter
- *
- * @package SelvinOrtiz
- */
-class Doxter
+class Doxter extends \Michelf\MarkdownExtra
 {
-	protected $parser;
 	protected $plugin;
 	protected $syntaxSnippet;
 
@@ -19,11 +11,16 @@ class Doxter
 	public $compiled	= '' ;
 	public $codeBlocks	= array();
 
-	public function __construct(array $params=array(), $parser=null)
+	public function __construct(array $params=array())
 	{
-		$this->parser			= $parser ? $parser : \Parsedown::instance();
-		$this->plugin			= \Craft\craft()->plugins->getPlugin('doxter');
-		$this->syntaxSnippet	= array_key_exists('syntaxSnippet', $params) ? $params['syntaxSnippet'] : '';
+		// Making sure parent gets initialized properly
+		parent::__construct();
+
+		// Grabbing the plugin for future use
+		$this->plugin = \Craft\craft()->plugins->getPlugin('doxter');
+
+		// Load passed in params for future use
+		$this->syntaxSnippet = array_key_exists('syntaxSnippet', $params) ? $params['syntaxSnippet'] : '';
 	}
 
 	public function __toString()
@@ -45,7 +42,7 @@ class Doxter
 
 	public function parse()
 	{
-		$this->parsed = $this->parser->parse($this->source);
+		$this->parsed = $this->transform($this->source);
 
 		$this->findCodeBlocks();
 
@@ -84,7 +81,7 @@ class Doxter
 		}
 
 		// When non of the above
-		return \Craft\doxter()->getDefaultSyntaxSnippet();
+		return '<pre><code data-language="{languageClass}">{sourceCode}</code></pre>';
 	}
 
 	protected function renderString($str, array $vars=array())
@@ -118,6 +115,7 @@ class Doxter
 
 		$regexp			= implode('', $regexp);
 		$this->compiled	= $this->parsed;
+		$this->compiled	= html_entity_decode($this->parsed); // Removes annoying encoded entities;
 		$this->compiled	= preg_replace_callback($regexp, array($this, 'tokenizeCodeBlock'), $this->compiled);
 
 		return $this;
@@ -127,7 +125,8 @@ class Doxter
 	{
 		$lang	= $matches[1] ?: '';
 		$code	= $matches[2] ?: '';
-		$id		= md5($code);
+		$code	= preg_replace('/^\<br\s?\/?\>/i', '', $code, 1); // Removes annoying <br /> from start of code block
+		$id		= md5( $code );
 
 		$this->addCodeBlock($id, $code, $lang);
 
@@ -136,8 +135,50 @@ class Doxter
 
 	protected function addCodeBlock($id, $code, $lang)
 	{
+		$code = htmlentities(preg_replace('/^\<br\s*?\/?\>/is', '', $code));
 		$this->codeBlocks[] = array('id'=>$id, 'code'=>$code, 'lang'=>$lang );
 
 		return $this;
+	}
+
+	/**
+	 * Editing the fenced code block syntax to match style used by github
+	 *
+	 * ``` php
+	 *
+	 * <pre class="php"><code data-language="php">echo 'Hello World.';</code></pre>
+	 *
+	 * ```
+	 */
+	protected function doFencedCodeBlocks( $text )
+	{
+		$text = preg_replace_callback('{
+				(?:\n|\A)
+				# 1: Opening marker
+				(
+					`{3,} # Marker: three (tilde) apostrophe or more.
+				)
+				[ ]*
+				(?:
+					\.?([-_:a-zA-Z0-9]+) # 2: standalone class name
+				|
+					'.$this->id_class_attr_catch_re.' # 3: Extra attributes
+				)?
+				[ ]* \n # Whitespace and newline following marker.
+
+				# 4: Content
+				(
+					(?>
+						(?!\1 [ ]* \n)	# Not a closing marker.
+						.*\n+
+					)+
+				)
+
+				# Closing marker.
+				\1 [ ]* \n
+			}xm',
+			array( &$this, '_doFencedCodeBlocks_callback'), $text);
+
+		return $text;
 	}
 }
