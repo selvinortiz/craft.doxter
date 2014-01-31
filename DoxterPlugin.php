@@ -17,8 +17,19 @@ class DoxterPlugin extends BasePlugin
 {
 	public function init()
 	{
-		require_once craft()->path->getPluginsPath().'doxter/helpers/DoxterHelper.php';
-		require_once craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
+		$helperFile = craft()->path->getPluginsPath().'doxter/helpers/DoxterHelper.php';
+		$loaderFile = craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
+
+		if (file_exists($helperFile) && file_exists($loaderFile))
+		{
+			require_once $helperFile;
+			require_once $loaderFile;
+		}
+		else
+		{
+			$message = 'Please download the latest stable release or read the install notes.';
+			throw new Exception(Craft::t($message));
+		}
 	}
 
 	/**
