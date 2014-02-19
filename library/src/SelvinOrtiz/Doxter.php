@@ -28,11 +28,7 @@ class Doxter
 
 	public function __toString()
 	{
-		if (empty($this->compiled))
-		{
-			return (string) $this->parse()->compile();
-		}
-
+		// Always return compiled even if empty to avoid infinite loop @see issue #5
 		return $this->compiled;
 	}
 

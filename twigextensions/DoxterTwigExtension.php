@@ -13,7 +13,13 @@ class DoxterTwigExtension extends Twig_Extension
 
 	public function doxter($source='', array $params=array())
 	{
-		return craft()->doxter->transform($source, $params);
+		// Only transform non empty strings @see issue #5
+		if (is_string($source) && !empty($source))
+		{
+			return craft()->doxter->transform($source, $params);
+		}
+
+		return false;
 	}
 
 	public function getFilters()

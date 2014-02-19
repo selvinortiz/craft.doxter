@@ -1,7 +1,13 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.4
+## Doxter 0.5.5
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
+
+----
+### Download Notes
+You must download the [latest release](https://github.com/selvinortiz/craft.doxter/releases) with the following name pattern `doxter.v*.*.*.zip`
+
+The official release is the only distribution meant for production and it is required when requesting support or reporting a bug.
 
 ----
 ### Description
@@ -37,6 +43,12 @@ Using the **Doxter Markdown** field type is not required because the **doxter** 
 That means that you can use **Scrawl Markdown** or a **Plain Text** field type to write/store your markdown and **doxter** will parse it.
 
 ### Changelog
+
+----
+#### 0.5.5
+* Adds the ability to handle empty fields safely @see issue #5
+* Fixes issue #5 by patching infinite loop triggered by an empty string
+* Improves the doxter filter/function by only processing non empty strings
 
 ----
 #### 0.5.4 RC1
