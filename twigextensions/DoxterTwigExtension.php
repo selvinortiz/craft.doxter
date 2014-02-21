@@ -11,10 +11,19 @@ class DoxterTwigExtension extends Twig_Extension
 		return 'Doxter';
 	}
 
+	/**
+	 * The doxter funtion/filter converts markdown to html
+	 *
+	 * - Handle empty strings safely @link https://github.com/selvinortiz/craft.doxter/issues/5
+	 * - Handle parseRefs returned value @link https://github.com/selvinortiz/craft.doxter/issues/6
+	 *
+	 * @param	mixed	$source	The source string or object that implements __toString
+	 * @param	array	$params Filter/Function arguments passed in from twig
+	 * @return	mixed			The parsed string or false if not a valid source
+	 */
 	public function doxter($source='', array $params=array())
 	{
-		// Only transform non empty strings @see issue #5
-		if (is_string($source) && !empty($source))
+		if (!empty($source) && (is_string($source) || method_exists($source, '__toString')))
 		{
 			return craft()->doxter->transform($source, $params);
 		}

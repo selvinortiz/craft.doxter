@@ -1,6 +1,6 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.5
+## Doxter 0.5.6
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ----
@@ -43,6 +43,12 @@ Using the **Doxter Markdown** field type is not required because the **doxter** 
 That means that you can use **Scrawl Markdown** or a **Plain Text** field type to write/store your markdown and **doxter** will parse it.
 
 ### Changelog
+
+----
+#### 0.5.6
+* Adds support for the `parseRefs` filter returned value
+* Adds flexibility by allowing empty and non empty string, and objects
+* Fixes issue #6 where objects that implement `__toString` were ignored
 
 ----
 #### 0.5.5
