@@ -5,11 +5,13 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 ## Changes
 
 ### 0.6.0
-* Adds **header** parsing support to dynamically add **anchors**
-* Adds the ability to choose what headers to add anchors to
+* Adds the `HeaderParser` class
+* Adds the `ReferenceTagParser` class
+* Adds the [Zit][zit] dependency container
 * Adds [reference tag][refTags] parsing support
 * Adds a [reference tag][refTags] toolbar to the **editor**
-* Adds the [Zit][zit] dependency container
+* Adds **header** parsing support to dynamically add **anchors**
+* Adds the ability to choose what headers to add anchors to
 * Adds a **test suite** with solid coverage
 * Fixes parsing issue with markdown table adjacent to lists
 * Fixes settings issue #7 where `enableWordWrap` did not stick
