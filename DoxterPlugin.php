@@ -2,9 +2,9 @@
 namespace Craft;
 
 /**
- * Doxter 0.5.6
+ * Doxter @v0.6.0
  *
- * Doxter is a markdown plugin designed to improve your workflow for writing docs
+ * Doxter is a markdown plugin designed to improve the way you write documentation
  *
  * @author		Selvin Ortiz - http://twitter.com/selvinortiz
  * @package		Doxter
@@ -17,39 +17,37 @@ class DoxterPlugin extends BasePlugin
 {
 	public function init()
 	{
-		$helperFile = craft()->path->getPluginsPath().'doxter/helpers/DoxterHelper.php';
-		$loaderFile = craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
+		$bootstrap = craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
 
-		if (file_exists($helperFile) && file_exists($loaderFile))
+		if (!file_exists($bootstrap))
 		{
-			require_once $helperFile;
-			require_once $loaderFile;
+			throw new Exception(Craft::t('Please download the latest release or read the install notes'));
 		}
-		else
-		{
-			$message = 'Please download the latest stable release or read the install notes.';
-			throw new Exception(Craft::t($message));
-		}
+
+		require_once $bootstrap;
+
+		// Load the dependency container
+		doxter()->stash('plugin', $this);
+		doxter()->stash('service', craft()->doxter);
+		doxter()->init();
 	}
 
-	/**
-	 * Gets the plugin name or alias given by end user
-	 *
-	 * @param	bool	$real	Whether the real name should be returned
-	 * @return	string
-	 */
 	public function getName($real=false)
 	{
-		if ($real) { return 'Doxter'; }
+		$name	= 'Doxter';
+		$alias	= $this->getSettings()->pluginAlias;
 
-		$alias = $this->getSettings()->pluginAlias;
+		if ($real)
+		{
+			return $name;
+		}
 
-		return empty($alias) ? 'Doxter' : Craft::t($alias);
+		return empty($alias) ? $name : $alias;
 	}
 
 	public function getVersion()
 	{
-		return '0.5.6';
+		return '0.6.0';
 	}
 
 	public function getDeveloper()
@@ -64,32 +62,84 @@ class DoxterPlugin extends BasePlugin
 
 	public function getSettingsHtml()
 	{
-		craft()->templates->includeCssResource('doxter/doxter.css');
-		craft()->templates->includeJsResource('doxter/doxter.js');
+		if (doxter()->service->getEnvOption('useCompressedResources', true))
+		{
+			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
+			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
+		}
+		else
+		{
+			craft()->templates->includeCssResource('doxter/css/doxter.css');
+			craft()->templates->includeJsResource('doxter/js/textrange.js');
+			craft()->templates->includeJsResource('doxter/js/behave.js');
+			craft()->templates->includeJsResource('doxter/js/doxter.js');
+		}
 
-		$snippetJs = 'Doxter.addEditorBehavior("syntaxSnippet", 4, false)';
-
-		craft()->templates->includeJs($snippetJs);
+		craft()->templates->includeJs($this->getSnippetJs());
 
 		return craft()->templates->render(
 			'doxter/_settings',
 			array(
-				'settings' => $this->getSettings()
+				'settings' => doxter()->plugin->getSettings()
 			)
 		);
 	}
 
+	public function getSnippetJs()
+	{
+		$options = json_encode(array(
+			'tabSize'	=> 4,
+			'softTabs'	=> false
+		));
+
+		return "new Doxter('codeBlockSnippet', {$options});";
+	}
+
 	public function hasCpSection()
 	{
-		return $this->getSettings()->enableCpTab;
+		return $this->getSettings()->getAttribute('enableCpTab');
 	}
 
 	public function defineSettings()
 	{
 		return array(
-			'syntaxSnippet'		=> array(AttributeType::String, 'column'=>ColumnType::Text),
-			'enableCpTab'		=> AttributeType::Bool,
-			'pluginAlias'		=> AttributeType::String
+			/**
+			 * Whether recursive parsing should be enabled in parsers that support it
+			 */
+			'parseRecursively'		=> array(AttributeType::Bool, 'default' => true),
+			
+			/**
+			 * Whether headers should be parsed and anchored
+			 */
+			'addHeaderAnchors'		=> array(AttributeType::Bool, 'default' => true),
+			
+			/**
+			 * The headers that should be parsed and anchored if header parsing is enabled
+			 */
+			'addHeaderAnchorsTo'	=> array(AttributeType::String, 'default' => 'h1, h2, h3'),
+
+			/**
+			 * The snippet used to wrap fenced code blocks in {languageClass} {sourceCode}
+			 */
+			'codeBlockSnippet'		=> array(AttributeType::String,
+				'default'			=> '<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>',
+				'column'			=> ColumnType::Text
+			),
+
+			/**
+			 * Whether reference tags should be parsed {type:reference:property}
+			 */
+			'parseReferenceTags'	=> array(AttributeType::Bool, 'default' => true),
+			
+			/**
+			 * Whether a tab with the name/alias should be shown in the CP nav
+			 */
+			'enableCpTab'			=> array(AttributeType::Bool, 'default' => false),
+			
+			/**
+			 * The plugin alias to use in place of the name in the CP tab, plugin settings, etc.
+			 */
+			'pluginAlias'			=> array(AttributeType::String, 'default' => 'Doxter')
 		);
 	}
 
@@ -97,16 +147,34 @@ class DoxterPlugin extends BasePlugin
 	{
 		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
 
-		return new DoxterTwigExtension();
+		doxter()->stash('extension', new DoxterTwigExtension());
+
+		return doxter()->extension;
 	}
 
 	public function onAfterInstall()
 	{
-		craft()->request->redirect(
-			sprintf(
-				'/%s/settings/plugins/doxter',
-				craft()->config->get('cpTrigger')
-			)
-		);
+		craft()->request->redirect($this->getCpSettingsUrl());
+	}
+
+	public function getCpUrl($append='')
+	{
+		return sprintf('/%s/doxter/%s', craft()->config->get('cpTrigger'), $append);
+	}
+
+	public function getCpSettingsUrl($append='')
+	{
+		return sprintf('/%s/settings/plugins/doxter/%s', craft()->config->get('cpTrigger'), $append);
+	}
+}
+
+/**
+ * A way to grab the dependency container within the Craft namespace
+ */
+if (!function_exists('\\Craft\\doxter'))
+{
+	function doxter()
+	{
+		return \SelvinOrtiz\Doxter\Di::getInstance();
 	}
 }

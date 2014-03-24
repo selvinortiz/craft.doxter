@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter allows you to write markdown and supports live preview
+ * Write markdown in live preview and create reference tags with ease
  *
  * @package Craft
  */
@@ -10,18 +10,27 @@ class DoxterFieldType extends BaseFieldType
 {
 	public function getName()
 	{
-		return Craft::t('Doxter Markdown');
+		return 'Doxter Markdown';
 	}
 
 	public function getInputHtml($name, $value)
 	{
-		$plugin		= craft()->plugins->getPlugin('doxter');
+		if (doxter()->service->getEnvOption('useCompressedResources', true))
+		{
+			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
+			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
+		}
+		else
+		{
+			craft()->templates->includeCssResource('doxter/css/doxter.css');
+			craft()->templates->includeJsResource('doxter/js/textrange.js');
+			craft()->templates->includeJsResource('doxter/js/behave.js');
+			craft()->templates->includeJsResource('doxter/js/doxter.js');
+		}
+
 		$inputId	= craft()->templates->formatInputId($name);
 		$targetId	= craft()->templates->namespaceInputId($inputId);
-		$snippetJs	= $this->getDoxterMarkdownJs($targetId, $this->getSettings());
-
-		craft()->templates->includeCssResource('doxter/doxter.css');
-		craft()->templates->includeJsResource('doxter/doxter.js');
+		$snippetJs	= $this->getDoxterFieldJs($targetId);
 
 		// Using the lovely Craft queue/buffer to support matrix fields: )
 		craft()->templates->includeJs($snippetJs);
@@ -29,11 +38,11 @@ class DoxterFieldType extends BaseFieldType
 		return craft()->templates->render(
 			'doxter/fields/doxter/_input',
 			array(
-				'id'				=> $targetId,
-				'name'				=> $name,
-				'value'				=> $value,
-				'inputId'			=> $inputId,
-				'settings'			=> $this->getSettings()
+				'id'		=> $targetId,
+				'name'		=> $name,
+				'value'		=> $value,
+				'inputId'	=> $inputId,
+				'settings'	=> $this->getSettings()
 			)
 		);
 	}
@@ -41,10 +50,11 @@ class DoxterFieldType extends BaseFieldType
 	public function defineSettings()
 	{
 		return array(
-			'enableWordWrap'	=> array(AttributeType::Bool, 'maxLength'=>3),
-			'enableSoftTabs'	=> array(AttributeType::Bool, 'maxLength'=>3),
-			'tabSize'			=> AttributeType::Number,
-			'rows'				=> AttributeType::Number
+			'enableWordWrap'	=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => false),
+			'enableSoftTabs'	=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => true),
+			'spellcheck'		=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => false),
+			'tabSize'			=> array(AttributeType::Number, 'default' => 4),
+			'rows'				=> array(AttributeType::Number, 'default' => 20)
 		);
 	}
 
@@ -58,21 +68,17 @@ class DoxterFieldType extends BaseFieldType
 		);
 	}
 
-	public function getDoxterMarkdownJs($id, $settings)
+	public function getDoxterFieldJs($id)
 	{
-		return "Doxter.createDoxterMarkdown('{$id}', {$settings->tabSize}, {$settings->enableSoftTabs});";
-	}
+		$options = json_encode(
+			array(
+				'tabSize'	=> doxter()->plugin->getSettings()->getAttribute('tabSize'),
+				'softTabs'	=> doxter()->plugin->getSettings()->getAttribute('enableSoftTabs'),
+				'container'	=> $id.'Canvas'
+			)
+		);
 
-	public function prepSettings($settings)
-	{
-		// I prefer sensible defautls instead of errors for this use case
-		$settings['enableWordWrap'] = craft()->doxter->getBoolFromLightSwitch($settings['enableWordWrap']);
-		$settings['enableSoftTabs'] = craft()->doxter->getBoolFromLightSwitch($settings['enableSoftTabs']);
-		$settings['syntaxSnippet']	= doxter()->get('syntaxSnippet', $settings, doxter()->getDefaultSyntaxSnippet());
-		$settings['tabSize']		= doxter()->get('tabSize', $settings, 4);
-		$settings['rows']			= doxter()->get('rows', $settings, 20);
-
-		return $settings;
+		return "new Doxter('{$id}', {$options}).render();";
 	}
 
 	public function defineContentAttribute()

@@ -1,112 +1,113 @@
 ![Doxter](resources/img/doxter.png)
 
-## Doxter 0.5.6
-*by* [Selvin Ortiz](http://twitter.com/selvinortiz)
+# Doxter 0.6.0
+Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
-----
-### Download Notes
-You must download the [latest release](https://github.com/selvinortiz/craft.doxter/releases) with the following name pattern `doxter.v*.*.*.zip`
+**Doxter** is a markdown plugin designed to improve the way you write documentation.  
+It provides a minimalist textarea **fieldtype** with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
+It also provides a **markdown parser** that supports [github flavor markdown][gfm], [reference tags][parseRefs] with _recursive parsing_ and _linkable headers_.
 
-The official release is the only distribution meant for production and it is required when requesting support or reporting a bug.
-
-----
-### Description
-_Doxter_ is a **markdown** plugin designed to improve your workflow for writing _docs_.
-
-### Features
-* Built on top of [Parsedown](https://github.com/erusev/parsedown) _by_ **Emanuil Rusev**
-* Enables you to **write markdown** in a simple text area with **editor behavior** enabled
-* Parses your **fenced code blocks** in a very intelligent way and sets them up for proper highlighting
-* Lets you focus on writing markdown and see it using **Live Preview**
-* Lets you parse markdown intelligently with the **doxter** filter and the **doxter(source, params)** function
-* You can have as many _doxter markdown_ **field type instances** as you want within a single entry type
-* You can event have multiple _doxter markdown_ field types within a **Matrix** field type
-* Gives you full control over the parsing output via the **syntaxSnippet** setting and parameter
-* Fully compatible with [Scrawl](https://github.com/builtbysplash/craft-scrawl) and **Plain Text** field types
-
-### Minimum Requirements
-- PHP 5.3.2
-- Craft 1.3
-
-### Installation
-1. Download the [latest release](https://github.com/selvinortiz/craft.doxter/releases) with the following name pattern `doxter.v*.*.*.zip`
+## Installation
+1. Download the [Official Release][release]
 2. Extract the archive and place `doxter` inside your `craft/plugins` directory
-3. Adjust file permissions as necessary
-4. Install **Doxter** from the **Control Panel**
-5. Set up your **Syntaxt Snippet** via the plugin settings to wrap your code blocks
+4. Install **Doxter** from the Control Panel **@** `Settings > Plugins`
+5. Adjust plugin settings from the Control Panel **@** `Settings > Plugins > Doxter`
+6. FieldType settings can be adjusted when you create your **Doxter Markdown** fields
 
-----
-### Usage
-You can use the **Doxter Markdown** field type in the same way you would use a **Rich Text** field type or [Scrawl](https://github.com/builtbysplash/craft-scrawl)
+## Features
+* [Live Preview][preview] Support
+* [Github Fravored Markdown][gfm] Parsing
+* Can add **header anchors** dynamically
+* Fast and consistent **parsing** based on [Parsedown][parsedown]
+* Minimalist **textarea** with [Editor Behavior][behave] and toolbar for [Reference Tags][refTags]
+* Support for multiple fieldtypes within a single [Entry Type][entrytypes]
+* Support for multiple fieldtypes within [Matrix Fields][matrix]
+* Fully compatible with [Scrawl][scrawl]
+* **Unit Tested** with care
 
-Using the **Doxter Markdown** field type is not required because the **doxter** filter/function doesn't care where it comes from as long as it is valid markdown;)
-That means that you can use **Scrawl Markdown** or a **Plain Text** field type to write/store your markdown and **doxter** will parse it.
+## Filter Usage
+Doxter adds the `doxter({})` filter that you should use instead of `md` or `markdown` and doing so
+will enable features not supported by those filters like [github flavored markdown][gfm], [reference tags][parseRefs], _linkable headers_,
+and custom **code block snippet**.
 
-### Changelog
+```twig
+{% set markdown %}
+    # Doxter
+    **Doxter** is a markdown plugin designed to improve the way your write documentation.
 
-----
-#### 0.5.6
-* Adds support for the `parseRefs` filter returned value
-* Adds flexibility by allowing empty and non empty string, and objects
-* Fixes issue #6 where objects that implement `__toString` were ignored
+    You can read more about it on our [latest article]({entry:1:getLink()})
+{% endset %}
 
-----
-#### 0.5.5
-* Adds the ability to handle empty fields safely @see issue #5
-* Fixes issue #5 by patching infinite loop triggered by an empty string
-* Improves the doxter filter/function by only processing non empty strings
+{{ markdown | doxter }}
+```
 
-----
-#### 0.5.4 RC1
-* Adds build automation to aid in distribution
-* Removes **Markdown Extra** and adds **Parsedown**
-* Removes the use of `devMode` to embed resources
-* Improves parsing performance and consistency
-* Fixes a few rendering issues related to JS event binding
-* Fixes many styling issues related to name collision in CSS
+The output should be something like this...
 
-#### 0.5.3
-Merged with 0.5.4 RC1, see above!
+```html
+<h1 id="doxter">Doxter <a class="anchor" href="#doxter" title="Doxter">#</a></h1>
 
-#### 0.5.2
-* Adds support for **Matrix**
-* Fixes a few rendering issues related to JS
-* Fixes many styling issues related to CSS
+<p><strong>Doxter</strong> is a markdown plugin designed to improve the way your write documentation.</p>
 
-#### 0.5.1
-* Adds support for multiple instances of **Doxter Markdown** within a single entry type
-* Improves button styling for **write/preview** modes
+<p>You can read more about it on our <a href="/blog/doxter-markdown">latest post</a><p>
+```
 
-#### 0.5.0
-* Adds _tabbed_ UI for **write/preview** modes
-* Fixes path issues with production resources
-* Fixes word wrap, white space, and tab size issues  @ #1
-* Improves the speed of `getDevMode()` by avoiding system call
-* Improves template rendering speed by removing the form macro
+### Filter API
+The `doxter` filter accepts all parameters for which there are setings.
 
-#### 0.4.0
-* Adds a **Doxter Markdown** fieldtype
-* Adds test suite skeleton to flesh out on **1.0.0**
-* Adds uncommitted **build** directory to manage distributions
+| Parameter                 | Type          | Default               | Description                                                           |
+|-----------------------    |-----------    |--------------------   |----------------------------------------------------------             |
+| `parseRecursively`        | `boolean`     | `true`                | Whether markdown within [reference tags][refTags] should be parsed    |
+| `parseReferenceTags`      | `boolean`     | `true`                | Whether [reference tags][refTags] should be parsed                    |
+| `addHeaderAnchors`        | `boolean`     | `true`                | Whether to add anchors to headers                                     |
+| `addHeadersAnchorsTo`     | `string`      | `h1, h2, h3`          | What headers to make linkable/add anchors to                          |
+| `codeBlockSnippet`        | `string`      | _see snippet below_   |                                                                      |
 
-#### 0.3.0
-Initial preview release
+#### Default Code Block Snippet
+```html
+<!-- Default snippet targets RainbowJS -->
+<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>
+```
 
-* Adds the ability to parse **markdown**
-* Adds the ability to parse **github** style _fenced code blocks_
+## FieldType Usage
+Doxter adds a `Doxter Markdown` fieldtype that you can use to write/store your markdown content.  
+The fieldtype is a simple textarea with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
+In addition to that, this simple fieldtype includes settings for _rows, word wrap, tab size, convert to tabs, etc_
 
-### Help & Feedback
-If you have questions, comments, or concerns feel free to reach out to me on twitter [@selvinortiz](http://twitter.com/selvinortiz)
+_Using this fieldtype is not required to be able to use the filter but future version might implement the ability to preparse and cache content_
 
-### Credits
-_Doxter_ was lovingly **crafted** using these third party tools, special thanks to their developers and maintainers.
+## Changes
+All noteworthy changes can be found in [CHANGELOG.md][changelog]
 
-- [Parsedown](http://parsedown.org "The Better Markdown Parser in PHP") for fast and consistent markdown parsing
-- [Behave JS](http://jakiestfu.github.io/Behave.js "Editor Behavior") to add editor behavior features in our simple textbox
+## Feedback
+If you have any feedback, questions, or concerns, please reach out to me on twitter [@selvinortiz][developer]
 
-A special thanks goes to my loyal followers and crafters that have helped me test and improve **Doxter** and provided me with useful feedback!
+## Credits
+Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
-### Licence
-**Doxter** is open source software licensed under the [MIT License](http://opensource.org/licenses/MIT)
+1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
+2. [BehaveJS][behave] _to add editor behavior to the textarea_
+3. [Zit][zit] _for dependency management_
 
-![Open Source Initiative](resources/img/osilogo.png)
+_Special thanks to their developer and maintainers!_
+
+## License
+Doxter is open source software licensed under the [MIT license][license]
+
+![Open Source Initiative][osilogo]
+
+[craft]:http://buildwithcraft.com "Craft CMS"
+[developer]:http://twitter.com/selvinortiz "@selvinortiz"
+[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.0/doxter.v0.6.0.zip "Official Release"
+[refTags]:http://buildwithcraft.com/docs/reference-tags "Reference Tags"
+[parseRefs]:http://buildwithcraft.com/docs/templating/filters#parseRefs "Reference Tag Filter"
+[preview]:http://buildwithcraft.com/features/live-preview "Live Preview"
+[matrix]:http://buildwithcraft.com/features/matrix "Matrix"
+[entrytypes]:http://buildwithcraft.com/features/entry-types "Entry Types"
+[gfm]: https://help.github.com/articles/github-flavored-markdown "Github Flavored Markdown"
+[zit]:https://github.com/selvinortiz/zit "Zit"
+[behave]:http://jakiestfu.github.io/Behave.js/ "BehaveJS"
+[parsedown]:https://github.com/erusev/parsedown "Parsedown"
+[scrawl]:https://github.com/builtbysplash/craft-scrawl "Scrawl"
+[changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
+[license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
+[osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"

@@ -4,36 +4,65 @@
 {% set alias	= craft.doxter.getName() %}
 {% set version	= craft.doxter.getVersion() %}
 
-{%- set syntaxSnippet -%}
-	{% if settings.syntaxSnippet is not empty %}
-		{{- settings.syntaxSnippet -}}
-	{% else %}
-		{{- "<pre><code data-language=\"{languageClass}\">{sourceCode}</code></pre>" -}}
-	{% endif %}
-{% endset %}
-
 {% block content %}
-	<div id="doxterSettings">
+	<div class="doxterSettings">
 		<h2>
-			<a href="{{ craft.doxter.getUrl() }}">
+			<a href="{{ craft.doxter.getCpUrl() }}">
 				{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span>
 			</a>
 		</h2>
 		<p>
-			<em>{{ name }}</em> is a <strong>markdown</strong> plugin designed to improve your workflow for writing docs
+			<em>{{ name }}</em> is a <strong>markdown</strong> plugin designed to improve the way you write documentation
 		</p>
 
 		<div class="doxterSection">
 			<h3 class="ico syntax">Parsing Settings</h3>
+			<h4>Parse Recursively?</h4>
+			<p class="subtle">Will enable recursive parsing for reference tags.</p>
+			{{
+				forms.lightswitch({
+					name:		"parseRecursively",
+					on:			settings.parseRecursively
+				})
+			}}
+			<hr>
+			<p>Parse <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Rerence Tags</a>?</p>
+			<p class="subtle">Tells doxter to parse references at runtime thereby avoiding using the <strong>parseRefs</strong> filter.</p>
+			{{
+				forms.lightswitch({
+					name:		"parseReferenceTags",
+					on:			settings.parseReferenceTags
+				})
+			}}
+			<hr>
+			<p>Parse Headers and Add Anchors?</p>
+			<p class="subtle">Tells doxter to parse headers so that it can add anchors/links to them.</p>
+			{{
+				forms.lightswitch({
+					name:		"addHeaderAnchors",
+					on:			settings.addHeaderAnchors
+				})
+			}}
+			{{
+				forms.textField({
+					id:				"addHeaderAnchorsTo",
+					name:			"addHeaderAnchorsTo",
+					label:			"Headers To Add Anchors To" | t,
+					instructions:	"Comma separated list of headers <em>(h1, h2, h3, etc)</em> that you'd like to add anchors to." | raw | t,
+					value:			settings.addHeaderAnchorsTo,
+					errors:			""
+				})
+			}}
+			<hr>
 			{{
 				forms.textareaField({
-					id:				"syntaxSnippet",
-					name:			"syntaxSnippet",
+					id:				"codeBlockSnippet",
+					name:			"codeBlockSnippet",
 					class:			"code",
 					rows:			5,
-					label:			"Syntax Highlighter Snippet",
-					instructions:	"A snippet to wrap your <em>code</em> and <em>language</em> class if using fenced code blocks",
-					value:			syntaxSnippet,
+					label:			"Code Block Snippet",
+					instructions:	"A snippet to wrap fenced code blocks for your syntax highlighter to use.",
+					value:			settings.codeBlockSnippet,
 					error:			""
 				})
 			}}

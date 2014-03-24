@@ -3,25 +3,28 @@ namespace Craft;
 
 class DoxterVariable
 {
-	protected $plugin;
-
-	public function __construct()
-	{
-		$this->plugin = craft()->plugins->getPlugin('doxter');
-	}
-
 	public function getName($real=false)
 	{
-		return $this->plugin->getName($real);
+		return doxter()->plugin->getName($real);
 	}
 
 	public function getVersion()
 	{
-		return $this->plugin->getVersion();
+		return doxter()->plugin->getVersion();
 	}
 
-	public function getUrl()
+	public function getDeveloper()
 	{
-		return sprintf('/%s/doxter', craft()->config->get('cpTrigger'));
+		return doxter()->plugin->getDeveloper();
+	}
+
+	public function getCpUrl()
+	{
+		return doxter()->plugin->getCpUrl();
+	}
+
+	public function getCpSettingsUrl()
+	{
+		return doxter()->plugin->getCpSettingsUrl();
 	}
 }
