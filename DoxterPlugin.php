@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v0.6.0
+ * Doxter @v0.6.1
  *
  * Doxter is a markdown plugin designed to improve the way you write documentation
  *
@@ -47,7 +47,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.6.0';
+		return '0.6.1';
 	}
 
 	public function getDeveloper()
@@ -103,22 +103,22 @@ class DoxterPlugin extends BasePlugin
 	public function defineSettings()
 	{
 		return array(
-			/**
+			/*
 			 * Whether recursive parsing should be enabled in parsers that support it
 			 */
 			'parseRecursively'		=> array(AttributeType::Bool, 'default' => true),
 			
-			/**
+			/*
 			 * Whether headers should be parsed and anchored
 			 */
 			'addHeaderAnchors'		=> array(AttributeType::Bool, 'default' => true),
 			
-			/**
+			/*
 			 * The headers that should be parsed and anchored if header parsing is enabled
 			 */
 			'addHeaderAnchorsTo'	=> array(AttributeType::String, 'default' => 'h1, h2, h3'),
 
-			/**
+			/*
 			 * The snippet used to wrap fenced code blocks in {languageClass} {sourceCode}
 			 */
 			'codeBlockSnippet'		=> array(AttributeType::String,
@@ -126,17 +126,17 @@ class DoxterPlugin extends BasePlugin
 				'column'			=> ColumnType::Text
 			),
 
-			/**
+			/*
 			 * Whether reference tags should be parsed {type:reference:property}
 			 */
 			'parseReferenceTags'	=> array(AttributeType::Bool, 'default' => true),
 			
-			/**
+			/*
 			 * Whether a tab with the name/alias should be shown in the CP nav
 			 */
 			'enableCpTab'			=> array(AttributeType::Bool, 'default' => false),
 			
-			/**
+			/*
 			 * The plugin alias to use in place of the name in the CP tab, plugin settings, etc.
 			 */
 			'pluginAlias'			=> array(AttributeType::String, 'default' => 'Doxter')
@@ -175,6 +175,6 @@ if (!function_exists('\\Craft\\doxter'))
 {
 	function doxter()
 	{
-		return \SelvinOrtiz\Doxter\Di::getInstance();
+		return \SelvinOrtiz\Doxter\Doxter::getInstance();
 	}
 }

@@ -4,14 +4,16 @@ namespace SelvinOrtiz\Doxter;
 /**
  * Doxter Header Parser
  *
- * @package SelvinOrtiz
+ * @package SelvinOrtiz\Doxter
  */
-class HeaderParser extends BaseParser
+class HeaderParser extends Parser
 {
 	/**
 	 * Parses headers and adds anchors
 	 *
 	 * @param	string	$source
+	 * @param	array	$params
+	 *
 	 * @return	string
 	 */
 	public function parse($source=null, array $params=array())
@@ -48,18 +50,6 @@ class HeaderParser extends BaseParser
 
 	protected function createSlug($title)
 	{
-		$slug	= html_entity_decode($title, ENT_COMPAT, 'UTF-8');
-		$locale	= @setlocale(LC_CTYPE, 0);
-		
-		@setlocale(LC_CTYPE, 'en_US.UTF-8');
-
-		$slug = iconv('UTF-8', 'ASCII//TRANSLIT', $slug);
-
-		$slug = preg_replace('/[^a-z0-9 ]+/i', '', $slug);
-		$slug = preg_replace('/\s+/', '-', $slug);
-
-		@setlocale(LC_CTYPE, $locale);
-
-		return strtolower($slug);
+		return \Craft\ElementHelper::createSlug($title);
 	}
 }

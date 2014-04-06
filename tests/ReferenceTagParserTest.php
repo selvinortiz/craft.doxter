@@ -58,4 +58,19 @@ class ReferenceTagParserTest extends DoxterBaseTest
 
 		$this->assertEquals($expect, $parsed);
 	}
+
+	public function setUp()
+	{
+		parent::setUp();
+		parent::reloadConfig();
+
+		$criteria	= m::mock('Craft\ElementCriteriaModel');
+		$criteria->shouldReceive('find')->withAnyArgs()->andReturn(false);
+
+		$elements	= m::mock('Craft\ElementsService');
+		$elements->shouldReceive('getIsInitialized')->andReturn(true);
+		$elements->shouldReceive('getCriteria')->withAnyArgs()->andReturn($criteria);
+
+		$this->setComponent(craft(), 'elements', $elements);
+	}
 }

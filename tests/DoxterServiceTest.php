@@ -47,7 +47,6 @@ class DoxterServiceTest extends DoxterBaseTest
 		// If options are available
 		doxter()->config->shouldReceive('get')->with('doxterSettings')->andReturn($envOptions);
 
-		$this->assertTrue(doxter()->service->getEnvOption('useCompressedResources'));
 		$this->assertEquals(null, doxter()->service->getEnvOption('baseDocumentPath'));
 		$this->assertEquals('/base/path', doxter()->service->getEnvOption('baseDocumentPath', '/base/path'));
 	}
@@ -59,5 +58,11 @@ class DoxterServiceTest extends DoxterBaseTest
 
 		$this->assertTrue(doxter()->service->safeOutput($content, $charset) instanceof \Twig_Markup);
 		$this->assertEquals($content, (string) doxter()->service->safeOutput($content, $charset));
+	}
+
+	public function setUp()
+	{
+		parent::setUp();
+		parent::reloadConfig();
 	}
 }

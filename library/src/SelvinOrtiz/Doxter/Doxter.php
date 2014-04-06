@@ -1,33 +1,41 @@
 <?php
 namespace SelvinOrtiz\Doxter;
 
-use SelvinOrtiz\Zit\IZit;
+use SelvinOrtiz\Zit\Zit;
 
-class Doxter
+class Doxter extends Zit
 {
-	public function parse($source, array $params = array()) 
+	public function init()
 	{
-		$codeBlockSnippet				= null;
-		$addHeaderAnchors				= true;
-		$addHeaderAnchorsTo				= array('h1', 'h2', 'h3');
-		$parseReferenceTags				= true;
-		$parseReferenceTagsRecursively	= true;
-		
-		extract($params);
+		// Define parser dependencies
+		doxter()->stash('parser', new DoxterParser);
+		doxter()->stash('parsedown', \Parsedown::instance());
+		doxter()->stash('headerParser', new HeaderParser);
+		doxter()->stash('markdownParser', new MarkdownParser);
+		doxter()->stash('referenceTagParser', new ReferenceTagParser);
+	}
 
-		// By parsing reference tags first, we have a chance to parse md within them
-		if ($parseReferenceTags)
+	protected function pop($id, $args=array() )
+	{
+		try
 		{
-			$source = Di::getInstance()->referenceTagParser->parse($source, compact('parseReferenceTagsRecursively'));
+			return parent::pop($id, $args);
 		}
-
-		$source = Di::getInstance()->markdownParser->parse($source, compact('codeBlockSnippet'));
-		
-		if ($addHeaderAnchors)
+		catch (\Exception $e)
 		{
-			$source = Di::getInstance()->headerParser->parse($source, compact('addHeaderAnchorsTo'));
+			throw new Exception\MissingDependencyException($id);
 		}
+	}
+}
 
-		return $source;
+
+/**
+ * A way to grab the dependency container within the Doxter namespace
+ */
+if (!function_exists('\\SelvinOrtiz\\Doxter\\doxter'))
+{
+	function doxter()
+	{
+		return \SelvinOrtiz\Doxter\Doxter::getInstance();
 	}
 }

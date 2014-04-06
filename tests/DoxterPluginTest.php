@@ -71,7 +71,8 @@ class DoxterPluginTest extends DoxterBaseTest
 	public function setUp()
 	{
 		parent::setUp();
-
+		parent::reloadConfig();
+		
 		$this->plugin = new DoxterPlugin;
 	}
 }

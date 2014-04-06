@@ -18,6 +18,9 @@ class DoxterFieldTypeTest extends DoxterBaseTest
 
 	public function testGetInputHtml()
 	{
+		doxter()->config->shouldReceive('getLocalized')->with('siteUrl')->andReturn('http://selvin.dev');
+		doxter()->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
+
 		$this->assertTrue(doxter()->fieldtype->getInputHtml('doxterMarkdown', '*markdown*'));
 	}
 

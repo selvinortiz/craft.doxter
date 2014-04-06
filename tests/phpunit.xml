@@ -12,7 +12,7 @@
 	syntaxCheck="true"
 	strict="false"
 
-	bootstrap="/home/selvinortiz/www/selv.dev/selv/craft/app/tests/bootstrap.php">
+	bootstrap="/home/selvinortiz/www/selvin.dev/selvin/craft/app/tests/bootstrap.php">
 
 	<testsuites>
 		<testsuite>

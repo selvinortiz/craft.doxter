@@ -1,11 +1,11 @@
 ![Doxter](resources/img/doxter.png)
 
-# Doxter 0.6.0
+# Doxter 0.6.1
 Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 **Doxter** is a markdown plugin designed to improve the way you write documentation.  
-It provides a minimalist textarea **fieldtype** with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
-It also provides a **markdown parser** that supports [github flavor markdown][gfm], [reference tags][parseRefs] with _recursive parsing_ and _linkable headers_.
+It provides a simple textarea **fieldtype** with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
+It also provides a **markdown parser** that supports [github flavor markdown][gfm], [reference tags][parseRefs] with _recursive parsing_ and **linkable headers**.
 
 ## Installation
 1. Download the [Official Release][release]
@@ -97,7 +97,7 @@ Doxter is open source software licensed under the [MIT license][license]
 
 [craft]:http://buildwithcraft.com "Craft CMS"
 [developer]:http://twitter.com/selvinortiz "@selvinortiz"
-[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.0/doxter.v0.6.0.zip "Official Release"
+[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.1/doxter.v0.6.1.zip "Official Release"
 [refTags]:http://buildwithcraft.com/docs/reference-tags "Reference Tags"
 [parseRefs]:http://buildwithcraft.com/docs/templating/filters#parseRefs "Reference Tag Filter"
 [preview]:http://buildwithcraft.com/features/live-preview "Live Preview"

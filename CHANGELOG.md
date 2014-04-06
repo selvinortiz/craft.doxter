@@ -4,6 +4,12 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 ## Changes
 
+### 0.6.1
+* Fixes an issue caused by `iconv()` not being defined in some environments
+* Fixes some deprecation issues and spacing
+* Improves **header parsing** by generating slugs the _craft way_
+* Improves dependency management
+
 ### 0.6.0
 * Adds the `HeaderParser` class
 * Adds the `ReferenceTagParser` class

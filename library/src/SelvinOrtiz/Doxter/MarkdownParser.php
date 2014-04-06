@@ -1,7 +1,7 @@
 <?php
 namespace SelvinOrtiz\Doxter;
 
-class MarkdownParser extends BaseParser
+class MarkdownParser extends Parser
 {
 	protected $codeBlockSnippet;
 
@@ -11,7 +11,7 @@ class MarkdownParser extends BaseParser
 
 		extract($params);
 		
-		$source = Di::getInstance()->parsedown->parse($source);
+		$source = doxter()->parsedown->parse($source);
 
 		if (empty($codeBlockSnippet))
 		{

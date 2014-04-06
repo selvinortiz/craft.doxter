@@ -2,3 +2,4 @@
 build
 vendor
 tests/report
+tests/unstable.sh

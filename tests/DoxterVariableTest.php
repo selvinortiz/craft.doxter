@@ -28,4 +28,10 @@ class DoxterVariableTest extends DoxterBaseTest
 	{
 		$this->assertEquals('/admin/doxter/', doxter()->variable->getCpUrl());
 	}
+
+	public function setUp()
+	{
+		parent::setUp();
+		parent::reloadConfig();
+	}
 }

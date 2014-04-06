@@ -1,9 +1,6 @@
 <?php
 namespace Craft;
 
-use \SelvinOrtiz\Zit\IZit;
-use \SelvinOrtiz\Doxter\Exception\InvalidDependencyContainerException;
-
 class DoxterService extends BaseApplicationComponent
 {
 	public function parse($source, array $params=array())
@@ -11,7 +8,7 @@ class DoxterService extends BaseApplicationComponent
 		$pluginSettings	= doxter()->plugin->getSettings()->getAttributes();
 		$combinedParams	= array_merge($pluginSettings, $params);
 
-		return $this->safeOutput(doxter()->doxter->parse($source, $combinedParams));
+		return $this->safeOutput(doxter()->parser->parse($source, $combinedParams));
 	}
 
 	public function getBoolFromLightSwitch($value)

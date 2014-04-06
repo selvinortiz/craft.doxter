@@ -11,7 +11,7 @@ use \Craft\ElementCriteriaModel;
  *
  * @package SelvinOrtiz
  */
-class ReferenceTagParser extends BaseParser
+class ReferenceTagParser extends Parser
 {
 	protected static $pattern = '(entry|user|asset|tag|global):([a-z0-9\@\.\-\_\/]+):?([a-z0-9\-\_\.\(\)]+)?';
 	protected static $openingTag = '{';
@@ -28,6 +28,8 @@ class ReferenceTagParser extends BaseParser
 	 * Parses reference tags recursively (optional)
 	 *
 	 * @param	string	$source
+	 * @param	boolean	$recursively
+	 *
 	 * @return	string
 	 */
 	public function parse($source = null, $recursively = true)
@@ -86,8 +88,8 @@ class ReferenceTagParser extends BaseParser
 					$attributes['slug']		= $reference[1];
 					$attributes['section']	= $reference[0];
 				}
-				
-			break;
+
+				break;
 
 			case 'user':
 				$elementType = ElementType::User;
@@ -105,7 +107,7 @@ class ReferenceTagParser extends BaseParser
 					$attributes['username'] = $reference;
 				}
 
-			break;
+				break;
 
 			case 'tag':
 				$elementType	= ElementType::Tag;
@@ -115,7 +117,7 @@ class ReferenceTagParser extends BaseParser
 				$elementType	= $elementType ? $elementType : ElementType::GlobalSet;
 				$attributes		= array('id' => (int)$reference);
 
-			break;
+				break;
 		}
 
 		$element	= $this->getElement($elementType, $attributes);
@@ -167,7 +169,7 @@ class ReferenceTagParser extends BaseParser
 	 * @param	mixed	$model		The instance of BaseElementModel or ContentElementModel
 	 * @param	mixed	$default
 	 *
-	 * @return    string
+	 * @return	string
 	 */
 	protected function getAttribute($attribute, $model, $default = null)
 	{
@@ -176,7 +178,6 @@ class ReferenceTagParser extends BaseParser
 		foreach ($attributes as $attributeName)
 		{
 			$attributeName = preg_replace('/\(.*?\)/i', '', $attributeName);
-
 
 			if (isset($model->{$attributeName}))
 			{

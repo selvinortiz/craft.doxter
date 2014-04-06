@@ -1,9 +1,7 @@
 <?php
 namespace SelvinOrtiz\Doxter;
 
-use SelvinOrtiz\Zit\IZit;
-
-abstract class BaseParser implements ParserInterface
+abstract class Parser
 {
 	public function isValidString($subject)
 	{
