@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v0.6.1
+ * Doxter @v0.6.2
  *
  * Doxter is a markdown plugin designed to improve the way you write documentation
  *
@@ -47,7 +47,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.6.1';
+		return '0.6.2';
 	}
 
 	public function getDeveloper()

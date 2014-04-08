@@ -4,6 +4,10 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 ## Changes
 
+### 0.6.2
+* Fixes typos in the settings page
+* Updates grammar in settings page
+
 ### 0.6.1
 * Fixes an issue caused by `iconv()` not being defined in some environments
 * Fixes some deprecation issues and spacing
