@@ -97,7 +97,7 @@ Doxter is open source software licensed under the [MIT license][license]
 
 [craft]:http://buildwithcraft.com "Craft CMS"
 [developer]:http://twitter.com/selvinortiz "@selvinortiz"
-[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.1/doxter.v0.6.1.zip "Official Release"
+[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.2/doxter.v0.6.2.zip "Official Release"
 [refTags]:http://buildwithcraft.com/docs/reference-tags "Reference Tags"
 [parseRefs]:http://buildwithcraft.com/docs/templating/filters#parseRefs "Reference Tag Filter"
 [preview]:http://buildwithcraft.com/features/live-preview "Live Preview"
