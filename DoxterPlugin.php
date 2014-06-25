@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v0.6.2
+ * Doxter @v1.0.0
  *
  * Doxter is a markdown plugin designed to improve the way you write documentation
  *
