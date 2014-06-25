@@ -23,7 +23,7 @@ class DoxterTwigExtension extends Twig_Extension
 	 */
 	public function doxter($source='', array $params=array())
 	{
-		return doxter()->service->parse($source, $params);
+		return craft()->doxter->parse($source, $params);
 	}
 
 	public function getFilters()

@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.0
+ * Doxter @v1.0.1
  *
  * The swiss army markdown plugin
  *
@@ -22,8 +22,12 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function init()
 	{
-		Craft::import('plugins/doxter/common.*');
-		Craft::import('plugins/doxter/twigextensions.*');
+		parent::init();
+
+		Craft::import('plugins.doxter.common.*');
+		Craft::import('plugins.doxter.twigextensions.*');
+
+		require_once(dirname(__FILE__).'/common/libs/Parsedown.php');
 	}
 
 	/**
@@ -46,7 +50,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.0.0';
+		return '1.0.1';
 	}
 
 	/**
@@ -72,7 +76,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getSettingsHtml()
 	{
-		if (doxter()->service->getEnvOption('useCompressedResources', true))
+		if (craft()->doxter->getEnvOption('useCompressedResources', true))
 		{
 			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
 			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
@@ -90,7 +94,7 @@ class DoxterPlugin extends BasePlugin
 		return craft()->templates->render(
 			'doxter/_settings',
 			array(
-				'settings' => doxter()->plugin->getSettings()
+				'settings' => craft()->doxter->settings,
 			)
 		);
 	}
@@ -169,11 +173,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function addTwigExtension()
 	{
-		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
-
-		doxter()->stash('extension', new DoxterTwigExtension());
-
-		return doxter()->extension;
+		return new DoxterTwigExtension;
 	}
 
 	/**
@@ -181,6 +181,6 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function onAfterInstall()
 	{
-		craft()->request->redirect($this->getCpSettingsUrl());
+		craft()->request->redirect(UrlHelper::getCpUrl('settings/plugins/doxter'));
 	}
 }

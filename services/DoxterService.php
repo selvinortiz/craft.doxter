@@ -1,14 +1,67 @@
 <?php
 namespace Craft;
 
+/**
+ * The service layer and global API into Doxter
+ *
+ * Class DoxterService
+ *
+ * @package Craft
+ */
+
 class DoxterService extends BaseApplicationComponent
 {
+	/**
+	 * @var array The plugin settings imported on service initialization
+	 */
+	public $settings = array();
+	/**
+	 * Loads plugin settings into self for later use
+	 *
+	 * @return void
+	 */
+	public function init()
+	{
+		$this->settings = craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes();
+
+		parent::init();
+	}
+
+	/**
+	 * Parses source markdown into valid html using various rules and parsers
+	 *
+	 * @param string $source The markdown source to parse
+	 * @param array $params Passed in parameters via a template call
+	 *
+	 * @return \Twig_Markup The parsed content flagged as safe to output
+	 */
 	public function parse($source, array $params=array())
 	{
-		$pluginSettings	= doxter()->plugin->getSettings()->getAttributes();
-		$combinedParams	= array_merge($pluginSettings, $params);
+		$codeBlockSnippet				= null;
+		$addHeaderAnchors				= true;
+		$addHeaderAnchorsTo				= array('h1', 'h2', 'h3');
+		$parseReferenceTags				= true;
+		$parseReferenceTagsRecursively	= true;
 
-		return $this->safeOutput(doxter()->parser->parse($source, $combinedParams));
+		$params = array_merge($this->settings, $params);
+
+		extract($params);
+
+		// By parsing reference tags first, we have a chance to parse md within them
+		if ($parseReferenceTags)
+		{
+			$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
+		}
+
+		$source	= \Parsedown::instance()->text($source);
+		$source	= DoxterCodeParser::instance()->parse($source, compact('codeBlockSnippet'));
+
+		if ($addHeaderAnchors)
+		{
+			$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo'));
+		}
+
+		return TemplateHelper::getRaw($source);
 	}
 
 	public function getBoolFromLightSwitch($value)
@@ -68,15 +121,5 @@ class DoxterService extends BaseApplicationComponent
 		}
 
 		return $env;
-	}
-
-	public function safeOutput($content, $charset=null)
-	{
-		if (is_null($charset))
-		{
-			$charset = craft()->templates->getTwig()->getCharset();
-		}
-
-		return new \Twig_Markup($content, (string) $charset);
 	}
 }

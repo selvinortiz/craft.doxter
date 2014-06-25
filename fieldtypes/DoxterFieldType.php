@@ -15,7 +15,7 @@ class DoxterFieldType extends BaseFieldType
 
 	public function getInputHtml($name, $value)
 	{
-		if (doxter()->service->getEnvOption('useCompressedResources', true))
+		if (craft()->doxter->getEnvOption('useCompressedResources', true))
 		{
 			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
 			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
@@ -72,13 +72,23 @@ class DoxterFieldType extends BaseFieldType
 	{
 		$options = json_encode(
 			array(
-				'tabSize'	=> doxter()->plugin->getSettings()->getAttribute('tabSize'),
-				'softTabs'	=> doxter()->plugin->getSettings()->getAttribute('enableSoftTabs'),
+				'tabSize'	=> $this->getSettings()->getAttribute('tabSize'),
+				'softTabs'	=> $this->getSettings()->getAttribute('enableSoftTabs'),
 				'container'	=> $id.'Canvas'
 			)
 		);
 
 		return "new Doxter('{$id}', {$options}).render();";
+	}
+
+	public function prepValue($value)
+	{
+		$model = DoxterModel::create();
+
+		$model->setAttribute('source', $value);
+		$model->setAttribute('output', craft()->doxter->parse($value));
+
+		return $model;
 	}
 
 	public function defineContentAttribute()

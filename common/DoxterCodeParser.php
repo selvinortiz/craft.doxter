@@ -1,7 +1,12 @@
 <?php
-namespace SelvinOrtiz\Doxter;
+namespace Craft;
 
-class MarkdownParser extends Parser
+/**
+ * Class DoxterCodeParser
+ *
+ * @package Craft
+ */
+class DoxterCodeParser extends DoxterBaseParser
 {
 	protected $codeBlockSnippet;
 
@@ -10,7 +15,7 @@ class MarkdownParser extends Parser
 		$codeBlockSnippet	= null;
 
 		extract($params);
-		
+
 		$source = doxter()->parsedown->parse($source);
 
 		if (empty($codeBlockSnippet))
@@ -25,7 +30,7 @@ class MarkdownParser extends Parser
 
 	protected function parseCodeBlocks($source=null)
 	{
-		if (!$this->isValidString($source) || stripos($source, '<pre>') === false) { return $source; }
+		if (!$this->canBeSafelyParsed($source) || stripos($source, '<pre>') === false) { return $source; }
 
 		$pattern	= '/<pre>(.?)<code class\="([a-z\-\_]+)">(.*?)<\/code>(.?)<\/pre>/ism';
 		$source		= preg_replace_callback($pattern, array($this, 'handleBlockMatch'), $source);

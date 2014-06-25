@@ -1,17 +1,12 @@
 <?php
-namespace SelvinOrtiz\Doxter;
-
-use \Craft\ElementType;
-use \Craft\ContentModel;
-use \Craft\BaseElementModel;
-use \Craft\ElementCriteriaModel;
+namespace Craft;
 
 /**
  * Doxter Reference Parser
  *
  * @package SelvinOrtiz
  */
-class ReferenceTagParser extends Parser
+class DoxterReferenceTagParser extends DoxterBaseParser
 {
 	protected static $pattern = '(entry|user|asset|tag|global):([a-z0-9\@\.\-\_\/]+):?([a-z0-9\-\_\.\(\)]+)?';
 	protected static $openingTag = '{';
@@ -34,7 +29,7 @@ class ReferenceTagParser extends Parser
 	 */
 	public function parse($source = null, $recursively = true)
 	{
-		if (!$this->isValidString($source) || stripos($source, '{') === false)
+		if (!$this->canBeSafelyParsed($source) || stripos($source, '{') === false)
 		{
 			return $source;
 		}
@@ -139,7 +134,7 @@ class ReferenceTagParser extends Parser
 
 	public function getElement($type, $attributes, $criteria = null)
 	{
-		$element = \Craft\craft()->elements->getCriteria($type, $attributes)->find($criteria);
+		$element = craft()->elements->getCriteria($type, $attributes)->find($criteria);
 
 		if ($element)
 		{
