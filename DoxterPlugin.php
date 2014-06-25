@@ -4,9 +4,9 @@ namespace Craft;
 /**
  * Doxter @v1.0.0
  *
- * Doxter is a markdown plugin designed to improve the way you write documentation
+ * The swiss army markdown plugin
  *
- * @author		Selvin Ortiz - http://twitter.com/selvinortiz
+ * @author		Selvin Ortiz - http://selvinortiz.com
  * @package		Doxter
  * @category	Markdown
  * @copyright	2014 Selvin Ortiz
@@ -15,51 +15,61 @@ namespace Craft;
 
 class DoxterPlugin extends BasePlugin
 {
+	/**
+	 * Imports custom library and listens for desired events
+	 *
+	 * @throws \Exception
+	 */
 	public function init()
 	{
-		$bootstrap = craft()->path->getPluginsPath().'doxter/library/vendor/autoload.php';
-
-		if (!file_exists($bootstrap))
-		{
-			throw new Exception(Craft::t('Please download the latest release or read the install notes'));
-		}
-
-		require_once $bootstrap;
-
-		// Load the dependency container
-		doxter()->stash('plugin', $this);
-		doxter()->stash('service', craft()->doxter);
-		doxter()->init();
+		Craft::import('plugins/doxter/common.*');
+		Craft::import('plugins/doxter/twigextensions.*');
 	}
 
+	/**
+	 * Returns the plugin name or the plugin alias assigned by the end user
+	 *
+	 * @param bool $real Whether the real name should be returned
+	 *
+	 * @return string
+	 */
 	public function getName($real=false)
 	{
 		$name	= 'Doxter';
-		$alias	= $this->getSettings()->pluginAlias;
+		$alias	= $this->getSettings()->getAttribute('pluginAlias');
 
-		if ($real)
-		{
-			return $name;
-		}
-
-		return empty($alias) ? $name : $alias;
+		return ($real || empty($alias)) ? $name : $alias;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getVersion()
 	{
-		return '0.6.2';
+		return '1.0.0';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeveloper()
 	{
 		return 'Selvin Ortiz';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeveloperUrl()
 	{
-		return 'http://twitter.com/selvinortiz';
+		return 'http://selvinortiz.com';
 	}
 
+	/**
+	 * Returns a rendered view for plugin settings
+	 *
+	 * @return string The html content
+	 */
 	public function getSettingsHtml()
 	{
 		if (doxter()->service->getEnvOption('useCompressedResources', true))
@@ -95,11 +105,21 @@ class DoxterPlugin extends BasePlugin
 		return "new Doxter('codeBlockSnippet', {$options});";
 	}
 
+	/**
+	 * Whether a control panel tab should be display for Doxter
+	 *
+	 * @return bool
+	 */
 	public function hasCpSection()
 	{
 		return $this->getSettings()->getAttribute('enableCpTab');
 	}
 
+	/**
+	 * The main plugin settings
+	 *
+	 * @return array
+	 */
 	public function defineSettings()
 	{
 		return array(
@@ -107,12 +127,12 @@ class DoxterPlugin extends BasePlugin
 			 * Whether recursive parsing should be enabled in parsers that support it
 			 */
 			'parseRecursively'		=> array(AttributeType::Bool, 'default' => true),
-			
+
 			/*
 			 * Whether headers should be parsed and anchored
 			 */
 			'addHeaderAnchors'		=> array(AttributeType::Bool, 'default' => true),
-			
+
 			/*
 			 * The headers that should be parsed and anchored if header parsing is enabled
 			 */
@@ -143,6 +163,10 @@ class DoxterPlugin extends BasePlugin
 		);
 	}
 
+	/**
+	 * @return object The twig extension instance
+	 * @throws \Exception
+	 */
 	public function addTwigExtension()
 	{
 		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
@@ -152,29 +176,11 @@ class DoxterPlugin extends BasePlugin
 		return doxter()->extension;
 	}
 
+	/**
+	 * Takes desired actions after plugin installation
+	 */
 	public function onAfterInstall()
 	{
 		craft()->request->redirect($this->getCpSettingsUrl());
-	}
-
-	public function getCpUrl($append='')
-	{
-		return sprintf('/%s/doxter/%s', craft()->config->get('cpTrigger'), $append);
-	}
-
-	public function getCpSettingsUrl($append='')
-	{
-		return sprintf('/%s/settings/plugins/doxter/%s', craft()->config->get('cpTrigger'), $append);
-	}
-}
-
-/**
- * A way to grab the dependency container within the Craft namespace
- */
-if (!function_exists('\\Craft\\doxter'))
-{
-	function doxter()
-	{
-		return \SelvinOrtiz\Doxter\Doxter::getInstance();
 	}
 }
