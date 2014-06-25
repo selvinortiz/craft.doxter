@@ -8,15 +8,14 @@ namespace Craft;
  */
 class DoxterCodeParser extends DoxterBaseParser
 {
+	protected static $instance;
 	protected $codeBlockSnippet;
 
-	public function parse($source=null, array $params=array())
+	public function parse($source, array $params=array())
 	{
 		$codeBlockSnippet	= null;
 
 		extract($params);
-
-		$source = doxter()->parsedown->parse($source);
 
 		if (empty($codeBlockSnippet))
 		{

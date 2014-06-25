@@ -15,7 +15,7 @@ class DoxterFieldType extends BaseFieldType
 
 	public function getInputHtml($name, $value)
 	{
-		if (craft()->doxter->getEnvOption('useCompressedResources', true))
+		if (craft()->doxter->getEnvOption('useCompressedResources', false))
 		{
 			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
 			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
@@ -32,7 +32,6 @@ class DoxterFieldType extends BaseFieldType
 		$targetId	= craft()->templates->namespaceInputId($inputId);
 		$snippetJs	= $this->getDoxterFieldJs($targetId);
 
-		// Using the lovely Craft queue/buffer to support matrix fields: )
 		craft()->templates->includeJs($snippetJs);
 
 		return craft()->templates->render(
@@ -78,15 +77,18 @@ class DoxterFieldType extends BaseFieldType
 			)
 		);
 
-		return "new Doxter('{$id}', {$options}).render();";
+		return "new Craft.DoxterFieldType('{$id}', {$options}).renderFieldType();";
 	}
 
 	public function prepValue($value)
 	{
 		$model = DoxterModel::create();
 
-		$model->setAttribute('source', $value);
-		$model->setAttribute('output', craft()->doxter->parse($value));
+		if (!empty($value))
+		{
+			$model->setAttribute('source', $value);
+			$model->setAttribute('output', craft()->doxter->parse($value));
+		}
 
 		return $model;
 	}

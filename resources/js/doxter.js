@@ -1,122 +1,116 @@
-function Doxter(id, config) {
-    this.uid				= id;
-    this.behave				= {};
-    this.tabSize			= config.tabSize || 4;
-    this.softTabs			= config.softTabs || true;
-    this.$editor			= $("#" + this.uid);
-    this.$container			= !! config.container ? $("#" + config.container) : $("#" + this.uid + "Canvas");
-    this.$selectEntryButton	= $("#" + this.uid + "SelectEntry");
-    this.$selectAssetButton	= $("#" + this.uid + "SelectAsset");
-    this.$selectUserButton	= $("#" + this.uid + "SelectUser");
-    this.$selectTagButton   = $("#" + this.uid + "SelectTag");
-    this.$selectGlobalButton= $("#" + this.uid + "SelectGlobal");
-    this.selectEntryModal	= null;
-    this.selectAssetModal	= null;
-    this.selectUserModal	= null;
-    this.selectTagModal     = null;
-    this.selectGlobalModal	= null;
+(function($, Craft)
+{
+	Craft.DoxterFieldType = Garnish.Base.extend(
+	{
+		init: function(id, config)
+		{
+			this.id						= id;
+			this.$editor				= $("#" + this.id);
+			this.$container				= $("#" + this.id + "Canvas");
+			this.$selectEntryButton		= $("#" + this.id + "SelectEntry");
+			this.$selectAssetButton		= $("#" + this.id + "SelectAsset");
+			this.$selectUserButton		= $("#" + this.id + "SelectUser");
+			this.$selectTagButton		= $("#" + this.id + "SelectTag");
+			this.$selectGlobalButton	= $("#" + this.id + "SelectGlobal");
+			// ~
+			this.tabSize				= config.tabSize	|| 4;
+			this.softTabs				= config.softTabs	|| true;
+			// ~
+			this.addListener(this.$selectEntryButton, 'click', 'createEntrySelectorModal');
+			this.addListener(this.$selectAssetButton, 'click', 'createAssetSelectorModal');
+			this.addListener(this.$selectUserButton, 'click', 'createUserSelectorModal');
+			this.addListener(this.$selectTagButton, 'click', 'createTagSelectorModal');
+			this.addListener(this.$selectGlobalButton, 'click', 'createGlobalSetSelectorModal');
+		},
 
-	return this
-}
+		renderFieldType: function()
+		{
+			this.addBehavior();
+			this.$container.removeClass('doxterHidden');
 
-Doxter.prototype.render = function() {
-    this.behave = this.behavior(this.uid, this.tabSize, this.softTabs);
-    this.toolbar();
-    this.$container.removeClass("doxterHidden");
+			return this
+		},
 
-    return this
-};
+		addBehavior: function()
+		{
+			return new Behave(
+			{
+				textarea:	document.getElementById(this.id),
+				softTabs:	this.softTabs,
+				tabSize:	this.tabSize,
+				autoOpen:	true,
+				overwrite:	true,
+				autoStrip:	true,
+				autoIndent:	true,
+				replaceTab:	true,
+				fence:		false
+			});
+		},
 
-Doxter.prototype.toolbar = function() {
-    var self = this;
+		createSelectorModal: function(type)
+		{
+			var self = this;
 
-    this.$selectEntryButton.on("click", function(e) {
-        self.selectEntryModal = Craft.createElementSelectorModal("Entry", {
-            id: this.uid + "SelectEntryModal",
-            criteria: {},
-            onSelect: function(elements) {
-                var tags = self.createTags("entry", elements);
-                self.write(tags)
-            }
-        });
-        e.preventDefault()
-    });
+			Craft.createElementSelectorModal(type,
+				{
+					id: this.id + 'Select' + type + 'Modal',
+					onSelect: function(elements)
+					{
+						var tags = self.createReferenceTags(type.toLowerCase(), elements);
 
-    this.$selectAssetButton.on("click", function(e) {
-        this.selectAssetModal = Craft.createElementSelectorModal("Asset", {
-            id: this.uid + "SelectAssetModal",
-            criteria: {},
-            onSelect: function(elements) {
-                var tags = self.createTags("asset", elements);
-                self.write(tags)
-            }
-        });
-        e.preventDefault()
-    });
+						self.writeToEditor(tags);
+					}
+			});
+		},
 
-    this.$selectUserButton.on("click", function(e) {
-        this.selectUserModal = Craft.createElementSelectorModal("User", {
-            id: this.uid + "SelectUserModal",
-            criteria: {},
-            onSelect: function(elements) {
-                var tags = self.createTags("user", elements);
-                self.write(tags)
-            }
-        });
-        e.preventDefault()
-    });
+		createEntrySelectorModal: function(e)
+		{
+			this.createSelectorModal('Entry', e);
+			e.preventDefault();
+		},
 
-    this.$selectTagButton.on("click", function(e) {
-        this.selectTagModal = Craft.createElementSelectorModal("Tag", {
-            id: this.uid + "SelectTagModal",
-            criteria: {},
-            onSelect: function(elements) {
-                var tags = self.createTags("tag", elements);
-                self.write(tags)
-            }
-        });
-        e.preventDefault()
-    });
+		createUserSelectorModal: function(e)
+		{
+			this.createSelectorModal('User', e);
+			e.preventDefault();
+		},
 
-    this.$selectGlobalButton.on("click", function(e) {
-        self.write("{globalset:id:property}")
-        e.preventDefault()
-    });
+		createAssetSelectorModal: function(e)
+		{
+			this.createSelectorModal('Asset');
+			e.preventDefault();
+		},
 
-    return this
-};
+		createTagSelectorModal: function(e)
+		{
+			this.createSelectorModal('Tag');
+			e.preventDefault();
+		},
 
-Doxter.prototype.behavior = function() {
-    var a = {
-        textarea: document.getElementById(this.uid),
-        softTabs: this.softTabs,
-        tabSize: this.tabSize,
-        replaceTab: true,
-        autoOpen: true,
-        overwrite: true,
-        autoStrip: true,
-        autoIndent: true,
-        fence: false
-    };
+		createGlobalSetSelectorModal: function(e)
+		{
+			this.writeToEditor("{globalset:id:property}")
+			e.preventDefault();
+		},
 
-    this.behave = new Behave(a);
+		writeToEditor: function(text)
+		{
+			this.$editor.textrange("insert", text);
+			this.$editor.textrange("set", this.$editor.textrange().end - 9, 8);
 
-    return this
-};
+			return this
+		},
 
-Doxter.prototype.write = function(a) {
-    this.$editor.textrange("insert", a);
-    this.$editor.textrange("set", this.$editor.textrange().end - 9, 8);
-    return this
-};
+		createReferenceTags: function(type, elements)
+		{
+			var i = 0, tags	= "", tag;
 
-Doxter.prototype.createTags = function(type, elements) {
-    var i = 0, tags	= "", tag;
+			for (; i < elements.length; i++) {
+				tag		= type.toLowerCase() + ":" + elements[i].id;
+				tags	= tags + "{" + tag + ":property}"
+			}
 
-    for (; i < elements.length; i++) {
-        tag		= type.toLowerCase() + ":" + elements[i].id;
-        tags	= tags + "{" + tag + ":property}"
-    }
-
-    return tags;
-};
+			return tags;
+		}
+	});
+})(jQuery, Craft);

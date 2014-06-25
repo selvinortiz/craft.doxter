@@ -8,6 +8,8 @@ namespace Craft;
  */
 class DoxterHeaderParser extends DoxterBaseParser
 {
+	protected static $instance;
+
 	/**
 	 * Parses headers and adds anchors to them if necessary
 	 *

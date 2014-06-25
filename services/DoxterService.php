@@ -14,7 +14,8 @@ class DoxterService extends BaseApplicationComponent
 	/**
 	 * @var array The plugin settings imported on service initialization
 	 */
-	public $settings = array();
+	public $settings	= array();
+
 	/**
 	 * Loads plugin settings into self for later use
 	 *
@@ -22,9 +23,9 @@ class DoxterService extends BaseApplicationComponent
 	 */
 	public function init()
 	{
-		$this->settings = craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes();
-
 		parent::init();
+
+		$this->settings = craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes();
 	}
 
 	/**

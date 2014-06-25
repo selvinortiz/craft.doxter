@@ -8,9 +8,10 @@ namespace Craft;
  */
 class DoxterReferenceTagParser extends DoxterBaseParser
 {
-	protected static $pattern = '(entry|user|asset|tag|global):([a-z0-9\@\.\-\_\/]+):?([a-z0-9\-\_\.\(\)]+)?';
-	protected static $openingTag = '{';
-	protected static $closingTag = '}';
+	protected static $instance;
+	protected static $pattern		= '(entry|user|asset|tag|global):([a-z0-9\@\.\-\_\/]+):?([a-z0-9\-\_\.\(\)]+)?';
+	protected static $openingTag	= '{';
+	protected static $closingTag	= '}';
 
 	/**
 	 * The content parsed after each iteration used to beak out of recursive parsing

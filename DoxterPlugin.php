@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.1
+ * Doxter @v1.0.2
  *
  * The swiss army markdown plugin
  *
@@ -50,7 +50,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.0.1';
+		return '1.0.2';
 	}
 
 	/**

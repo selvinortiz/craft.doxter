@@ -10,7 +10,12 @@ class DoxterModel extends BaseModel
 
 	public function __toString()
 	{
-		return $this->text();
+		if (empty($this->source))
+		{
+			return '';
+		}
+
+		return $this->source;
 	}
 
 	public function text()
