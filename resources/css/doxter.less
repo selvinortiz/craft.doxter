@@ -1,36 +1,83 @@
-.doxterHidden {
+@import "mixins";
+
+.doxterHidden
+{
 	visibility: hidden;
 }
 
-.doxterSettings {
-	h2, h3 {
+.doxterSettings
+{
+	h2, h3
+	{
 		color: #444;
 	}
-	h3 {
-		&.ico {
-			padding-left: 32px;
+	h3
+	{
+		&.ico
+		{
 			line-height: 32px;
+			padding-left: 32px;
 			background-repeat: no-repeat;
 			background-position: left center;
 		}
-		&.syntax {
+		&.syntax
+		{
 			background-image: url(../img/syntax.png);
 		}
-		&.settings {
+		&.settings
+		{
 			background-image: url(../img/settings.png);
 		}
 	}
-	.subtle {
+	.subtle
+	{
 		color: #bbb;
 	}
-	.notice {
+	.notice
+	{
 		color: #aaa;
 		font-family: serif;
 		font-style: italic;
 	}
-	.doxterSection {
+	.doxterSection
+	{
 		margin-top: 40px;
 		padding-top: 20px;
 		border-top: 1px dotted #bbb;
 	}
+}
+
+.doxterToolbar
+{
+	padding-top: 1em;
+	a
+	{
+		color: #333;
+		font-size: 1.5em;
+		font-family: Craft, sans-serif;
+		padding: 0.2em 0.6em;
+		margin: 0;
+		text-align: middle;
+		text-decoration: none;
+		background-color: #eee;
+		border: 1px solid #ddd;
+		.gradient(#f6f6f6, #e6e6e6, #fff);
+		.drop-shadow(0, 1px, 3px);
+		.rounded();
+	}
+}
+
+.doxterEditor
+{
+	width: 100%;
+	height: 300px;
+	min-height: 300px;
+	margin: 10px 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 1px solid #dedede;
+	line-height: 1.6;
+	font-size: 1.8em;
 }

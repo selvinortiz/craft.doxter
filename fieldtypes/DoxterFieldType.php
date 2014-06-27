@@ -2,31 +2,33 @@
 namespace Craft;
 
 /**
- * Write markdown in live preview and create reference tags with ease
+ * The main Doxter fieldtype class
  *
  * @package Craft
  */
 class DoxterFieldType extends BaseFieldType
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return 'Doxter Markdown';
 	}
 
+	/**
+	 * Returns the rendered html for the fieldtype UI
+	 *
+	 * @param string $name
+	 * @param mixed  $value
+	 *
+	 * @return string
+	 */
 	public function getInputHtml($name, $value)
 	{
-		if (craft()->doxter->getEnvOption('useCompressedResources', false))
-		{
-			craft()->templates->includeCssResource('doxter/css/doxter.min.css');
-			craft()->templates->includeJsResource('doxter/js/doxter.min.js');
-		}
-		else
-		{
-			craft()->templates->includeCssResource('doxter/css/doxter.css');
-			craft()->templates->includeJsResource('doxter/js/textrange.js');
-			craft()->templates->includeJsResource('doxter/js/behave.js');
-			craft()->templates->includeJsResource('doxter/js/doxter.js');
-		}
+		craft()->templates->includeCssResource('doxter/css/doxter.css');
+		craft()->templates->includeJsResource('doxter/js/ace.js');
+		craft()->templates->includeJsResource('doxter/js/doxter.js');
 
 		$inputId	= craft()->templates->formatInputId($name);
 		$targetId	= craft()->templates->namespaceInputId($inputId);
@@ -34,8 +36,7 @@ class DoxterFieldType extends BaseFieldType
 
 		craft()->templates->includeJs($snippetJs);
 
-		return craft()->templates->render(
-			'doxter/fields/doxter/_input',
+		return craft()->templates->render('doxter/fields/doxter/input',
 			array(
 				'id'		=> $targetId,
 				'name'		=> $name,
@@ -59,8 +60,7 @@ class DoxterFieldType extends BaseFieldType
 
 	public function getSettingsHtml()
 	{
-		return craft()->templates->render(
-			'doxter/fields/doxter/_settings',
+		return craft()->templates->render('doxter/fields/doxter/settings',
 			array(
 				'settings' => $this->getSettings()
 			)
@@ -77,7 +77,7 @@ class DoxterFieldType extends BaseFieldType
 			)
 		);
 
-		return "new Craft.DoxterFieldType('{$id}', {$options}).renderFieldType();";
+		return "new Craft.DoxterFieldType('{$id}', {$options}).render();";
 	}
 
 	public function prepValue($value)
@@ -86,8 +86,8 @@ class DoxterFieldType extends BaseFieldType
 
 		if (!empty($value))
 		{
-			$model->setAttribute('source', $value);
-			$model->setAttribute('output', craft()->doxter->parse($value));
+			$model->setAttribute('text', $value);
+			$model->setAttribute('html', craft()->doxter->parse($value));
 		}
 
 		return $model;

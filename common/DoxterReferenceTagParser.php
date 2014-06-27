@@ -9,9 +9,16 @@ namespace Craft;
 class DoxterReferenceTagParser extends DoxterBaseParser
 {
 	protected static $instance;
-	protected static $pattern		= '(entry|user|asset|tag|global):([a-z0-9\@\.\-\_\/]+):?([a-z0-9\-\_\.\(\)]+)?';
 	protected static $openingTag	= '{';
 	protected static $closingTag	= '}';
+	protected static $references	= array(
+		'category'	=> ElementType::Category,
+		'global'	=> ElementType::GlobalSet,
+		'entry'		=> ElementType::Entry,
+		'asset'		=> ElementType::Asset,
+		'user'		=> ElementType::User,
+		'tag'		=> ElementType::Tag,
+	);
 
 	/**
 	 * The content parsed after each iteration used to beak out of recursive parsing
@@ -21,24 +28,36 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 	protected $parsedContent;
 
 	/**
+	 * Returns the pattern for matching reference tags within Doxter fields
+	 *
+	 * @return string
+	 */
+	protected function getPattern()
+	{
+		$references = implode('|', array_keys(static::$references));
+
+		return 	sprintf('/%s(%s):([a-z0-9\@\.\-\_\/]+):?(.+)?%s/i', static::$openingTag, $references, static::$closingTag);
+
+	}
+
+	/**
 	 * Parses reference tags recursively (optional)
 	 *
-	 * @param	string	$source
-	 * @param	boolean	$recursively
+	 * @param string $source
+	 * @param array $options
 	 *
 	 * @return	string
 	 */
-	public function parse($source = null, $recursively = true)
+	public function parse($source, array $options=array())
 	{
 		if (!$this->canBeSafelyParsed($source) || stripos($source, '{') === false)
 		{
 			return $source;
 		}
 
-		$pattern	= sprintf('/%s%s%s/i', self::$openingTag, self::$pattern, self::$closingTag);
-		$source		= preg_replace_callback($pattern, array($this, 'handleTagMatch'), $source);
+		$source	= preg_replace_callback(static::getPattern(), array($this, 'handleTagMatch'), $source);
 
-		if (!$recursively)
+		if (isset($options['parseReferenceTagsRecursively']) && $options['parseReferenceTagsRecursively'])
 		{
 			return $source;
 		}
@@ -61,70 +80,34 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 		return is_null($content) ? $matched : $content;
 	}
 
-	public function getTagContent(array $tags = array(), $default = null)
+	/**
+	 *
+	 * @param array $tags
+	 * @param mixed $default
+	 *
+	 * @return BaseElementModel|mixed
+	 */
+	public function getTagContent(array $tags=array(), $default=null)
 	{
-		$type			= $tags[0];
-		$reference		= $tags[1];
-		$attribute		= isset($tags[2]) ? $tags[2] : false;
-		$attributes		= array();
-		$elementType	= null;
-
-		switch (strtolower($type))
-		{
-			case 'entry':
-				$elementType	= ElementType::Entry;
-				$reference		= array_map('trim', explode('/', $reference));
-
-				if (count($reference) == 1)
-				{
-					$attributes['id'] = (int) $reference[0];
-				}
-				elseif (count($reference) == 2)
-				{
-					$attributes['slug']		= $reference[1];
-					$attributes['section']	= $reference[0];
-				}
-
-				break;
-
-			case 'user':
-				$elementType = ElementType::User;
-
-				if (stripos($reference, '@'))
-				{
-					$attributes['email'] = $reference;
-				}
-				elseif (is_numeric($reference))
-				{
-					$attributes['id'] = (int)$reference;
-				}
-				else
-				{
-					$attributes['username'] = $reference;
-				}
-
-				break;
-
-			case 'tag':
-				$elementType	= ElementType::Tag;
-			case 'asset':
-				$elementType	= $elementType ? $elementType : ElementType::Asset;
-			case 'global':
-				$elementType	= $elementType ? $elementType : ElementType::GlobalSet;
-				$attributes		= array('id' => (int)$reference);
-
-				break;
-		}
-
-		$element	= $this->getElement($elementType, $attributes);
+		$elementType		= $tags[0];
+		$elementCriteria	= $tags[1];
+		$elementString		= isset($tags[2]) ? $tags[2] : false;
+		$element			= $this->getElementByReferenceTag($elementType, $elementCriteria);
 
 		if ($element)
 		{
-			$elementContent = $element->getContent();
-
-			if ($attribute)
+			if ($elementString)
 			{
-				return $this->getElementAttribute($attribute, $element, $elementContent, $default);
+				$elementString	= '{'.$elementString.'}';
+
+				try
+				{
+					return craft()->templates->renderObjectTemplate($elementString, $element);
+				}
+				catch(\Exception $e)
+				{
+					return $default;
+				}
 			}
 
 			return $element;
@@ -133,67 +116,64 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 		return $default;
 	}
 
-	public function getElement($type, $attributes, $criteria = null)
-	{
-		$element = craft()->elements->getCriteria($type, $attributes)->find($criteria);
-
-		if ($element)
-		{
-			return array_shift($element);
-		}
-
-		return false;
-	}
-
-	public function getElementAttribute($attribute, BaseElementModel $element, ContentModel $content, $default = false)
-	{
-		$comparisonKey	= md5(time());
-		$attributeValue	= $this->getAttribute($attribute, $element, $comparisonKey);
-
-		if ($attributeValue !== $comparisonKey)
-		{
-			return $attributeValue;
-		}
-
-		return $this->getAttribute($attribute, $content, $default);
-	}
-
 	/**
-	 * Will attempt to grab the attribute value of an element
+	 * @param string $elementType (category|global|entry|user|asset|tag)
+	 * @param string $elementCriteria (10|section/slug|user@domain.com)
 	 *
-	 * @param	string	$attribute	The special (attr|attr()|attr.sub) attribute name
-	 * @param	mixed	$model		The instance of BaseElementModel or ContentElementModel
-	 * @param	mixed	$default
-	 *
-	 * @return	string
+	 * @return BaseElementModel|null
 	 */
-	protected function getAttribute($attribute, $model, $default = null)
+	public function getElementByReferenceTag($elementType, $elementCriteria)
 	{
-		$attributes = is_array($attribute) ? $attribute : array_map('trim', explode('.', $attribute));
+		$criteria		= array('limit' => 1);
+		$elementType	= strtolower($elementType);
 
-		foreach ($attributes as $attributeName)
+		if (!array_key_exists($elementType, static::$references))
 		{
-			$attributeName = preg_replace('/\(.*?\)/i', '', $attributeName);
+			return false;
+		}
 
-			if (isset($model->{$attributeName}))
+		switch ($elementType)
+		{
+			case 'entry':
 			{
-				$model = $model->{$attributeName};
-			}
-			elseif (method_exists($model, $attributeName))
-			{
-				$model = $model->{$attributeName}();
-			}
-			else
-			{
-				return $default;
-			}
+				$elementCriteria = array_map('trim', explode('/', $elementCriteria));
 
-			if ($model instanceof ElementCriteriaModel)
+				if (count($elementCriteria) == 1)
+				{
+					$criteria['id'] = (int) $elementCriteria[0];
+				}
+				elseif (count($elementCriteria) == 2)
+				{
+					$criteria['section']	= $elementCriteria[0];
+					$criteria['slug']		= $elementCriteria[1];
+				}
+
+				break;
+			}
+			case 'user':
 			{
-				$model = $model->first();
+				if (stripos($elementCriteria, '@'))
+				{
+					$criteria['email'] = $elementCriteria;
+				}
+				elseif (is_numeric($elementCriteria))
+				{
+					$criteria['id'] = (int) $elementCriteria;
+				}
+				else
+				{
+					$criteria['username'] = $elementCriteria;
+				}
+
+				break;
+			}
+			default:
+			{
+				$criteria['id'] = $elementCriteria;
+				break;
 			}
 		}
 
-		return $model;
+		return craft()->elements->getCriteria(static::$references[$elementType])->first($criteria);
 	}
 }

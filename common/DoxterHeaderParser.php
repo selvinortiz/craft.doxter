@@ -14,15 +14,15 @@ class DoxterHeaderParser extends DoxterBaseParser
 	 * Parses headers and adds anchors to them if necessary
 	 *
 	 * @param string $source HTML source to search for headers within
-	 * @param array $params Passed in parsing options
+	 * @param array $options Passed in parsing options
 	 *
 	 * @return string
 	 */
-	public function parse($source, array $params=array())
+	public function parse($source, array $options=array())
 	{
 		$addHeaderAnchorsTo = array('h1', 'h2', 'h3');
 
-		extract($params);
+		extract($options);
 
 		if (is_string($addHeaderAnchorsTo))
 		{

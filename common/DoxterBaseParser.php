@@ -2,14 +2,24 @@
 namespace Craft;
 
 /**
+ * The base parser that all other parsers must extend
+ *
  * Class DoxterBaseParser
  *
  * @package Craft
  */
 abstract class DoxterBaseParser
 {
+	/**
+	 * @var object The parser instance which should be defined in each extending class
+	 */
 	protected static $instance;
 
+	/**
+	 * Returns an instance of the class in called static context
+	 *
+	 * @return object
+	 */
 	public static function instance()
 	{
 		if (static::$instance === null)
@@ -23,7 +33,7 @@ abstract class DoxterBaseParser
 	}
 
 	/**
-	 * Whether the source string can be safely parsed
+	 * Reports whether the source string can be safely parsed
 	 *
 	 * @param string $source
 	 *
@@ -38,4 +48,14 @@ abstract class DoxterBaseParser
 
 		return (is_string($source) || is_callable(array($source, '__toString')));
 	}
+
+	/**
+	 * Must be implemented by all extending parsers
+	 *
+	 * @param string $source
+	 * @param array $options
+	 *
+	 * @return mixed
+	 */
+	abstract public function parse($source, array $options=array());
 }

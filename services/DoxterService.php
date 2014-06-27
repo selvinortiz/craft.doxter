@@ -55,7 +55,7 @@ class DoxterService extends BaseApplicationComponent
 		}
 
 		$source	= \Parsedown::instance()->text($source);
-		$source	= DoxterCodeParser::instance()->parse($source, compact('codeBlockSnippet'));
+		$source	= DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
 
 		if ($addHeaderAnchors)
 		{

@@ -17,38 +17,29 @@
 
 		<div class="doxterSection">
 			<h3 class="ico syntax">Parsing Settings</h3>
-			<h4>Parse Recursively?</h4>
-			<p class="subtle">Will enable recursive parsing for reference tags.</p>
-			{{
-				forms.lightswitch({
-					name:		"parseRecursively",
-					on:			settings.parseRecursively
-				})
-			}}
-			<hr>
 			<p>Parse <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Reference Tags</a>?</p>
-			<p class="subtle">Tells Doxter to parse references at runtime thereby avoiding using the <strong>parseRefs</strong> filter.</p>
+			<p class="subtle">Tells Doxter to parse reference tags</p>
 			{{
 				forms.lightswitch({
 					name:		"parseReferenceTags",
 					on:			settings.parseReferenceTags
 				})
 			}}
-			<hr>
-			<p>Parse Headers and Add Anchors?</p>
-			<p class="subtle">Tells Doxter to parse headers so that it can add anchors/links to them.</p>
+			<p>Parse Headers?</p>
+			<p class="subtle">Tells Doxter to parse headers and make them clickable.</p>
 			{{
 				forms.lightswitch({
 					name:		"addHeaderAnchors",
 					on:			settings.addHeaderAnchors
 				})
 			}}
+			<hr>
 			{{
 				forms.textField({
 					id:				"addHeaderAnchorsTo",
 					name:			"addHeaderAnchorsTo",
-					label:			"Headers To Add Anchors To" | t,
-					instructions:	"Comma separated list of headers <em>(h1, h2, h3, etc)</em> that you'd like to add anchors to." | raw | t,
+					label:			"Headers To Parse" | t,
+					instructions:	"Comma separated list of headers <em>(h1, h2, h3)</em> that you'd like Doxter to parse." | raw | t,
 					value:			settings.addHeaderAnchorsTo,
 					errors:			""
 				})
@@ -58,7 +49,7 @@
 				forms.textareaField({
 					id:				"codeBlockSnippet",
 					name:			"codeBlockSnippet",
-					class:			"code",
+					class:			"code codeBlockSnippet",
 					rows:			5,
 					label:			"Code Block Snippet",
 					instructions:	"A snippet to wrap fenced code blocks for your syntax highlighter to use.",
@@ -66,6 +57,10 @@
 					error:			""
 				})
 			}}
+
+			<button class="addPrismSnippetBtn btn" data-highlighter="PrismJs">PrismJs</button>
+			<button class="addRainbowSnippetBtn btn" data-highlighter="RainbowJs">RainbowJs</button>
+
 		</div>
 
 		<div class="doxterSection">
@@ -94,7 +89,7 @@
 				&copy; {{ "now" | date("Y") }}
 				<strong>{{ name }} <span class="subtle">({{ version }})</span></strong>
 				<em>by</em>
-				<a href="http://twitter.com/selvinortiz" title="@selvinortiz" target="_blank">Selvin Ortiz</a>
+				<a href="http://selvinortiz.com" title="Selvin Ortiz" target="_blank">Selvin Ortiz</a>
 			</p>
 		</div>
 	</div>
