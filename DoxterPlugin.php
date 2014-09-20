@@ -4,19 +4,19 @@ namespace Craft;
 /**
  * Doxter @v1.0.3
  *
- * The swiss army markdown plugin
+ * Documentation friendly markdown editing and parsing
  *
  * @author		Selvin Ortiz - http://selvinortiz.com
- * @package		Doxter
- * @category	Markdown
+ * @package		Craft
+ * @category	Doxter, Markdown
  * @copyright	2014 Selvin Ortiz
- * @license		[MIT]
+ * @license		MIT Copyright (c) 2014 Selvin Ortiz
  */
 
 class DoxterPlugin extends BasePlugin
 {
 	/**
-	 * Imports custom library and listens for desired events
+	 * Imports custom classes when the plugin is initialized
 	 *
 	 * @throws \Exception
 	 */
@@ -82,7 +82,7 @@ class DoxterPlugin extends BasePlugin
 
 		return craft()->templates->render('doxter/settings',
 			array(
-				'settings' => craft()->doxter->settings,
+				'settings' => $this->getSettings(),
 			)
 		);
 	}
@@ -98,39 +98,64 @@ class DoxterPlugin extends BasePlugin
 	}
 
 	/**
-	 * The main plugin settings
-	 *
 	 * @return array
 	 */
 	public function defineSettings()
 	{
 		return array(
-			'codeBlockSnippet'		=> array(AttributeType::String,
-				'default'			=> '<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>',
-				'column'			=> ColumnType::Text
-			),
-			'addHeaderAnchors'		=> array(AttributeType::Bool, 'default' => true),
-			'addHeaderAnchorsTo'	=> array(AttributeType::String, 'default' => 'h1, h2, h3'),
-			'parseReferenceTags'	=> array(AttributeType::Bool,	'default' => true),
-			'enableCpTab'			=> array(AttributeType::Bool,	'default' => false),
-			'pluginAlias'			=> array(AttributeType::String,	'default' => 'Doxter')
+			'codeBlockSnippet'				=> array(AttributeType::String, 'default' => $this->getCodeBlockSnippet(), 'column' => ColumnType::Text),
+			'addHeaderAnchors'				=> array(AttributeType::Bool,	'default' => true),
+			'addHeaderAnchorsTo'			=> array(AttributeType::String,	'default' => array('h1', 'h2', 'h3')),
+			'parseReferenceTags'			=> array(AttributeType::Bool,	'default' => true),
+			'parseReferenceTagsRecursively'	=> array(AttributeType::Bool,	'default' => true),
+			'enableCpTab'					=> array(AttributeType::Bool,	'default' => false),
+			'pluginAlias'					=> array(AttributeType::String,	'default' => 'Doxter')
 		);
 	}
 
+	public function prepSettings($settings=array())
+	{
+		$settings['addHeaderAnchorsTo'] = craft()->doxter->getHeadersToParse($settings['addHeaderAnchorsTo']);
+
+		return $settings;
+	}
+
 	/**
-	 * @return object The twig extension instance
+	 * Returns the default code block snippet to use
+	 *
+	 * @access protected
+	 * @return string
+	 */
+	protected function getCodeBlockSnippet()
+	{
+		return '<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>';
+	}
+
+	/**
+	 * Adds
+	 * @return DoxterTwigExtension
 	 * @throws \Exception
 	 */
 	public function addTwigExtension()
 	{
-		return new DoxterTwigExtension;
+		return new DoxterTwigExtension();
 	}
 
 	/**
-	 * Takes desired actions after plugin installation
+	 * Redirects to the plugin settings screen after installation
 	 */
 	public function onAfterInstall()
 	{
 		craft()->request->redirect(UrlHelper::getCpUrl('settings/plugins/doxter'));
 	}
+}
+
+/**
+ * Enables us to have a single point of access to our service layer and proper hinting
+ *
+ * @return DoxterService
+ */
+function doxter()
+{
+	return craft()->doxter;
 }

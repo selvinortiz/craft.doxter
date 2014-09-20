@@ -1,5 +1,6 @@
 .idea
 build
 vendor
+sync.sh
 tests/report
 tests/unstable.sh
