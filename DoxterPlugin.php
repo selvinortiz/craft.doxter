@@ -28,6 +28,7 @@ class DoxterPlugin extends BasePlugin
 		Craft::import('plugins.doxter.twigextensions.*');
 
 		require_once(dirname(__FILE__).'/common/libs/Parsedown.php');
+		require_once(dirname(__FILE__).'/common/libs/ParsedownExtra.php');
 	}
 
 	/**
