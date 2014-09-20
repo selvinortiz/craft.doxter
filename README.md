@@ -3,12 +3,10 @@
 # Doxter 1.0.3
 Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
-**Doxter** is a markdown plugin designed to improve the way you write documentation.  
-It provides a markdown editor **fieldtype**, a toolbar for [reference tags][refTags], and [live preview][preview] support.
-It also provides a **markdown parser** that supports [github flavor markdown][gfm], [reference tags][parseRefs] with _recursive parsing_ and **linkable headers**.
+**Doxter** is a markdown plugin designed to improve the way you write documentation.
 
 ## Installation
-1. Download the [Official Release][release]
+1. Download the [Latest Release][release]
 2. Extract the archive and place `doxter` inside your `craft/plugins` directory
 4. Install **Doxter** from the Control Panel **@** `Settings > Plugins`
 5. Adjust plugin settings from the Control Panel **@** `Settings > Plugins > Doxter`
@@ -17,12 +15,11 @@ It also provides a **markdown parser** that supports [github flavor markdown][gf
 ## Features
 * [Live Preview][preview] Support
 * [Github Flavored Markdown][gfm] Parsing
-* Can add **header anchors** dynamically
+* Creates **Linkable Headers** based on parsing settings
 * Fast and consistent **parsing** based on [Parsedown][parsedown]
 * Minimalist **textarea** with [Editor Behavior][behave] and toolbar for [Reference Tags][refTags]
 * Support for multiple fieldtypes within a single [Entry Type][entrytypes]
 * Support for multiple fieldtypes within [Matrix Fields][matrix]
-* Fully compatible with [Scrawl][scrawl]
 * **Unit Tested** with care
 
 ## Filter Usage
@@ -95,17 +92,14 @@ Doxter is open source software licensed under the [MIT license][license]
 
 [craft]:http://buildwithcraft.com "Craft CMS"
 [developer]:http://twitter.com/selvinortiz "@selvinortiz"
-[release]:https://github.com/selvinortiz/craft.doxter/releases/download/v0.6.2/doxter.v0.6.2.zip "Official Release"
+[release]:https://github.com/selvinortiz/craft.doxter/releases "Official Release"
 [refTags]:http://buildwithcraft.com/docs/reference-tags "Reference Tags"
 [parseRefs]:http://buildwithcraft.com/docs/templating/filters#parseRefs "Reference Tag Filter"
 [preview]:http://buildwithcraft.com/features/live-preview "Live Preview"
 [matrix]:http://buildwithcraft.com/features/matrix "Matrix"
 [entrytypes]:http://buildwithcraft.com/features/entry-types "Entry Types"
 [gfm]: https://help.github.com/articles/github-flavored-markdown "Github Flavored Markdown"
-[zit]:https://github.com/selvinortiz/zit "Zit"
-[behave]:http://jakiestfu.github.io/Behave.js/ "BehaveJS"
 [parsedown]:https://github.com/erusev/parsedown "Parsedown"
-[scrawl]:https://github.com/builtbysplash/craft-scrawl "Scrawl"
 [changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
 [license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
 [osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"
