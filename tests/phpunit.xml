@@ -12,7 +12,7 @@
 	syntaxCheck="true"
 	strict="false"
 
-	bootstrap="/home/selvinortiz/www/selvin.dev/selvin/craft/app/tests/bootstrap.php">
+	bootstrap="bootstrap.php">
 
 	<testsuites>
 		<testsuite>
@@ -28,7 +28,7 @@
 				<directory>../build</directory>
 				<directory>../resources</directory>
 				<directory>../templates</directory>
-				<directory>../library/vendor</directory>
+				<directory>../common/libs</directory>
 			</exclude>
 		</whitelist>
 	</filter>

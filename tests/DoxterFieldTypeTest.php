@@ -3,9 +3,12 @@ namespace Craft;
 
 use Mockery as m;
 
-class DoxterFieldTypeTest extends DoxterBaseTest
+class DoxterFieldTypeTest extends DoxterBase
 {
-	protected $fieldtype;
+	/**
+	 * @var DoxterFieldType
+	 */
+	protected $subject;
 
 	/**
 	 * UNIT TESTS
@@ -13,41 +16,39 @@ class DoxterFieldTypeTest extends DoxterBaseTest
 	 */
 	public function testGetName()
 	{
-		$this->assertEquals('Doxter Markdown', doxter()->fieldtype->getName());
+		$this->assertEquals('Doxter Markdown', $this->subject->getName());
 	}
 
 	public function testGetInputHtml()
 	{
-		doxter()->config->shouldReceive('getLocalized')->with('siteUrl')->andReturn('http://selvin.dev');
-		doxter()->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
+		$this->config->shouldReceive('getLocalized')->with('siteUrl')->andReturn('http://selvinortiz.dev');
+		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
 
-		$this->assertTrue(doxter()->fieldtype->getInputHtml('doxterMarkdown', '*markdown*'));
+		$this->assertTrue($this->subject->getInputHtml('doxterMarkdown', '*markdown*'));
 	}
 
 	public function testGetDoxterFieldJs()
 	{
-		$this->assertTrue(stripos(doxter()->fieldtype->getDoxterFieldJs('doxter'), 'new Doxter') !== false);
+		$this->assertTrue(stripos($this->subject->getDoxterFieldJs('doxter'), 'new Craft.DoxterFieldType') !== false);
 	}
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$env = array('useCompressedResource' => true);
+		$this->subject	= new DoxterFieldType();
 
-		doxter()->config->shouldReceive('get')->with('doxterSettings')->andReturn($env);
-		doxter()->config->shouldReceive('get')->with('devMode')->andReturn(false);
-		doxter()->config->shouldReceive('get')->with('actionTrigger')->andReturn('action');
-		doxter()->config->shouldReceive('get')->with('defaultTemplateExtensions')->andReturn(array('.html'));
-		doxter()->config->shouldReceive('get')->with('indexTemplateFilenames')->andReturn(array('index'));
-		doxter()->config->shouldReceive('get')->with('translationDebugOutput')->andReturn('');
-		doxter()->config->shouldReceive('parseEnvironmentString')->andReturn('');
+		$this->config->shouldReceive('get')->with('doxterSettings')->andReturn(null);
+		$this->config->shouldReceive('get')->with('devMode')->andReturn(false);
+		$this->config->shouldReceive('get')->with('actionTrigger')->andReturn('action');
+		$this->config->shouldReceive('get')->with('defaultTemplateExtensions')->andReturn(array('.html'));
+		$this->config->shouldReceive('get')->with('indexTemplateFilenames')->andReturn(array('index'));
+		$this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn('');
+		$this->config->shouldReceive('parseEnvironmentString')->andReturn('');
 
 		$templates	= m::mock('Craft\TemplatesService[render]');
 
 		$templates->shouldReceive('render')->andReturn(true);
-
 		$this->setComponent(craft(), 'templates', $templates);
-
 	}
 }
