@@ -17,7 +17,7 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 * [Github Flavored Markdown][gfm] Parsing
 * Creates **Linkable Headers** based on parsing settings
 * Fast and consistent **parsing** based on [Parsedown][parsedown]
-* Minimalist **textarea** with [Editor Behavior][behave] and toolbar for [Reference Tags][refTags]
+* Advanced editor powered by [Ace][ace] and a custom toolbar for [Reference Tags][refTags]
 * Support for multiple fieldtypes within a single [Entry Type][entrytypes]
 * Support for multiple fieldtypes within [Matrix Fields][matrix]
 * **Unit Tested** with care
@@ -103,3 +103,4 @@ Doxter is open source software licensed under the [MIT license][license]
 [changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
 [license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
 [osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"
+[ace]:http://ace.c9.io "Ace Editor"
