@@ -4,6 +4,10 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 ## Changes
 
+### 1.0.3
+* Introduces a complete rewrite of the core and update editor
+* Adds support for `ParsedownExtra`
+
 ### 0.6.2
 * Fixes typos in the settings page
 * Updates grammar in settings page

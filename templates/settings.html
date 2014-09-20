@@ -40,7 +40,7 @@
 					name:			"addHeaderAnchorsTo",
 					label:			"Headers To Parse" | t,
 					instructions:	"Comma separated list of headers <em>(h1, h2, h3)</em> that you'd like Doxter to parse." | raw | t,
-					value:			settings.addHeaderAnchorsTo,
+					value:			settings.addHeaderAnchorsTo|join(', '),
 					errors:			""
 				})
 			}}

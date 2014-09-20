@@ -4,8 +4,16 @@ namespace Craft;
 use \Twig_Extension;
 use \Twig_SimpleFilter;
 
+/**
+ * Class DoxterTwigExtension
+ *
+ * @package Craft
+ */
 class DoxterTwigExtension extends Twig_Extension
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return 'Doxter Extension';
@@ -17,15 +25,21 @@ class DoxterTwigExtension extends Twig_Extension
 	 * - Handle empty strings safely @link https://github.com/selvinortiz/craft.doxter/issues/5
 	 * - Handle parseRefs returned value @link https://github.com/selvinortiz/craft.doxter/issues/6
 	 *
-	 * @param	mixed	$source	The source string or object that implements __toString
-	 * @param	array	$params Filter arguments passed in from twig
-	 * @return	mixed			The parsed string or false if not a valid source
+	 * @param string $source The source string or object that implements __toString
+	 * @param array $options Filter arguments passed in from twig
+	 *
+	 * @return mixed The parsed string or false if not a valid source
 	 */
-	public function doxter($source='', array $params=array())
+	public function doxter($source='', array $options=array())
 	{
-		return craft()->doxter->parse($source, $params);
+		return doxter()->parse($source, $options);
 	}
 
+	/**
+	 * Makes the filters available to the template context
+	 *
+	 * @return array
+	 */
 	public function getFilters()
 	{
 		return array(

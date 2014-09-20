@@ -6,37 +6,21 @@ namespace Craft;
  *
  * Class DoxterService
  *
+ * @author Selvin Ortiz - http://selvinortiz.com
  * @package Craft
  */
 
 class DoxterService extends BaseApplicationComponent
 {
 	/**
-	 * @var array The plugin settings imported on service initialization
-	 */
-	public $settings	= array();
-
-	/**
-	 * Loads plugin settings into self for later use
-	 *
-	 * @return void
-	 */
-	public function init()
-	{
-		parent::init();
-
-		$this->settings = craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes();
-	}
-
-	/**
 	 * Parses source markdown into valid html using various rules and parsers
 	 *
 	 * @param string $source The markdown source to parse
-	 * @param array $params Passed in parameters via a template call
+	 * @param array $options Passed in parameters via a template filter call
 	 *
 	 * @return \Twig_Markup The parsed content flagged as safe to output
 	 */
-	public function parse($source, array $params=array())
+	public function parse($source, array $options=array())
 	{
 		$codeBlockSnippet				= null;
 		$addHeaderAnchors				= true;
@@ -44,17 +28,17 @@ class DoxterService extends BaseApplicationComponent
 		$parseReferenceTags				= true;
 		$parseReferenceTagsRecursively	= true;
 
-		$params = array_merge($this->settings, $params);
+		$options = array_merge(craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes(), $options);
 
-		extract($params);
+		extract($options);
 
-		// By parsing reference tags first, we have a chance to parse md within them
+		// Parsing reference tags first so that we can parse markdown within them
 		if ($parseReferenceTags)
 		{
 			$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
 		}
 
-		$source	= \Parsedown::instance()->text($source);
+		$source	= \ParsedownExtra::instance()->text($source);
 		$source	= DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
 
 		if ($addHeaderAnchors)
@@ -65,62 +49,32 @@ class DoxterService extends BaseApplicationComponent
 		return TemplateHelper::getRaw($source);
 	}
 
-	public function getBoolFromLightSwitch($value)
+	/**
+	 * Ensures that a valid list of parseable headers is returned
+	 *
+	 * @param string $headerString
+	 *
+	 * @return array
+	 */
+	public function getHeadersToParse($headerString='')
 	{
-		if (is_bool($value))
-		{
-			return $value;
-		}
+		$allowedHeaders = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
 
-		switch (strtolower($value))
-		{
-			case '1':
-			case 'y':
-			case 'on':
-			case 'yes':
-				return true;
-			break;
-			default:
-				return false;
-			break;
-		}
-	}
+		$headers = ArrayHelper::filterEmptyStringsFromArray(ArrayHelper::stringToArray($headerString));
 
-	public function getEnvOption($option=null, $default=null)
-	{
-		$env	= craft()->config->get('doxterSettings');
-		$opts 	= array();
-
-		// Settings not available
-		if (is_null($env))
+		if (count($headers))
 		{
-			return $default;
-		}
-
-		// Option not provided
-		if (is_null($option))
-		{
-			return $env;
-		}
-
-		if (is_string($option))
-		{
-			$opts = array_map('trim', explode('.', $option));
-		}
-
-		if (count($opts))
-		{
-			foreach ($opts as $opt)
+			foreach ($headers as $key => $header)
 			{
-				if (array_key_exists($opt, $env))
-				{
-					$env = $env[$opt]; continue;
-				}
+				$header = strtolower($header);
 
-				return $default;
+				if (!in_array($header, $allowedHeaders))
+				{
+					unset($headers[$key]);
+				}
 			}
 		}
 
-		return $env;
+		return $headers;
 	}
 }

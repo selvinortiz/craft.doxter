@@ -2,8 +2,9 @@
 namespace Craft;
 
 /**
- * The main Doxter fieldtype class
+ * The DoxterFieldType class in charge of rendering inputs and settings.
  *
+ * @class DoxterFieldType
  * @package Craft
  */
 class DoxterFieldType extends BaseFieldType
@@ -50,9 +51,7 @@ class DoxterFieldType extends BaseFieldType
 	public function defineSettings()
 	{
 		return array(
-			'enableWordWrap'	=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => false),
 			'enableSoftTabs'	=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => true),
-			'spellcheck'		=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => false),
 			'tabSize'			=> array(AttributeType::Number, 'default' => 4),
 			'rows'				=> array(AttributeType::Number, 'default' => 20)
 		);
@@ -71,6 +70,7 @@ class DoxterFieldType extends BaseFieldType
 	{
 		$options = json_encode(
 			array(
+				'rows'		=> $this->getSettings()->getAttribute('rows'),
 				'tabSize'	=> $this->getSettings()->getAttribute('tabSize'),
 				'softTabs'	=> $this->getSettings()->getAttribute('enableSoftTabs'),
 				'container'	=> $id.'Canvas'
@@ -87,7 +87,7 @@ class DoxterFieldType extends BaseFieldType
 		if (!empty($value))
 		{
 			$model->setAttribute('text', $value);
-			$model->setAttribute('html', craft()->doxter->parse($value));
+			$model->setAttribute('html', doxter()->parse($value));
 		}
 
 		return $model;

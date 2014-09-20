@@ -52,11 +52,11 @@ class DoxterModel extends BaseModel
 			return $this->parse($options);
 		}
 
-		return $this->html;
+		return $this->getAttribute('html');
 	}
 
 	/**
-	 * Alias for getHtml()
+	 * Alias of getHtml()
 	 *
 	 * @see getHtml()
 	 * @param array $options
@@ -65,7 +65,7 @@ class DoxterModel extends BaseModel
 	 */
 	public function parse(array $options=array())
 	{
-		return craft()->doxter->parse($this->text, $options);
+		return doxter()->parse($this->getAttribute('text'), $options);
 	}
 
 	public function defineAttributes()

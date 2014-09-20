@@ -1,10 +1,10 @@
 ![Doxter](resources/img/doxter.png)
 
-# Doxter 0.6.2
+# Doxter 1.0.3
 Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 **Doxter** is a markdown plugin designed to improve the way you write documentation.  
-It provides a simple textarea **fieldtype** with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
+It provides a markdown editor **fieldtype**, a toolbar for [reference tags][refTags], and [live preview][preview] support.
 It also provides a **markdown parser** that supports [github flavor markdown][gfm], [reference tags][parseRefs] with _recursive parsing_ and **linkable headers**.
 
 ## Installation
@@ -16,7 +16,7 @@ It also provides a **markdown parser** that supports [github flavor markdown][gf
 
 ## Features
 * [Live Preview][preview] Support
-* [Github Fravored Markdown][gfm] Parsing
+* [Github Flavored Markdown][gfm] Parsing
 * Can add **header anchors** dynamically
 * Fast and consistent **parsing** based on [Parsedown][parsedown]
 * Minimalist **textarea** with [Editor Behavior][behave] and toolbar for [Reference Tags][refTags]
@@ -85,8 +85,6 @@ If you have any feedback, questions, or concerns, please reach out to me on twit
 Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
 1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
-2. [BehaveJS][behave] _to add editor behavior to the textarea_
-3. [Zit][zit] _for dependency management_
 
 _Special thanks to their developer and maintainers!_
 

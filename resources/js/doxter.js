@@ -2,7 +2,7 @@
 {
 	/**
 	 * General purpose Doxter module
-	 * Enables dynamic code block selection based on highlighter selected
+	 * Enables dynamic code block selection based on highlighter selected and other misc
 	 */
 	Craft.Doxter = Garnish.Base.extend(
 	{
@@ -34,6 +34,10 @@
 
 					break;
 				}
+				default:
+				{
+					this.$codeBlockSnippet.val('<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>');
+				}
 			}
 
 			e.preventDefault();
@@ -58,6 +62,7 @@
 			this.$selectCategoryButton	= $("#" + this.id + "SelectCategory");
 			this.$selectGlobalButton	= $("#" + this.id + "SelectGlobal");
 			// ~
+			this.rows					= config.rows		|| 20;
 			this.tabSize				= config.tabSize	|| 4;
 			this.softTabs				= config.softTabs	|| true;
 			// ~
@@ -77,16 +82,21 @@
 
 		addAceEditor: function()
 		{
-			var self = this;
+			var self = this, height = this.rows * 15 + 'px';
 
-			$('#' + this.id + 'Fake').addClass('doxterEditor');
+			$('#' + this.id + 'Fake').addClass('doxterEditor').css({'height': height, 'max-height': height});
 
 			this.editor = ace.edit(this.id + 'Fake');
 
 			this.editor.renderer.setShowGutter(false);
-			this.editor.renderer.setShowPrintMargin(false);
 			this.editor.setTheme('ace/theme/tomorrow');
 			this.editor.getSession().setMode('ace/mode/markdown');
+			this.editor.getSession().setTabSize(this.tabSize);
+			this.editor.getSession().setUseSoftTabs(this.softTabs);
+			this.editor.getSession().setUseWrapMode(false);
+			this.editor.setHighlightActiveLine(true);
+			this.editor.setShowPrintMargin(false);
+
 			this.editor.getSession().on('change', function(e)
 			{
 				self.field.val(self.editor.getSession().getValue());
