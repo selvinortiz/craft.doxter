@@ -279,7 +279,7 @@ class Parsedown
 
             $Block = array(
                 'element' => array(
-                    'name' => 'h'.$level,
+                    'name' => 'h' . min(6, $level),
                     'text' => $text,
                     'handler' => 'line',
                 ),
@@ -619,7 +619,7 @@ class Parsedown
 
     protected function identifyMarkup($Line)
     {
-        if (preg_match('/^<(\w[\w\d]*)(?:[ ][^>\/]*)?(\/?)[ ]*>/', $Line['text'], $matches))
+        if (preg_match('/^<(\w[\w\d]*)(?:[ ][^>]*)?(\/?)[ ]*>/', $Line['text'], $matches))
         {
             if (in_array($matches[1], $this->textLevelElements))
             {

@@ -2,9 +2,9 @@
 namespace Craft;
 
 /**
- * Doxter Reference Parser
+ * Class DoxterReferenceTagParser
  *
- * @package SelvinOrtiz
+ * @package Craft
  */
 class DoxterReferenceTagParser extends DoxterBaseParser
 {
@@ -57,7 +57,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 
 		$source	= preg_replace_callback(static::getPattern(), array($this, 'handleTagMatch'), $source);
 
-		if (isset($options['parseReferenceTagsRecursively']) && $options['parseReferenceTagsRecursively'])
+		if (!isset($options['parseReferenceTagsRecursively']) || $options['parseReferenceTagsRecursively'] == false)
 		{
 			return $source;
 		}
@@ -72,26 +72,19 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 		return $this->parse($source);
 	}
 
-	public function handleTagMatch(array $matches = array())
-	{
-		$matched = array_shift($matches);
-		$content = $this->getTagContent($matches, $matched);
-
-		return is_null($content) ? $matched : $content;
-	}
-
 	/**
+	 * Handles a matched reference tag and replaces it with actual content or the tag itself
 	 *
-	 * @param array $tags
-	 * @param mixed $default
+	 * @param array $matches
 	 *
-	 * @return BaseElementModel|mixed
+	 * @return mixed|BaseElementModel
 	 */
-	public function getTagContent(array $tags=array(), $default=null)
+	public function handleTagMatch(array $matches=array())
 	{
-		$elementType		= $tags[0];
-		$elementCriteria	= $tags[1];
-		$elementString		= isset($tags[2]) ? $tags[2] : false;
+		$matchedTag			= array_shift($matches);						// {entry:1:title}
+		$elementType		= $matches[0];									// entry
+		$elementCriteria	= $matches[1];									// 1
+		$elementString		= isset($matches[2]) ? $matches[2] : false;		// title
 		$element			= $this->getElementByReferenceTag($elementType, $elementCriteria);
 
 		if ($element)
@@ -104,23 +97,29 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 				{
 					return craft()->templates->renderObjectTemplate($elementString, $element);
 				}
-				catch(\Exception $e)
+				catch(Exception $e)
 				{
-					return $default;
+					return $matchedTag;
 				}
 			}
 
 			return $element;
 		}
 
-		return $default;
+		return $matchedTag;
 	}
 
 	/**
-	 * @param string $elementType (category|global|entry|user|asset|tag)
-	 * @param string $elementCriteria (10|section/slug|user@domain.com)
+	 * Finds an element based on what type and criteria is provided
 	 *
-	 * @return BaseElementModel|null
+	 * @example
+	 * $elementType		= One of (category|global|entry|user|asset|tag)
+	 * $elementCriteria	= One of (id|username|email|section/slug)
+	 *
+	 * @param string $elementType
+	 * @param string $elementCriteria
+	 *
+	 * @return mixed|BaseElementModel
 	 */
 	public function getElementByReferenceTag($elementType, $elementCriteria)
 	{

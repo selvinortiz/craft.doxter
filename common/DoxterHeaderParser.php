@@ -24,12 +24,12 @@ class DoxterHeaderParser extends DoxterBaseParser
 
 		extract($options);
 
-		if (is_string($addHeaderAnchorsTo))
+		if (!is_array($addHeaderAnchorsTo))
 		{
-			$addHeaderAnchorsTo = ArrayHelper::stringToArray(str_replace('|', ',', $addHeaderAnchorsTo));
+			$addHeaderAnchorsTo = craft()->doxter->getHeadersToParse($addHeaderAnchorsTo);
 		}
 
-		$headers	= implode('|', array_map('trim', $addHeaderAnchorsTo));	// h1|h2|h3
+		$headers	= implode('|', array_map('trim', $addHeaderAnchorsTo));		// h1|h2|h3
 		$pattern	= sprintf('/<(%s)>([^<>]+)<\/(%s)>/i', $headers, $headers);
 		$source		= preg_replace_callback($pattern, array($this, 'handleMatch'), $source);
 
