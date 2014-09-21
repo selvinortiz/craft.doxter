@@ -67,10 +67,9 @@ The `doxter` filter accepts all parameters for which there are setings.
 
 ## FieldType Usage
 Doxter adds a `Doxter Markdown` fieldtype that you can use to write/store your markdown content.  
-The fieldtype is a simple textarea with [editor behavior][behave], a toolbar for [reference tags][refTags], and [live preview][preview] support.  
-In addition to that, this simple fieldtype includes settings for _rows, word wrap, tab size, convert to tabs, etc_
+The fieldtype is an editor based on [Ace][ace] with a custom toolbar for [reference tags][refTags], and [live preview][preview] support.
 
-_Using this fieldtype is not required to be able to use the filter but future version might implement the ability to preparse and cache content_
+_Using this fieldtype is not required to be able to use the filter but future version might implement the ability to parse and cache content during entry save_
 
 ## Changes
 All noteworthy changes can be found in [CHANGELOG.md][changelog]
@@ -82,6 +81,7 @@ If you have any feedback, questions, or concerns, please reach out to me on twit
 Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
 1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
+2. [Ace Editor[ace] _for an enjoyable experience writing markdown_
 
 _Special thanks to their developer and maintainers!_
 
