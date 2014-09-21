@@ -66,6 +66,11 @@ class DoxterFieldType extends BaseFieldType
 		);
 	}
 
+	/**
+	 * @param string $id The field (html) id
+	 *
+	 * @return string
+	 */
 	public function getDoxterFieldJs($id)
 	{
 		$options = json_encode(
@@ -80,6 +85,11 @@ class DoxterFieldType extends BaseFieldType
 		return "new Craft.DoxterFieldType('{$id}', {$options}).render();";
 	}
 
+	/**
+	 * @param mixed $value
+	 *
+	 * @return DoxterModel
+	 */
 	public function prepValue($value)
 	{
 		$model = DoxterModel::create();
@@ -95,6 +105,6 @@ class DoxterFieldType extends BaseFieldType
 
 	public function defineContentAttribute()
 	{
-		return array(AttributeType::String, 'column'=>ColumnType::LongText);
+		return array(AttributeType::String, 'column' => ColumnType::LongText);
 	}
 }

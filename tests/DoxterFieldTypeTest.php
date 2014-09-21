@@ -14,12 +14,27 @@ class DoxterFieldTypeTest extends DoxterBase
 	 * UNIT TESTS
 	 * ----------
 	 */
-	public function testGetName()
+	public function testGetNameReturnsExpected()
 	{
 		$this->assertEquals('Doxter Markdown', $this->subject->getName());
 	}
 
-	public function testGetInputHtml()
+	public function testDefineSettingsReturnsProperlyDefinedSettings()
+	{
+		$expected	= array('enableSoftTabs', 'tabSize', 'rows');
+		$settings	= $this->subject->defineSettings();
+
+		$this->assertEquals($expected, array_keys($settings));
+	}
+
+	public function testDefineContentReturnsProperlyDefinedColumn()
+	{
+		$expected	= array(AttributeType::String, 'column' => ColumnType::LongText);
+
+		$this->assertEquals($expected, $this->subject->defineContentAttribute());
+	}
+
+	public function testGetInputHtmlReturnsRenderedString()
 	{
 		$this->config->shouldReceive('getLocalized')->with('siteUrl')->andReturn('http://selvinortiz.dev');
 		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
@@ -27,7 +42,7 @@ class DoxterFieldTypeTest extends DoxterBase
 		$this->assertTrue($this->subject->getInputHtml('doxterMarkdown', '*markdown*'));
 	}
 
-	public function testGetDoxterFieldJs()
+	public function testGetDoxterFieldJsReturnsStringWithInitializerCode()
 	{
 		$this->assertTrue(stripos($this->subject->getDoxterFieldJs('doxter'), 'new Craft.DoxterFieldType') !== false);
 	}
