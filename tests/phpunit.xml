@@ -28,7 +28,7 @@
 				<directory>../build</directory>
 				<directory>../resources</directory>
 				<directory>../templates</directory>
-				<directory>../common/libs</directory>
+				<directory>../common/parsedown</directory>
 			</exclude>
 		</whitelist>
 	</filter>

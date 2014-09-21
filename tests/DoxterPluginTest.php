@@ -58,6 +58,11 @@ class DoxterPluginTest extends DoxterBase
 		$this->assertEquals($expected, array_keys($this->subject->defineSettings()));
 	}
 
+	public function testGetSettingsHtmlReturnsRenderTemplateResult()
+	{
+		$this->assertTrue($this->subject->getSettingsHtml());
+	}
+
 	public function testGetSettingsReturnsSettingsModelOrBaseModel()
 	{
 		$this->assertTrue($this->subject->getSettings() instanceof BaseModel);
@@ -75,8 +80,7 @@ class DoxterPluginTest extends DoxterBase
 	public function setUp()
 	{
 		parent::setUp();
-		parent::reloadConfig();
-		
+
 		$this->subject = new DoxterPlugin;
 	}
 }

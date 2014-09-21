@@ -36,10 +36,13 @@ class DoxterFieldTypeTest extends DoxterBase
 
 	public function testGetInputHtmlReturnsRenderedString()
 	{
-		$this->config->shouldReceive('getLocalized')->with('siteUrl')->andReturn('http://selvinortiz.dev');
-		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
-
 		$this->assertTrue($this->subject->getInputHtml('doxterMarkdown', '*markdown*'));
+	}
+
+	public function testPrepValueCanUserDoxterServiceLayerReturnsDoxterModel()
+	{
+		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue(null));
+		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue('Some markdown *text*.'));
 	}
 
 	public function testGetDoxterFieldJsReturnsStringWithInitializerCode()
@@ -59,6 +62,7 @@ class DoxterFieldTypeTest extends DoxterBase
 		$this->config->shouldReceive('get')->with('defaultTemplateExtensions')->andReturn(array('.html'));
 		$this->config->shouldReceive('get')->with('indexTemplateFilenames')->andReturn(array('index'));
 		$this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn('');
+		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
 		$this->config->shouldReceive('parseEnvironmentString')->andReturn('');
 
 		$templates	= m::mock('Craft\TemplatesService[render]');

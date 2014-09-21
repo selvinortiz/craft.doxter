@@ -3,8 +3,14 @@ namespace Craft;
 
 class DoxterVariable
 {
+	/**
+	 * @var DoxterPlugin
+	 */
 	protected $doxter;
 
+	/**
+	 * @return DoxterPlugin|null
+	 */
 	public function getPlugin()
 	{
 		if ($this->doxter === null)
