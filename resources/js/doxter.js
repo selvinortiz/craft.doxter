@@ -155,7 +155,7 @@
 
 		createGlobalSetSelectorModal: function(e)
 		{
-			this.writeToEditor("{globalset:id:property}")
+			this.writeToEditor("{globalset:id:property}");
 			e.preventDefault();
 		},
 
