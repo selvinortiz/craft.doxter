@@ -127,7 +127,7 @@ class DoxterPlugin extends BasePlugin
 	 * @access protected
 	 * @return string
 	 */
-	protected function getCodeBlockSnippet()
+	public function getCodeBlockSnippet()
 	{
 		return '<pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>';
 	}
