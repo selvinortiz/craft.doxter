@@ -26,7 +26,7 @@ class DoxterHeaderParser extends DoxterBaseParser
 
 		if (!is_array($addHeaderAnchorsTo))
 		{
-			$addHeaderAnchorsTo = craft()->doxter->getHeadersToParse($addHeaderAnchorsTo);
+			$addHeaderAnchorsTo = doxter()->getHeadersToParse($addHeaderAnchorsTo);
 		}
 
 		$headers	= implode('|', array_map('trim', $addHeaderAnchorsTo));		// h1|h2|h3
