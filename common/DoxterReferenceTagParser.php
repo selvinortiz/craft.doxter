@@ -169,7 +169,6 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 			default:
 			{
 				$criteria['id'] = $elementCriteria;
-				break;
 			}
 		}
 

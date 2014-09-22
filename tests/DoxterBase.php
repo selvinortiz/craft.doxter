@@ -24,6 +24,9 @@ class DoxterBase extends BaseTest
 		$this->config->shouldReceive('getIsInitialized')->andReturn(true);
 		$this->config->shouldReceive('omitScriptNameInUrls')->andReturn(true);
 
+		$this->config->shouldReceive('get')->with('user', 'db')->andReturn('root');
+		$this->config->shouldReceive('get')->with('password', 'db')->andReturn('secret');
+		$this->config->shouldReceive('get')->with('database', 'db')->andReturn('selvinortizdev');
 		$this->config->shouldReceive('get')->with('devMode')->andReturn(false);
 		$this->config->shouldReceive('get')->with('cpTrigger')->andReturn('admin');
 		$this->config->shouldReceive('get')->with('baseCpUrl')->andReturn('http://selvinortiz.dev/');
@@ -49,7 +52,6 @@ class DoxterBase extends BaseTest
 
 		$this->setComponent(craft(), 'config', $this->config);
 
-		// craft()->doxter & craft()->plugins->getPlugin('doxter');
 		$plugin			= new DoxterPlugin;
 		$pluginService	= m::mock('Craft\PluginsService[getPlugin]');
 

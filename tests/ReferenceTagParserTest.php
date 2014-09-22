@@ -3,13 +3,18 @@ namespace Craft;
 
 use Mockery as m;
 
-class ReferenceTagParserTest extends DoxterBaseTest
+class ReferenceTagParserTest extends DoxterBase
 {
+	/**
+	 * @var DoxterReferenceTagParser
+	 */
+	protected $subject;
+
 	public function testEntryReferenceTagParsingById()
 	{
 		$source	= '{entry:123456789:id}';
 		$expect	= '{entry:123456789:id}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -18,7 +23,7 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	{
 		$source	= '{entry:section/slug:id}';
 		$expect	= '{entry:section/slug:id}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -27,7 +32,7 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	{
 		$source	= '{user:123456789:email}';
 		$expect	= '{user:123456789:email}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -36,7 +41,7 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	{
 		$source	= '{user:user@domain.com:email}';
 		$expect	= '{user:user@domain.com:email}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -45,7 +50,7 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	{
 		$source	= '{user:username:email}';
 		$expect	= '{user:username:email}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -54,7 +59,7 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	{
 		$source	= '{asset:123456789:id}';
 		$expect	= '{asset:123456789:id}';
-		$parsed	= doxter()->referenceTagParser->parse($source);
+		$parsed	= $this->subject->parse($source);
 
 		$this->assertEquals($expect, $parsed);
 	}
@@ -62,12 +67,12 @@ class ReferenceTagParserTest extends DoxterBaseTest
 	public function setUp()
 	{
 		parent::setUp();
-		parent::reloadConfig();
 
-		$criteria	= m::mock('Craft\ElementCriteriaModel');
-		$criteria->shouldReceive('find')->withAnyArgs()->andReturn(false);
+		$this->subject	= new DoxterReferenceTagParser;
+		$criteria		= m::mock('Craft\ElementCriteriaModel');
+		$elements		= m::mock('Craft\ElementsService');
 
-		$elements	= m::mock('Craft\ElementsService');
+		$criteria->shouldReceive('first')->withAnyArgs()->andReturn(false);
 		$elements->shouldReceive('getIsInitialized')->andReturn(true);
 		$elements->shouldReceive('getCriteria')->withAnyArgs()->andReturn($criteria);
 

@@ -54,8 +54,10 @@ class DoxterFieldTypeTest extends DoxterBase
 	{
 		parent::setUp();
 
-		$this->subject	= new DoxterFieldType();
+		$this->subject	= new DoxterFieldType;
+		$templates		= m::mock('Craft\TemplatesService[render]');
 
+		$templates->shouldReceive('render')->andReturn(true);
 		$this->config->shouldReceive('get')->with('doxterSettings')->andReturn(null);
 		$this->config->shouldReceive('get')->with('devMode')->andReturn(false);
 		$this->config->shouldReceive('get')->with('actionTrigger')->andReturn('action');
@@ -65,9 +67,6 @@ class DoxterFieldTypeTest extends DoxterBase
 		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(false);
 		$this->config->shouldReceive('parseEnvironmentString')->andReturn('');
 
-		$templates	= m::mock('Craft\TemplatesService[render]');
-
-		$templates->shouldReceive('render')->andReturn(true);
 		$this->setComponent(craft(), 'templates', $templates);
 	}
 }
