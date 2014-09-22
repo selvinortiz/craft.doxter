@@ -1,4 +1,5 @@
 .idea
+docs
 build
 vendor
 sync.sh
