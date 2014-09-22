@@ -81,7 +81,7 @@ If you have any feedback, questions, or concerns, please reach out to me on twit
 Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
 1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
-2. [Ace Editor[ace] _for an enjoyable experience writing markdown_
+2. [Ace Editor][ace] _for an enjoyable experience writing markdown_
 
 _Special thanks to their developer and maintainers!_
 
