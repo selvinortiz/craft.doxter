@@ -5,8 +5,9 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 ## Changes
 
 ### 1.0.3
-* Introduces a complete rewrite of the core and update editor
+* Introduces a complete rewrite of the core and updated editor
 * Adds support for `ParsedownExtra`
+* Adds the powerful Ace Editor
 
 ### 0.6.2
 * Fixes typos in the settings page
