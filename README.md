@@ -108,6 +108,7 @@ If you have any feedback, questions, or concerns, please reach out to me on twit
 Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
 1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
+1. [Parsedown Extra][parsedown] _for lightening fast and consistent markdown extra parsing_
 2. [Ace Editor][ace] _for an enjoyable experience writing markdown_
 
 _Special thanks to their developer and maintainers!_
@@ -127,6 +128,7 @@ Doxter is open source software licensed under the [MIT license][license]
 [entrytypes]:http://buildwithcraft.com/features/entry-types "Entry Types"
 [gfm]: https://help.github.com/articles/github-flavored-markdown "Github Flavored Markdown"
 [parsedown]:https://github.com/erusev/parsedown "Parsedown"
+[parsedown]:https://github.com/erusev/parsedown-extra "Parsedown Extra"
 [changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
 [license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
 [osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"
