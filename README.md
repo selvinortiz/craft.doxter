@@ -45,6 +45,13 @@ Returns the _plain text_ content stored via the field type
 {{ entry.doxterField.getText() }}
 ```
 
+It is also worth noting that this is the default behavior when you use you the **Doxter Model** in string context.
+
+```twig
+{# __toString() returns the getText() equivalent #}
+{{ entry.doxterField }}
+```
+
 ### getHtml()
 
 Returns properly formatted **HTML** parsed from the the _plain text_ content stored via the **Doxter Markdown** field type.
@@ -57,7 +64,8 @@ Returns properly formatted **HTML** parsed from the the _plain text_ content sto
 Alias of `getHtml()`
 
 ```twig
-{{ entry.doxterField.parse() }}```
+{{ entry.doxterField.parse() }}
+```
 
 ## Doxter Filter
 The `doxter` filter is still supported and can be used to parse markdown from any source
@@ -74,7 +82,7 @@ The **Doxter Model** `getHtml() | parse()` methods and the **Doxter Filter** acc
 | `parseRecursively`    | `boolean` | `true`             | Whether markdown within [reference tags][refTags] should be parsed    |
 | `parseReferenceTags`  | `boolean` | `true`             | Whether [reference tags][refTags] should be parsed                    |
 | `addHeaderAnchors`    | `boolean` | `true`             | Whether to parse headers and add anchors                              |
-| `addHeadersAnchorsTo` | `array`   | `[h1, h2, h3]`     | Which headers to add anchors to if header parsing is enabled          |
+| `addHeaderAnchorsTo`  | `array`   | `[h1, h2, h3]`     | Which headers to add anchors to if header parsing is enabled          |
 | `codeBlockSnippet`    | `string`  | _see snippet below_|                                                                       |
 
 ## Default Code Block Snippet
@@ -85,10 +93,10 @@ The code block snippet allows you to define how fenced code blocks should be ren
 <pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>
 ```
 
-| Variable      | Description                                                         |
-|---------------|---------------------------------------------------------------------|
-|`languageClass`| The programming/scripting language added in the fenced code block   |
-|`sourceCode`   | The actual code inside the fenced code block                        | 
+| Variable      | Description                                                         | Example          |
+|---------------|---------------------------------------------------------------------|------------------|
+|`languageClass`| The programming/scripting language added in the fenced code block   |`js`, `php`       |
+|`sourceCode`   | The actual code inside the fenced code block                        | `echo "Code";`   |
 
 ## Changes
 All noteworthy changes can be found in [CHANGELOG.md][changelog]
