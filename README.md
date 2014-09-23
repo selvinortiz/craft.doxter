@@ -1,16 +1,16 @@
 ![Doxter](resources/img/doxter.png)
 
-# Doxter 1.0.3
+# Doxter 1.0
 Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
-**Doxter** is a markdown plugin designed to improve the way you write documentation.
+**Doxter** is a markdown plugin designed to improve the way you write documentation
 
 ## Installation
-1. Download the [Latest Release][release]
+1. Download the [latest release][release] or clone this repo
 2. Extract the archive and place `doxter` inside your `craft/plugins` directory
 4. Install **Doxter** from the Control Panel **@** `Settings > Plugins`
 5. Adjust plugin settings from the Control Panel **@** `Settings > Plugins > Doxter`
-6. FieldType settings can be adjusted when you create your **Doxter Markdown** fields
+6. FieldType settings can be adjusted when you create your **Doxter Markdown** field
 
 ## Features
 * [Live Preview][preview] Support
@@ -22,54 +22,73 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 * Support for multiple fieldtypes within [Matrix Fields][matrix]
 * **Unit Tested** with care
 
-## Filter Usage
-Doxter adds the `doxter({})` filter that you should use instead of `md` or `markdown` and doing so
-will enable features not supported by those filters like [github flavored markdown][gfm], [reference tags][parseRefs], _linkable headers_,
-and custom **code block snippet**.
+---
+
+## Doxter Markdown
+
+**Doxter Markdown** is a field type that allows you to write and parse markdown content.
+
+## Workflow
+
+1. Create a new **Doxter Markdown** field
+2. Add the new field to a **field layout** in your **entry type**
+3. Write your _markdown_ and save it along with your **entry**
+
+The content will be saved as _plain text_ and returned as a **DoxterModel** when fetched via `craft.entries`
+
+## Doxter Model
+
+### getText()
+Returns the _plain text_ content stored via the field type
 
 ```twig
-{% set markdown %}
-    # Doxter
-    **Doxter** is a markdown plugin designed to improve the way your write documentation.
-
-    You can read more about it on our [latest article]({entry:1:getLink()})
-{% endset %}
-
-{{ markdown | doxter }}
+{{ entry.doxterField.getText() }}
 ```
 
-The output should be something like this...
+### getHtml()
 
-```html
-<h1 id="doxter">Doxter <a class="anchor" href="#doxter" title="Doxter">#</a></h1>
+Returns properly formatted **HTML** parsed from the the _plain text_ content stored via the **Doxter Markdown** field type.
 
-<p><strong>Doxter</strong> is a markdown plugin designed to improve the way your write documentation.</p>
-
-<p>You can read more about it on our <a href="/blog/doxter-markdown">latest post</a><p>
+```twig
+{{ entry.doxterField.getHtml() }}
 ```
 
-### Filter API
-The `doxter` filter accepts all parameters for which there are setings.
+### parse()
+Alias of `getHtml()`
 
-| Parameter                 | Type          | Default               | Description                                                           |
-|-----------------------    |-----------    |--------------------   |----------------------------------------------------------             |
-| `parseRecursively`        | `boolean`     | `true`                | Whether markdown within [reference tags][refTags] should be parsed    |
-| `parseReferenceTags`      | `boolean`     | `true`                | Whether [reference tags][refTags] should be parsed                    |
-| `addHeaderAnchors`        | `boolean`     | `true`                | Whether to add anchors to headers                                     |
-| `addHeadersAnchorsTo`     | `string`      | `h1, h2, h3`          | What headers to make linkable/add anchors to                          |
-| `codeBlockSnippet`        | `string`      | _see snippet below_   |                                                                      |
+```twig
+{{ entry.doxterField.parse() }}```
 
-#### Default Code Block Snippet
+## Doxter Filter
+The `doxter` filter is still supported and can be used to parse markdown from any source
+
+```twig
+{{ "Doxter _markdown_"|doxter }}
+```
+
+## Options
+The **Doxter Model** `getHtml() | parse()` methods and the **Doxter Filter** accept an array of options to override those you set on the plugin settings screen.
+
+| Option                | Type      | Default            | Description                                                           |
+|-----------------------|-----------|--------------------|----------------------------------------------------------             |
+| `parseRecursively`    | `boolean` | `true`             | Whether markdown within [reference tags][refTags] should be parsed    |
+| `parseReferenceTags`  | `boolean` | `true`             | Whether [reference tags][refTags] should be parsed                    |
+| `addHeaderAnchors`    | `boolean` | `true`             | Whether to parse headers and add anchors                              |
+| `addHeadersAnchorsTo` | `array`   | `[h1, h2, h3]`     | Which headers to add anchors to if header parsing is enabled          |
+| `codeBlockSnippet`    | `string`  | _see snippet below_|                                                                       |
+
+## Default Code Block Snippet
+The code block snippet allows you to define how fenced code blocks should be rendered by providing two variables you can use in your snippet.
+
 ```html
 <!-- Default snippet targets RainbowJS -->
 <pre><code data-language="language-{languageClass}">{sourceCode}</code></pre>
 ```
 
-## FieldType Usage
-Doxter adds a `Doxter Markdown` fieldtype that you can use to write/store your markdown content.  
-The fieldtype is an editor based on [Ace][ace] with a custom toolbar for [reference tags][refTags], and [live preview][preview] support.
-
-_Using this fieldtype is not required to be able to use the filter but future version might implement the ability to parse and cache content during entry save_
+| Variable      | Description                                                         |
+|---------------|---------------------------------------------------------------------|
+|`languageClass`| The programming/scripting language added in the fenced code block   |
+|`sourceCode`   | The actual code inside the fenced code block                        | 
 
 ## Changes
 All noteworthy changes can be found in [CHANGELOG.md][changelog]
