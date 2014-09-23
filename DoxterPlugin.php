@@ -116,7 +116,7 @@ class DoxterPlugin extends BasePlugin
 
 	public function prepSettings($settings=array())
 	{
-		$settings['addHeaderAnchorsTo'] = craft()->doxter->getHeadersToParse($settings['addHeaderAnchorsTo']);
+		$settings['addHeaderAnchorsTo'] = doxter()->getHeadersToParse($settings['addHeaderAnchorsTo']);
 
 		return $settings;
 	}

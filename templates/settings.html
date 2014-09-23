@@ -6,44 +6,48 @@
 
 {% block content %}
 	<div class="doxterSettings">
-		<h2>
-			<a href="{{ craft.doxter.getCpUrl() }}">
-				{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span>
-			</a>
-		</h2>
+		<h2>{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span></h2>
 		<p>
 			<em>{{ name }}</em> is a <strong>markdown</strong> plugin designed to improve the way you write documentation
 		</p>
 
 		<div class="doxterSection">
 			<h3 class="ico syntax">Parsing Settings</h3>
-			<p>Parse <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Reference Tags</a>?</p>
-			<p class="subtle">Tells Doxter to parse reference tags</p>
+			<p>Enable <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Reference Tag</a> Parsing?</p>
+			<p class="subtle">This tells Doxter to parse reference tags</p>
 			{{
 				forms.lightswitch({
-					name:		"parseReferenceTags",
-					on:			settings.parseReferenceTags
+					name:	"parseReferenceTags",
+					on:		settings.parseReferenceTags
 				})
 			}}
-			<p>Parse Headers?</p>
-			<p class="subtle">Tells Doxter to parse headers and make them clickable.</p>
+			<p>Enable Header Parsing?</p>
+			<p class="subtle">
+				This tells Doxter to parse headers and make them linkable without requiring the
+				<a href="https://github.com/pixelandtonic/Anchors" title="Anchors Plugin">Anchors Plugin</a>
+			</p>
 			{{
 				forms.lightswitch({
-					name:		"addHeaderAnchors",
-					on:			settings.addHeaderAnchors
+					name:	"addHeaderAnchors",
+					on:		settings.addHeaderAnchors
 				})
 			}}
 			<hr>
-			{{
-				forms.textField({
-					id:				"addHeaderAnchorsTo",
-					name:			"addHeaderAnchorsTo",
-					label:			"Headers To Parse" | t,
-					instructions:	"Comma separated list of headers <em>(h1, h2, h3)</em> that you'd like Doxter to parse." | raw | t,
-					value:			settings.addHeaderAnchorsTo|join(', '),
-					errors:			""
-				})
-			}}
+			<p>Headers To Parse</p>
+			<p class="subtle">This tells Doxter what headers to parse if header parsing is enabled.</p>
+			<div class="checkboxGroup">
+				{{
+					forms.checkboxGroup({
+						id:				"addHeaderAnchorsTo",
+						name:			"addHeaderAnchorsTo",
+						label:			"Headers To Parse" | t,
+						instructions:	"Check the headers you want to make linkable by default."|t,
+						options:		{"h1": "H1", "h2": "H2", "h3": "H3", "h4": "H4", "h5": "H5", "h6": "H6"},
+						values:			settings.addHeaderAnchorsTo,
+						errors:			""
+					})
+				}}
+			</div>
 			<hr>
 			{{
 				forms.textareaField({
@@ -68,8 +72,8 @@
 			<p>Display Plugin Tab?</p>
 			{{
 				forms.lightswitch({
-					name:		"enableCpTab",
-					on:			settings.enableCpTab
+					name:	"enableCpTab",
+					on:		settings.enableCpTab
 				})
 			}}
 			{{
