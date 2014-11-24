@@ -1,61 +1,48 @@
 @import "mixins";
 
-.doxterHidden
-{
+.doxterHidden {
 	visibility: hidden;
 }
 
-.doxterSettings
-{
-	h2, h3
-	{
+.doxterSettings {
+	h2, h3 {
 		color: #444;
 	}
-	h3
-	{
-		&.ico
-		{
+	h3 {
+		&.ico {
 			line-height: 32px;
 			padding-left: 32px;
 			background-repeat: no-repeat;
 			background-position: left center;
 		}
-		&.syntax
-		{
+		&.syntax {
 			background-image: url(../img/syntax.png);
 		}
-		&.settings
-		{
+		&.settings {
 			background-image: url(../img/settings.png);
 		}
 	}
-	.subtle
-	{
+	.subtle {
 		color: #bbb;
 	}
-	.notice
-	{
+	.notice {
 		color: #aaa;
 		font-family: serif;
 		font-style: italic;
 	}
-	.doxterSection
-	{
+	.doxterSection {
 		margin-top: 40px;
 		padding-top: 20px;
 		border-top: 1px dotted #bbb;
 	}
-	.checkboxGroup div
-	{
+	.checkboxGroup div {
 		display: inline;
 	}
 }
 
-.doxterToolbar
-{
+.doxterToolbar {
 	padding-top: 1em;
-	a
-	{
+	a {
 		color: #333;
 		font-size: 1.5em;
 		font-family: Craft, sans-serif;
@@ -71,19 +58,17 @@
 	}
 }
 
-.doxterEditor
-{
-  width: 100%;
-  min-width: 100%;
-	height: 300px;
-	min-height: 300px;
+.doxterEditor {
+	height: 200px;
+	min-height: 200px;
 	margin: 10px 0;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	border: 1px solid #dedede;
-	line-height: 1.6;
-	font-size: 1.8em;
-  overflow: hidden;
+	textarea {
+		font-size: 1.5em;
+		line-height: 1.6em;
+	}
 }

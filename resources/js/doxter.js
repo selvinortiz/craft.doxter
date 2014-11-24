@@ -91,7 +91,7 @@
 			this.editor.renderer.setShowGutter(false);
 			this.editor.setTheme('ace/theme/tomorrow');
 			this.editor.getSession().setMode('ace/mode/markdown');
-            this.editor.getSession().setTabSize(this.tabSize);
+			this.editor.getSession().setTabSize(this.tabSize);
 			this.editor.getSession().setUseSoftTabs(this.softTabs);
 			this.editor.getSession().setUseWrapMode(true);
 			this.editor.setHighlightActiveLine(true);
@@ -102,7 +102,7 @@
 				self.field.val(self.editor.getSession().getValue());
 			});
 
-            self.editor = this.editor;
+			self.editor = this.editor;
 
 			this.addListener(this.$livePreviewBtn, 'click', $.proxy(function(e)
 			{
