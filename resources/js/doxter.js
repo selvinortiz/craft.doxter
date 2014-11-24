@@ -91,9 +91,9 @@
 			this.editor.renderer.setShowGutter(false);
 			this.editor.setTheme('ace/theme/tomorrow');
 			this.editor.getSession().setMode('ace/mode/markdown');
-			this.editor.getSession().setTabSize(this.tabSize);
+            this.editor.getSession().setTabSize(this.tabSize);
 			this.editor.getSession().setUseSoftTabs(this.softTabs);
-			this.editor.getSession().setUseWrapMode(false);
+			this.editor.getSession().setUseWrapMode(true);
 			this.editor.setHighlightActiveLine(true);
 			this.editor.setShowPrintMargin(false);
 
@@ -102,9 +102,11 @@
 				self.field.val(self.editor.getSession().getValue());
 			});
 
+            self.editor = this.editor;
+
 			this.addListener(this.$livePreviewBtn, 'click', $.proxy(function(e)
 			{
-				$('#' + self.id + 'Fake', window.parent.document).hide();
+				$('#' + self.id + 'Canvas', window.parent.document).hide();
 			}, this));
 		},
 

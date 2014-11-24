@@ -2,9 +2,10 @@
 namespace Craft;
 
 /**
- * The DoxterFieldType class in charge of rendering inputs and settings.
+ * This field renders a minimalist yet powerful markdown editor
  *
- * @class DoxterFieldType
+ * Class DoxterFieldType
+ *
  * @package Craft
  */
 class DoxterFieldType extends BaseFieldType
@@ -27,9 +28,9 @@ class DoxterFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		craft()->templates->includeCssResource('doxter/css/doxter.css');
 		craft()->templates->includeJsResource('doxter/js/ace.js');
 		craft()->templates->includeJsResource('doxter/js/doxter.js');
+		craft()->templates->includeCssResource('doxter/css/doxter.css');
 
 		$inputId	= craft()->templates->formatInputId($name);
 		$targetId	= craft()->templates->namespaceInputId($inputId);
@@ -48,12 +49,15 @@ class DoxterFieldType extends BaseFieldType
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineSettings()
 	{
 		return array(
-			'enableSoftTabs'	=> array(AttributeType::Bool, 'maxLength' => 3, 'default' => true),
-			'tabSize'			=> array(AttributeType::Number, 'default' => 4),
-			'rows'				=> array(AttributeType::Number, 'default' => 20)
+			'enableSoftTabs'	=> array(AttributeType::Bool,	'maxLength'	=> 3, 'default' => true),
+			'tabSize'			=> array(AttributeType::Number,	'default'	=> 4),
+			'rows'				=> array(AttributeType::Number,	'default'	=> 20)
 		);
 	}
 
@@ -103,6 +107,9 @@ class DoxterFieldType extends BaseFieldType
 		return $model;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineContentAttribute()
 	{
 		return array(AttributeType::String, 'column' => ColumnType::LongText);

@@ -97,7 +97,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 				{
 					return craft()->templates->renderObjectTemplate($elementString, $element);
 				}
-				catch(Exception $e)
+				catch(\Exception $e)
 				{
 					return $matchedTag;
 				}

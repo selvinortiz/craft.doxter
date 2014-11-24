@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * The DoxterFieldType model that represents text (source) and html (output) for field values
+ * Represents text (source) and html (output) for the field type value
  *
  * Class DoxterModel
  *
@@ -11,7 +11,7 @@ namespace Craft;
 class DoxterModel extends BaseModel
 {
 	/**
-	 * Returns an instance of sef which improves testability
+	 * Returns an instance of self which improves testability
 	 *
 	 * @return DoxterModel
 	 */
@@ -21,7 +21,7 @@ class DoxterModel extends BaseModel
 	}
 
 	/**
-	 * @return string The source markdown string
+	 * @return string
 	 */
 	public function __toString()
 	{
@@ -29,7 +29,7 @@ class DoxterModel extends BaseModel
 	}
 
 	/**
-	 * Returns the markdown source
+	 * Returns the field type text (markdown source)
 	 *
 	 * @return string
 	 */
@@ -39,33 +39,30 @@ class DoxterModel extends BaseModel
 	}
 
 	/**
-	 * Returns raw html converted from the source markdown for the fieldtype
+	 * Alias of parse()
 	 *
-	 * @param array $options Parsing options
+	 * @see parse()
+	 * @param array $options
 	 *
 	 * @return \Twig_Markup
 	 */
 	public function getHtml(array $options=array())
 	{
-		if (count($options))
-		{
-			return $this->parse($options);
-		}
-
-		return $this->getAttribute('html');
+		return $this->parse($options);
 	}
 
 	/**
-	 * Alias of getHtml()
+	 * Returns the field type html (parsed output)
 	 *
-	 * @see getHtml()
-	 * @param array $options
+	 * @param array $options Parsing options if any
 	 *
 	 * @return \Twig_Markup
 	 */
 	public function parse(array $options=array())
 	{
-		return doxter()->parse($this->getAttribute('text'), $options);
+		$html = (array() === $options) ? $this->getAttribute('html') : doxter()->parse($this->getAttribute('text'), $options);
+
+        return TemplateHelper::getRaw(typogrify($html));
 	}
 
 	public function defineAttributes()

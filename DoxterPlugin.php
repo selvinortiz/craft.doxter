@@ -29,6 +29,7 @@ class DoxterPlugin extends BasePlugin
 
 		require_once(dirname(__FILE__).'/common/parsedown/Parsedown.php');
 		require_once(dirname(__FILE__).'/common/parsedown/ParsedownExtra.php');
+		require_once(dirname(__FILE__).'/common/parsedown/Typography.php');
 	}
 
 	/**
@@ -40,10 +41,9 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getName($real=false)
 	{
-		$name	= 'Doxter';
 		$alias	= $this->getSettings()->getAttribute('pluginAlias');
 
-		return ($real || empty($alias)) ? $name : $alias;
+		return ($real || empty($alias)) ? 'Doxter' : $alias;
 	}
 
 	/**

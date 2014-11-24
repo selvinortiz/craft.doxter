@@ -5,9 +5,10 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 ## Changes
 
 ### 1.0.3
-* Introduces a complete rewrite of the core and updated editor
+* Fixes issue where editor undo/redo behavior was unstable
+* Improves doxter with a complete rewrite of the core
+* Improves the editor by replacing the simple field with Ace Editor
 * Adds support for `ParsedownExtra`
-* Adds the powerful Ace Editor
 
 ### 0.6.2
 * Fixes typos in the settings page
