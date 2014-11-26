@@ -21,6 +21,8 @@ class DoxterFieldType extends BaseFieldType
 	/**
 	 * Returns the rendered html for the fieldtype UI
 	 *
+	 * @see https://github.com/jakiestfu/Behave.js
+	 *
 	 * @param string $name
 	 * @param mixed  $value
 	 *
@@ -28,25 +30,30 @@ class DoxterFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		craft()->templates->includeJsResource('doxter/js/ace.js');
-		craft()->templates->includeJsResource('doxter/js/doxter.js');
-		craft()->templates->includeCssResource('doxter/css/doxter.css');
+		$tabs			= $this->getSettings()->getAttribute('enabledSoftTabs') ? 'true' : 'false';
+		$tabSize		= $this->getSettings()->getAttribute('tabSize');
+		$inputId		= craft()->templates->formatInputId($name);
+		$namespacedId	= craft()->templates->namespaceInputId($inputId);
 
-		$inputId	= craft()->templates->formatInputId($name);
-		$targetId	= craft()->templates->namespaceInputId($inputId);
-		$snippetJs	= $this->getDoxterFieldJs($targetId);
+		craft()->templates->includeJsResource('doxter/js/behave.js');
 
-		craft()->templates->includeJs($snippetJs);
+		craft()->templates->includeJs("new Behave(
+		{
+			textarea: document.getElementById('{$namespacedId}'),
+			replaceTabs: true,
+			softTabs: {$tabs},
+			tabSize: {$tabSize}
+		});");
 
-		return craft()->templates->render('doxter/fields/doxter/input',
+		return craft()->templates->renderMacro('_includes/forms', 'textarea', array(
 			array(
-				'id'		=> $targetId,
-				'name'		=> $name,
-				'value'		=> $value,
-				'inputId'	=> $inputId,
-				'settings'	=> $this->getSettings()
+				'id'    => $inputId,
+				'name'  => $name,
+				'value' => $value,
+				'class' => 'nicetext code doxter',
+				'rows'  => $this->getSettings()->getAttribute('rows')
 			)
-		);
+		));
 	}
 
 	/**
@@ -57,7 +64,7 @@ class DoxterFieldType extends BaseFieldType
 		return array(
 			'enableSoftTabs'	=> array(AttributeType::Bool,	'maxLength'	=> 3, 'default' => true),
 			'tabSize'			=> array(AttributeType::Number,	'default'	=> 4),
-			'rows'				=> array(AttributeType::Number,	'default'	=> 20)
+			'rows'				=> array(AttributeType::Number,	'default'	=> 4)
 		);
 	}
 
@@ -68,25 +75,6 @@ class DoxterFieldType extends BaseFieldType
 				'settings' => $this->getSettings()
 			)
 		);
-	}
-
-	/**
-	 * @param string $id The field (html) id
-	 *
-	 * @return string
-	 */
-	public function getDoxterFieldJs($id)
-	{
-		$options = json_encode(
-			array(
-				'rows'		=> $this->getSettings()->getAttribute('rows'),
-				'tabSize'	=> $this->getSettings()->getAttribute('tabSize'),
-				'softTabs'	=> $this->getSettings()->getAttribute('enableSoftTabs'),
-				'container'	=> $id.'Canvas'
-			)
-		);
-
-		return "new Craft.DoxterFieldType('{$id}', {$options}).render();";
 	}
 
 	/**

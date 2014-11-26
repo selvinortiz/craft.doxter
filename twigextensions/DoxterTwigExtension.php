@@ -35,6 +35,11 @@ class DoxterTwigExtension extends Twig_Extension
 		return doxter()->parse($source, $options);
 	}
 
+	public function doxterTypography($source='')
+	{
+		return TemplateHelper::getRaw(typogrify($source));
+	}
+
 	/**
 	 * Makes the filters available to the template context
 	 *
@@ -43,7 +48,8 @@ class DoxterTwigExtension extends Twig_Extension
 	public function getFilters()
 	{
 		return array(
-			'doxter' => new Twig_SimpleFilter('doxter', array($this, 'doxter'))
+			'doxter'			=> new Twig_SimpleFilter('doxter', array($this, 'doxter')),
+			'doxterTypography'	=> new Twig_SimpleFilter('doxterTypography', array($this, 'doxterTypography'))
 		);
 	}
 }

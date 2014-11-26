@@ -1,5 +1,3 @@
-![Doxter](resources/img/doxter.png)
-
 # Doxter 1.0
 Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
