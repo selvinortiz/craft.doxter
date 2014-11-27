@@ -49,23 +49,16 @@
 	 */
 	Craft.DoxterFieldType = Garnish.Base.extend(
 	{
-		init: function(id, config)
+		init: function(id)
 		{
 			this.id						= id;
-			this.$container				= $("#" + this.id + "Canvas");
-			this.$livePreviewBtn		= $('#livepreview-btn');
-			this.field					= $("#" + this.id);
+            this.$textarea              = $("#" + this.id);
 			this.$selectEntryButton		= $("#" + this.id + "SelectEntry");
 			this.$selectAssetButton		= $("#" + this.id + "SelectAsset");
 			this.$selectUserButton		= $("#" + this.id + "SelectUser");
 			this.$selectTagButton		= $("#" + this.id + "SelectTag");
 			this.$selectCategoryButton	= $("#" + this.id + "SelectCategory");
 			this.$selectGlobalButton	= $("#" + this.id + "SelectGlobal");
-			// ~
-			this.rows					= config.rows		|| 20;
-			this.tabSize				= config.tabSize	|| 4;
-			this.softTabs				= config.softTabs	|| true;
-			// ~
 			this.addListener(this.$selectEntryButton, 'click', 'createEntrySelectorModal');
 			this.addListener(this.$selectAssetButton, 'click', 'createAssetSelectorModal');
 			this.addListener(this.$selectUserButton, 'click', 'createUserSelectorModal');
@@ -74,54 +67,16 @@
 			this.addListener(this.$selectGlobalButton, 'click', 'createGlobalSetSelectorModal');
 		},
 
-		render: function()
-		{
-			this.addAceEditor();
-			this.$container.removeClass('doxterHidden');
-		},
-
-		addAceEditor: function()
-		{
-			var self = this, height = this.rows * 15 + 'px';
-
-			$('#' + this.id + 'Fake').addClass('doxterEditor').css({'height': height, 'max-height': height});
-
-			this.editor = ace.edit(this.id + 'Fake');
-
-			this.editor.renderer.setShowGutter(false);
-			this.editor.setTheme('ace/theme/tomorrow');
-			this.editor.getSession().setMode('ace/mode/markdown');
-			this.editor.getSession().setTabSize(this.tabSize);
-			this.editor.getSession().setUseSoftTabs(this.softTabs);
-			this.editor.getSession().setUseWrapMode(true);
-			this.editor.setHighlightActiveLine(true);
-			this.editor.setShowPrintMargin(false);
-
-			this.editor.getSession().on('change', function(e)
-			{
-				self.field.val(self.editor.getSession().getValue());
-			});
-
-			self.editor = this.editor;
-
-			this.addListener(this.$livePreviewBtn, 'click', $.proxy(function(e)
-			{
-				$('#' + self.id + 'Canvas', window.parent.document).hide();
-			}, this));
-		},
-
 		createSelectorModal: function(type)
 		{
-			var self = this;
-
+            var self = this;
 			Craft.createElementSelectorModal(type,
 			{
 				id: this.id + 'Select' + type + 'Modal',
 				onSelect: function(elements)
 				{
-					var tags = self.createReferenceTags(type.toLowerCase(), elements);
-
-					self.writeToEditor(tags);
+					var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
+                    self.writeToEditor(tags);
 				}
 			});
 		},
@@ -157,16 +112,14 @@
 
 		createGlobalSetSelectorModal: function(e)
 		{
-			this.writeToEditor("{globalset:id:property}");
+			this.writeToEditor('{globalset:id}')
 			e.preventDefault();
 		},
 
 		writeToEditor: function(text)
 		{
-			this.editor.insert(text);
-
-			return this
-		},
+            prompt('Copy Reference Tag', text);
+        },
 
 		createReferenceTags: function(type, elements)
 		{
@@ -174,7 +127,7 @@
 
 			for (; i < elements.length; i++) {
 				tag		= type.toLowerCase() + ":" + elements[i].id;
-				tags	= tags + "{" + tag + ":property}"
+				tags	= tags + "{" + tag + "}"
 			}
 
 			return tags;

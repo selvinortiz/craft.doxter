@@ -35,7 +35,9 @@ class DoxterFieldType extends BaseFieldType
 		$inputId		= craft()->templates->formatInputId($name);
 		$namespacedId	= craft()->templates->namespaceInputId($inputId);
 
+		craft()->templates->includeCssResource('doxter/css/doxter.css');
 		craft()->templates->includeJsResource('doxter/js/behave.js');
+		craft()->templates->includeJsResource('doxter/js/doxter.js');
 
 		craft()->templates->includeJs("new Behave(
 		{
@@ -45,7 +47,9 @@ class DoxterFieldType extends BaseFieldType
 			tabSize: {$tabSize}
 		});");
 
-		return craft()->templates->renderMacro('_includes/forms', 'textarea', array(
+		craft()->templates->includeJs("var {$inputId}DoxterField = new Craft.DoxterFieldType('{$namespacedId}');");
+
+		$field = craft()->templates->renderMacro('_includes/forms', 'textarea', array(
 			array(
 				'id'    => $inputId,
 				'name'  => $name,
@@ -54,6 +58,8 @@ class DoxterFieldType extends BaseFieldType
 				'rows'  => $this->getSettings()->getAttribute('rows')
 			)
 		));
+
+		return craft()->templates->render('doxter/fields/doxter/input', array('field' => $field, 'inputId' => $inputId));
 	}
 
 	/**
