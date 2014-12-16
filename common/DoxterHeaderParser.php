@@ -29,8 +29,8 @@ class DoxterHeaderParser extends DoxterBaseParser
 			$addHeaderAnchorsTo = doxter()->getHeadersToParse($addHeaderAnchorsTo);
 		}
 
-		$headers	= implode('|', array_map('trim', $addHeaderAnchorsTo));		// h1|h2|h3
-		$pattern	= sprintf('/<(%s)>([^<>]+)<\/(%s)>/i', $headers, $headers);
+		$headers	= implode('|', array_map('trim', $addHeaderAnchorsTo));
+		$pattern	= sprintf('/<(?<tag>%s)>(?<text>.*?)<\/(%s)>/i', $headers, $headers);
 		$source		= preg_replace_callback($pattern, array($this, 'handleMatch'), $source);
 
 		return $source;
@@ -45,10 +45,10 @@ class DoxterHeaderParser extends DoxterBaseParser
 	 */
 	public function handleMatch(array $matches=array())
 	{
-		$tag	= $matches[1];
-		$text	= $matches[2];
+		$tag	= $matches['tag'];
+		$text	= $matches['text'];
 		$slug	= ElementHelper::createSlug($text);
-
-		return "<{$tag} id=\"{$slug}\">{$text} <a class=\"anchor\" href=\"#{$slug}\" title=\"{$text}\">#</a></{$tag}>";
+		$clean  = strip_tags($text);
+		return "<{$tag} id=\"{$slug}\">{$text} <a class=\"anchor\" href=\"#{$slug}\" title=\"{$clean}\">#</a></{$tag}>";
 	}
 }
