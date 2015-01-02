@@ -13,6 +13,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 	protected static $closingTag	= '}';
 	protected static $references	= array(
 		'category'	=> ElementType::Category,
+		'globalset'	=> ElementType::GlobalSet,
 		'global'	=> ElementType::GlobalSet,
 		'entry'		=> ElementType::Entry,
 		'asset'		=> ElementType::Asset,
@@ -145,6 +146,19 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 				{
 					$criteria['section']	= $elementCriteria[0];
 					$criteria['slug']		= $elementCriteria[1];
+				}
+
+				break;
+			}
+			case 'global':
+			{
+				if (is_numeric($elementCriteria))
+				{
+					$criteria['id'] = (int) $elementCriteria;
+				}
+				else
+				{
+					$criteria['handle'] = $elementCriteria;
 				}
 
 				break;
