@@ -151,6 +151,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 				break;
 			}
 			case 'global':
+			case 'globalset':
 			{
 				if (is_numeric($elementCriteria))
 				{
