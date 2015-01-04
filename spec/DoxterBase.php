@@ -34,6 +34,7 @@ class DoxterBase extends BaseTest
 		$this->config->shouldReceive('get')->with('actionTrigger')->andReturn('action');
 		$this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true);
 		$this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false);
+		$this->config->shouldReceive('get')->with('tokenParam')->andReturn(null);
 
 		$this->config->shouldReceive('getLocalized')->with('loginPath')->andReturn('login');
 		$this->config->shouldReceive('getLocalized')->with('logoutPath')->andReturn('logout');
@@ -74,16 +75,16 @@ class DoxterBase extends BaseTest
 	protected function autoload()
 	{
 		$map = array(
-			'\\Craft\\DoxterPlugin'				=> '../DoxterPlugin.php',
-			'\\Craft\\DoxterModel'				=> '../models/DoxterModel.php',
-			'\\Craft\\DoxterService'			=> '../services/DoxterService.php',
-			'\\Craft\\DoxterVariable'			=> '../variables/DoxterVariable.php',
-			'\\Craft\\DoxterFieldType'			=> '../fieldtypes/DoxterFieldType.php',
-			'\\Craft\\DoxterTwigExtension'		=> '../twigextensions/DoxterTwigExtension.php',
-			'\\Craft\\DoxterBaseParser'			=> '../common/DoxterBaseParser.php',
-			'\\Craft\\DoxterHeaderParser'		=> '../common/DoxterHeaderParser.php',
-			'\\Craft\\DoxterCodeBlockParser'	=> '../common/DoxterCodeBlockParser.php',
-			'\\Craft\\DoxterReferenceTagParser'	=> '../common/DoxterReferenceTagParser.php',
+			'\\Craft\\DoxterPlugin'				=> '../doxter/DoxterPlugin.php',
+			'\\Craft\\DoxterModel'				=> '../doxter/models/DoxterModel.php',
+			'\\Craft\\DoxterService'			=> '../doxter/services/DoxterService.php',
+			'\\Craft\\DoxterVariable'			=> '../doxter/variables/DoxterVariable.php',
+			'\\Craft\\DoxterFieldType'			=> '../doxter/fieldtypes/DoxterFieldType.php',
+			'\\Craft\\DoxterTwigExtension'		=> '../doxter/twigextensions/DoxterTwigExtension.php',
+			'\\Craft\\DoxterBaseParser'			=> '../doxter/common/DoxterBaseParser.php',
+			'\\Craft\\DoxterHeaderParser'		=> '../doxter/common/DoxterHeaderParser.php',
+			'\\Craft\\DoxterCodeBlockParser'	=> '../doxter/common/DoxterCodeBlockParser.php',
+			'\\Craft\\DoxterReferenceTagParser'	=> '../doxter/common/DoxterReferenceTagParser.php',
 		);
 
 		foreach ($map as $classPath => $filePath)

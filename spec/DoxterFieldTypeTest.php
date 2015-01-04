@@ -34,20 +34,10 @@ class DoxterFieldTypeTest extends DoxterBase
 		$this->assertEquals($expected, $this->subject->defineContentAttribute());
 	}
 
-	public function testGetInputHtmlReturnsRenderedString()
-	{
-		$this->assertTrue($this->subject->getInputHtml('doxterMarkdown', '*markdown*'));
-	}
-
 	public function testPrepValueCanUserDoxterServiceLayerReturnsDoxterModel()
 	{
 		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue(null));
 		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue('Some markdown *text*.'));
-	}
-
-	public function testGetDoxterFieldJsReturnsStringWithInitializerCode()
-	{
-		$this->assertTrue(stripos($this->subject->getDoxterFieldJs('doxter'), 'new Craft.DoxterFieldType') !== false);
 	}
 
 	public function setUp()
