@@ -1,7 +1,9 @@
+.tmp
+.temp
 .idea
-docs
-build
-vendor
+DS_Store
+#
+# --
 sync.sh
-tests/report
-tests/unstable.sh
+spec/report
+spec/unstable.sh
