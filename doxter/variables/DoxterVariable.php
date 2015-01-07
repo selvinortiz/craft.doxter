@@ -35,14 +35,4 @@ class DoxterVariable
 	{
 		return $this->getPlugin()->getDeveloper();
 	}
-
-	public function getCpUrl()
-	{
-		return UrlHelper::getCpUrl('doxter');
-	}
-
-	public function getCpSettingsUrl()
-	{
-		return UrlHelper::getCpUrl('settings/plugins/doxter');
-	}
 }

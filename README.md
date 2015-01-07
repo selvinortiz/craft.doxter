@@ -15,7 +15,7 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 * [Github Flavored Markdown][gfm] Parsing
 * Creates **Linkable Headers** based on parsing settings
 * Fast and consistent **parsing** based on [Parsedown][parsedown]
-* Advanced editor powered by [Ace][ace] and a custom toolbar for [Reference Tags][refTags]
+* Minimalist editor with custom toolbar for [Reference Tags][refTags]
 * Support for multiple fieldtypes within a single [Entry Type][entrytypes]
 * Support for multiple fieldtypes within [Matrix Fields][matrix]
 * **Unit Tested** with care

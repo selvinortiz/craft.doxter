@@ -4,13 +4,12 @@ namespace Craft;
 /**
  * Doxter @v1.0.4
  *
- * Documentation friendly markdown editing and parsing
+ * Documentation friendly markdown for Craft
  *
- * @author		Selvin Ortiz - http://selvinortiz.com
- * @package		Craft
- * @category	Doxter, Markdown
- * @copyright	2014 Selvin Ortiz
- * @license		MIT Copyright (c) 2014 Selvin Ortiz
+ * @author         Selvin Ortiz - http://selv.in
+ * @package        Craft
+ * @copyright      2014 Selvin Ortiz
+ * @license        MIT Copyright (c) 2014 Selvin Ortiz
  */
 
 class DoxterPlugin extends BasePlugin
@@ -39,9 +38,9 @@ class DoxterPlugin extends BasePlugin
 	 *
 	 * @return string
 	 */
-	public function getName($real=false)
+	public function getName($real = false)
 	{
-		$alias	= $this->getSettings()->getAttribute('pluginAlias');
+		$alias = $this->getSettings()->getAttribute('pluginAlias');
 
 		return ($real || empty($alias)) ? 'Doxter' : $alias;
 	}
@@ -67,25 +66,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getDeveloperUrl()
 	{
-		return 'http://selvinortiz.com';
-	}
-
-	/**
-	 * Returns a rendered view for plugin settings
-	 *
-	 * @return string The html content
-	 */
-	public function getSettingsHtml()
-	{
-		craft()->templates->includeCssResource('doxter/css/doxter.css');
-		craft()->templates->includeJsResource('doxter/js/doxter.js');
-		craft()->templates->includeJs('new Craft.Doxter();');
-
-		return craft()->templates->render('doxter/settings',
-			array(
-				'settings' => $this->getSettings(),
-			)
-		);
+		return 'http://selv.in';
 	}
 
 	/**
@@ -99,22 +80,50 @@ class DoxterPlugin extends BasePlugin
 	}
 
 	/**
+	 * Returns a rendered view for plugin settings
+	 *
+	 * @return string
+	 */
+	public function getSettingsHtml()
+	{
+		craft()->templates->includeCssResource('doxter/css/doxter.css');
+		craft()->templates->includeJsResource('doxter/js/doxter.js');
+		craft()->templates->includeJs('new Craft.Doxter();');
+
+		return craft()->templates->render(
+			'doxter/settings',
+			array(
+				'settings' => $this->getSettings(),
+			)
+		);
+	}
+
+	/**
 	 * @return array
 	 */
 	public function defineSettings()
 	{
 		return array(
-			'codeBlockSnippet'				=> array(AttributeType::String, 'default' => $this->getCodeBlockSnippet(), 'column' => ColumnType::Text),
-			'addHeaderAnchors'				=> array(AttributeType::Bool,	'default' => true),
-			'addHeaderAnchorsTo'			=> array(AttributeType::String,	'default' => array('h1', 'h2', 'h3')),
-			'parseReferenceTags'			=> array(AttributeType::Bool,	'default' => true),
-			'parseReferenceTagsRecursively'	=> array(AttributeType::Bool,	'default' => true),
-			'enableCpTab'					=> array(AttributeType::Bool,	'default' => false),
-			'pluginAlias'					=> array(AttributeType::String,	'default' => 'Doxter')
+			'codeBlockSnippet'              => array(
+				AttributeType::String,
+				'default' => $this->getCodeBlockSnippet(),
+				'column'  => ColumnType::Text
+			),
+			'addHeaderAnchors'              => array(AttributeType::Bool, 'default' => true),
+			'addHeaderAnchorsTo'            => array(AttributeType::String, 'default' => array('h1', 'h2', 'h3')),
+			'parseReferenceTags'            => array(AttributeType::Bool, 'default' => true),
+			'parseReferenceTagsRecursively' => array(AttributeType::Bool, 'default' => true),
+			'enableCpTab'                   => array(AttributeType::Bool, 'default' => false),
+			'pluginAlias'                   => array(AttributeType::String, 'default' => 'Doxter')
 		);
 	}
 
-	public function prepSettings($settings=array())
+	/**
+	 * @param array $settings
+	 *
+	 * @return array
+	 */
+	public function prepSettings($settings = array())
 	{
 		$settings['addHeaderAnchorsTo'] = doxter()->getHeadersToParse($settings['addHeaderAnchorsTo']);
 
@@ -133,21 +142,12 @@ class DoxterPlugin extends BasePlugin
 	}
 
 	/**
-	 * Adds
-	 * @return DoxterTwigExtension
 	 * @throws \Exception
+	 * @return DoxterTwigExtension
 	 */
 	public function addTwigExtension()
 	{
 		return new DoxterTwigExtension();
-	}
-
-	/**
-	 * Redirects to the plugin settings screen after installation
-	 */
-	public function onAfterInstall()
-	{
-		craft()->request->redirect(UrlHelper::getCpUrl('settings/plugins/doxter'));
 	}
 }
 
@@ -158,5 +158,5 @@ class DoxterPlugin extends BasePlugin
  */
 function doxter()
 {
-	return craft()->doxter;
+	return Craft::app()->getComponent('doxter');
 }
