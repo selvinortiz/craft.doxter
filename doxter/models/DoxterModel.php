@@ -25,7 +25,7 @@ class DoxterModel extends BaseModel
 	 */
 	public function __toString()
 	{
-		return $this->getText();
+		return (string) $this->getHtml();
 	}
 
 	/**

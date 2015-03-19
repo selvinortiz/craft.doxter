@@ -69,14 +69,14 @@
 
 		createSelectorModal: function(type)
 		{
-            var self = this;
+			var self = this;
 			Craft.createElementSelectorModal(type,
 			{
 				id: this.id + 'Select' + type + 'Modal',
 				onSelect: function(elements)
 				{
 					var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
-                    self.writeToEditor(tags);
+					self.writeToEditor(tags);
 				}
 			});
 		},
@@ -95,7 +95,19 @@
 
 		createAssetSelectorModal: function(e)
 		{
-			this.createSelectorModal('Asset');
+			var self = this;
+			Craft.createElementSelectorModal('Asset',
+			{
+				id: this.id + 'SelectAssetModal',
+				multiSelect: false,
+				criteria: {kind: 'image'},
+				onSelect: function(elements)
+				{
+					var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
+					self.writeToEditor(tags);
+				}
+			});
+
 			e.preventDefault();
 		},
 
