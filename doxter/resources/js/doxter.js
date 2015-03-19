@@ -103,7 +103,7 @@
 				criteria: {kind: 'image'},
 				onSelect: function(elements)
 				{
-					var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
+					var tags = self.createReferenceTags('asset', elements, 'image');
 					self.writeToEditor(tags);
 				}
 			});
