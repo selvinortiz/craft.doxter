@@ -53,7 +53,7 @@ class DoxterFieldType extends BaseFieldType
 				array(
 					'id'    => $inputId,
 					'name'  => $name,
-					'value' => $value,
+					'value' => $value instanceof DoxterModel ? $value->getText() : $value,
 					'class' => 'nicetext code doxter',
 					'rows'  => $this->getSettings()->getAttribute('rows')
 				)
