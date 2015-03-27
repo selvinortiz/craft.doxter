@@ -33,7 +33,7 @@ class DoxterPluginTest extends DoxterBase
 
 	public function testGetDeveloperUrlAsDefined()
 	{
-		$this->assertEquals('http://selvinortiz.com', $this->subject->getDeveloperUrl());
+		$this->assertEquals('https://selv.in', $this->subject->getDeveloperUrl());
 	}
 
 	public function testGetCodeBlockSnippetReturnsCorrectSyntaxDefinition()

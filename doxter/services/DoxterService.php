@@ -6,7 +6,7 @@ namespace Craft;
  *
  * Class DoxterService
  *
- * @author Selvin Ortiz - http://selvinortiz.com
+ * @author  Selvin Ortiz - https://selv.in
  * @package Craft
  */
 
@@ -15,18 +15,18 @@ class DoxterService extends BaseApplicationComponent
 	/**
 	 * Parses source markdown into valid html using various rules and parsers
 	 *
-	 * @param string $source The markdown source to parse
-	 * @param array $options Passed in parameters via a template filter call
+	 * @param string $source  The markdown source to parse
+	 * @param array  $options Passed in parameters via a template filter call
 	 *
 	 * @return \Twig_Markup The parsed content flagged as safe to output
 	 */
-	public function parse($source, array $options=array())
+	public function parse($source, array $options = array())
 	{
-		$codeBlockSnippet				= null;
-		$addHeaderAnchors				= true;
-		$addHeaderAnchorsTo				= array('h1', 'h2', 'h3');
-		$parseReferenceTags				= true;
-		$parseReferenceTagsRecursively	= true;
+		$codeBlockSnippet              = null;
+		$addHeaderAnchors              = true;
+		$addHeaderAnchorsTo            = array('h1', 'h2', 'h3');
+		$parseReferenceTags            = true;
+		$parseReferenceTagsRecursively = true;
 
 		$options = array_merge(craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes(), $options);
 
@@ -38,8 +38,9 @@ class DoxterService extends BaseApplicationComponent
 			$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
 		}
 
-		$source	= \ParsedownExtra::instance()->text($source);
-		$source	= DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
+		$source = DoxterShortcodeParser::instance()->parse($source);
+		$source = \ParsedownExtra::instance()->text($source);
+		$source = DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
 
 		if ($addHeaderAnchors)
 		{
@@ -56,7 +57,7 @@ class DoxterService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getHeadersToParse($headerString='')
+	public function getHeadersToParse($headerString = '')
 	{
 		$allowedHeaders = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
 
@@ -76,5 +77,67 @@ class DoxterService extends BaseApplicationComponent
 		}
 
 		return $headers;
+	}
+
+	/**
+	 * Returns the value of a deeply nested array key by using dot notation
+	 *
+	 * @param string $key
+	 * @param array  $data
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
+	public function getValueByKey($key, array $data, $default = null)
+	{
+		if (!is_string($key) || empty($key) || !count($data))
+		{
+			return $default;
+		}
+
+		if (strpos($key, '.') !== false)
+		{
+			$keys = explode('.', $key);
+
+			foreach ($keys as $innerKey)
+			{
+				if (!array_key_exists($innerKey, $data))
+				{
+					return $default;
+				}
+
+				$data = $data[$innerKey];
+			}
+
+			return $data;
+		}
+
+		return array_key_exists($key, $data) ? $data[$key] : $default;
+	}
+
+
+	/**
+	 * Renders a plugin template whether the request is for the control panel or the site
+	 *
+	 * @param string $template
+	 * @param array  $vars
+	 *
+	 * @return string
+	 */
+	public function renderPluginTemplate($template, array $vars = array())
+	{
+		$path     = craft()->path->getTemplatesPath();
+		$rendered = null;
+
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'doxter/templates/');
+
+		if (craft()->templates->doesTemplateExist($template))
+		{
+			$rendered = craft()->templates->render($template, $vars);
+		}
+
+		craft()->path->setTemplatesPath($path);
+
+		return $rendered;
 	}
 }

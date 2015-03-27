@@ -2,14 +2,14 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.5
+ * Doxter @v1.0.6
  *
  * Documentation friendly markdown for Craft
  *
- * @author         Selvin Ortiz - http://selv.in
+ * @author         Selvin Ortiz - https://selv.in
  * @package        Craft
- * @copyright      2014 Selvin Ortiz
- * @license        MIT Copyright (c) 2014 Selvin Ortiz
+ * @copyright      2015 Selvin Ortiz
+ * @license        MIT Copyright (c) 2015 Selvin Ortiz
  */
 
 class DoxterPlugin extends BasePlugin
@@ -23,8 +23,14 @@ class DoxterPlugin extends BasePlugin
 	{
 		parent::init();
 
-		Craft::import('plugins.doxter.common.*');
-		Craft::import('plugins.doxter.twigextensions.*');
+		Craft::import('plugins.doxter.models.DoxterShortcodeModel');
+		Craft::import('plugins.doxter.common.DoxterBaseParser');
+		Craft::import('plugins.doxter.common.DoxterHeaderParser');
+		Craft::import('plugins.doxter.common.DoxterCodeBlockParser');
+		Craft::import('plugins.doxter.common.DoxterShortcodeParser');
+		Craft::import('plugins.doxter.common.DoxterReferenceTagParser');
+		Craft::import('plugins.doxter.common.shortcodes.DoxterShortcodes');
+		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
 
 		require_once(dirname(__FILE__).'/common/parsedown/Parsedown.php');
 		require_once(dirname(__FILE__).'/common/parsedown/ParsedownExtra.php');
@@ -66,7 +72,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getDeveloperUrl()
 	{
-		return 'http://selv.in';
+		return 'https://selv.in';
 	}
 
 	/**
@@ -148,6 +154,13 @@ class DoxterPlugin extends BasePlugin
 	public function addTwigExtension()
 	{
 		return new DoxterTwigExtension();
+	}
+
+	public function registerDoxterShortcodes()
+	{
+		return array(
+			'image' => 'Craft\\DoxterShortcodes@image',
+		);
 	}
 }
 
