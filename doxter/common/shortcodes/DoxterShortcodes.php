@@ -31,6 +31,7 @@ class DoxterShortcodes
 				'src'     => $src,
 				'alt'     => $alt,
 				'content' => $code->parseContent(),
+				'wrapper' => $code->getParam('wrapper', 'p'),
 				'class'   => $code->getParam('class', 'fluid'),
 			);
 
