@@ -1,0 +1,27 @@
+<div class="doxter-video">
+	{%- if name == 'youtube' -%}
+	<iframe
+		width="560"
+		height="315"
+		src="https://youtube.com/embed/{{ src }}"
+		frameborder="0"
+		webkitallowfullscreen
+		mozallowfullscreen
+		allowfullscreen>
+	</iframe>
+	{%- endif -%}
+	{% if name == 'vimeo' %}
+	<iframe
+		width="560"
+		height="315"
+		src="https://player.vimeo.com/video/{{ src }}?color={{ color }}&title=0&byline=0&portrait=0"
+		frameborder="0"
+		webkitallowfullscreen
+		mozallowfullscreen
+		allowfullscreen>
+	</iframe>
+	{%- endif -%}
+</div>
+
+{% includeJsResource 'doxter/js/fitvids.js' %}
+{% includeJs "$('.doxter-video').fitVids();" %}

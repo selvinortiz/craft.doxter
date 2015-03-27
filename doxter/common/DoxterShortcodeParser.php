@@ -14,6 +14,18 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	protected static $instance;
 
 	/**
+	 * The method that should be called if a class name is provided as the callback
+	 *
+	 * @var string
+	 */
+	protected static $defaultMethod = 'parse';
+
+	/**
+	 * @var array
+	 */
+	protected $registeredClasses = array();
+
+	/**
 	 * @var bool
 	 */
 	protected $initialized = false;
@@ -113,6 +125,15 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	/**
 	 * Register new shortcode and its associated callback|class
 	 *
+	 * @note
+	 * Supported shortcode registration syntax
+	 * name                 |   callback
+	 * ----                 |   --------
+	 * 'shortcode'          |   'function'
+	 * 'shortcode:another'  |   function(DoxterShortcodeModel $code) {}
+	 *                      |   'Namespace\\Class'
+	 *                      |   'Namespace\\Class@method'
+	 *
 	 * @param string $name
 	 * @param mixed  $callback
 	 *
@@ -120,7 +141,22 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	 */
 	public function register($name, $callback)
 	{
-		$this->shortcodes[$name] = $callback;
+		if (is_string($name))
+		{
+			if (strpos($name, ':') !== false)
+			{
+				$names = array_filter(array_map('trim', explode(':', $name)));
+
+				foreach ($names as $n)
+				{
+					$this->register($n, $callback);
+				}
+			}
+			else
+			{
+				$this->shortcodes[$name] = $callback;
+			}
+		}
 	}
 
 	/**
@@ -246,14 +282,14 @@ class DoxterShortcodeParser extends DoxterBaseParser
 
 		return preg_replace_callback(
 			"/{$pattern}/s", function ($m)
+		{
+			if ($m[1] == '[' && $m[6] == ']')
 			{
-				if ($m[1] == '[' && $m[6] == ']')
-				{
-					return substr($m[0], 1, -1);
-				}
+				return substr($m[0], 1, -1);
+			}
 
-				return $m[1].$m[6];
-			},
+			return $m[1].$m[6];
+		},
 			$content
 		);
 	}
@@ -343,26 +379,39 @@ class DoxterShortcodeParser extends DoxterBaseParser
 
 		if (is_string($callback))
 		{
-			// Namespace\Class@method
+			$instance = null;
+
+			if (isset($this->registeredClasses[$callback]))
+			{
+				$instance = $this->registeredClasses[$callback];
+			}
+
 			if (stripos($callback, '@') !== false)
 			{
 				$parts  = explode('@', $callback);
 				$name   = $parts[0];
 				$method = $parts[1];
 
-				return array(new $name, $method);
-			}
-			// Namespace\Class
-			elseif (class_exists($callback))
-			{
-				$instance = new $callback;
+				if (!$instance)
+				{
+					$instance = new $name();
 
-				return array($instance, 'parse');
+					$this->registeredClasses[$callback] = $instance;
+				}
+
+				return array($instance, $method);
 			}
-			// function
-			else
+
+			if (class_exists($callback))
 			{
-				return $callback;
+				if (!$instance)
+				{
+					$instance = new $callback();
+
+					$this->registeredClasses[$callback] = $instance;
+				}
+
+				return array($instance, static::$defaultMethod);
 			}
 		}
 

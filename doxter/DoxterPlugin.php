@@ -159,7 +159,8 @@ class DoxterPlugin extends BasePlugin
 	public function registerDoxterShortcodes()
 	{
 		return array(
-			'image' => 'Craft\\DoxterShortcodes@image',
+			'image'         => 'Craft\\DoxterShortcodes@image',
+			'vimeo:youtube' => 'Craft\\DoxterShortcodes@video',
 		);
 	}
 }

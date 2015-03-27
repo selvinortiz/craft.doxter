@@ -3,6 +3,11 @@ namespace Craft;
 
 class DoxterShortcodes
 {
+	/**
+	 * @param DoxterShortcodeModel $code
+	 *
+	 * @return string
+	 */
 	public function image(DoxterShortcodeModel $code)
 	{
 		$src       = $code->getParam('src');
@@ -30,6 +35,32 @@ class DoxterShortcodes
 			);
 
 			return doxter()->renderPluginTemplate('shortcodes/_image', $vars);
+		}
+	}
+
+	/**
+	 * @param DoxterShortcodeModel $code
+	 *
+	 * @return string
+	 */
+	public function video(DoxterShortcodeModel $code)
+	{
+		$src = $code->getParam('src');
+
+		if (!empty($src))
+		{
+			if (strpos($src, '/'))
+			{
+				$src = array_pop(explode('/', $src));
+			}
+
+			$vars = array(
+				'src'   => $src,
+				'name'  => $code->name,
+				'color' => $code->getParam('color'),
+			);
+
+			return doxter()->renderPluginTemplate('shortcodes/_video', $vars);
 		}
 	}
 }
