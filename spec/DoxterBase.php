@@ -50,6 +50,7 @@ class DoxterBase extends BaseTest
 		$this->config->shouldReceive('get')->with('slugWordSeparator')->andReturn('-');
 		$this->config->shouldReceive('get')->with('allowUppercaseInSlug')->andReturn(false);
 		$this->config->shouldReceive('get')->with('addTrailingSlashesToUrls')->andReturn(true);
+		$this->config->shouldReceive('get')->with('timezone')->andReturn(new \DateTimeZone('UTC'));
 
 		$this->setComponent(craft(), 'config', $this->config);
 

@@ -1,8 +1,10 @@
 <?php
+date_default_timezone_set('UTC');
+
 /**
  * Defines path and environment constants
  */
-define('SITE_BASE_PATH',			'/var/www/selvinortiz.dev/');
+define('SITE_BASE_PATH',			'/Users/selvinortiz/dev/www/selv.dev/');
 define('CRAFT_BASE_PATH',			SITE_BASE_PATH.'craft/');
 define('CRAFT_APP_PATH',			CRAFT_BASE_PATH.'app/');
 define('CRAFT_CONFIG_PATH',			CRAFT_BASE_PATH.'config/');

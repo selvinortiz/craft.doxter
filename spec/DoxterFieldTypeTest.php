@@ -34,7 +34,7 @@ class DoxterFieldTypeTest extends DoxterBase
 		$this->assertEquals($expected, $this->subject->defineContentAttribute());
 	}
 
-	public function testPrepValueCanUserDoxterServiceLayerReturnsDoxterModel()
+	public function testPrepValueCanUseDoxterServiceLayerReturnsDoxterModel()
 	{
 		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue(null));
 		$this->assertInstanceOf('\\Craft\\DoxterModel', $this->subject->prepValue('Some markdown *text*.'));

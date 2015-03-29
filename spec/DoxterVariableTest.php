@@ -29,11 +29,6 @@ class DoxterVariableTest extends DoxterBase
 		$this->assertEquals('Selvin Ortiz', $this->subject->getDeveloper());
 	}
 
-	public function testGetCpUrl()
-	{
-		$this->assertEquals('http://selvinortiz.dev/admin/doxter/', $this->subject->getCpUrl());
-	}
-
 	public function setUp()
 	{
 		parent::setUp();

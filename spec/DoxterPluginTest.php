@@ -45,12 +45,13 @@ class DoxterPluginTest extends DoxterBase
 
 	public function testDefineSettingsReturnsProperlyDefinedSettings()
 	{
-		$expected	= array(
+		$expected = array(
 			'codeBlockSnippet',
 			'addHeaderAnchors',
 			'addHeaderAnchorsTo',
+			'startingHeaderLevel',
 			'parseReferenceTags',
-			'parseReferenceTagsRecursively',
+			'parseShortcodes',
 			'enableCpTab',
 			'pluginAlias',
 		);
