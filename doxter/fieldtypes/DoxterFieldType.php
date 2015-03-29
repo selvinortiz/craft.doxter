@@ -15,7 +15,7 @@ class DoxterFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return 'Doxter Markdown';
+		return 'Doxter';
 	}
 
 	/**
