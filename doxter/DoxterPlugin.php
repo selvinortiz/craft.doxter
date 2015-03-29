@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.6
+ * Doxter @v1.0.7
  *
  * Documentation friendly markdown for Craft
  *
@@ -15,7 +15,7 @@ namespace Craft;
 class DoxterPlugin extends BasePlugin
 {
 	/**
-	 * Imports custom classes when the plugin is initialized
+	 * Loads dependencies and registers default shortcodes
 	 *
 	 * @throws \Exception
 	 */
@@ -35,6 +35,17 @@ class DoxterPlugin extends BasePlugin
 		require_once(dirname(__FILE__).'/common/parsedown/Parsedown.php');
 		require_once(dirname(__FILE__).'/common/parsedown/ParsedownExtra.php');
 		require_once(dirname(__FILE__).'/common/parsedown/Typography.php');
+
+		// Registers default shortcodes on the fly before parsing
+		craft()->on('doxter.beforeShortcodeParsing', function()
+		{
+			$shortcodes = array(
+				'image'         => 'Craft\\DoxterShortcodes@image',
+				'vimeo:youtube' => 'Craft\\DoxterShortcodes@video',
+			);
+
+			doxter()->registerShortcodes($shortcodes);
+		});
 	}
 
 	/**
@@ -154,14 +165,6 @@ class DoxterPlugin extends BasePlugin
 	public function addTwigExtension()
 	{
 		return new DoxterTwigExtension();
-	}
-
-	public function registerDoxterShortcodes()
-	{
-		return array(
-			'image'         => 'Craft\\DoxterShortcodes@image',
-			'vimeo:youtube' => 'Craft\\DoxterShortcodes@video',
-		);
 	}
 }
 

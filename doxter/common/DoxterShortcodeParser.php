@@ -26,11 +26,6 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	protected $registeredClasses = array();
 
 	/**
-	 * @var bool
-	 */
-	protected $initialized = false;
-
-	/**
 	 * Registered shortcodes
 	 *
 	 * @var array
@@ -38,31 +33,70 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	protected $shortcodes = array();
 
 	/**
-	 * Loads all shortcodes and register them and their callbacks
+	 * Registers an array of shortcodes with Doxter
+	 *
+	 * @param array $shortcodes
+	 */
+	public function registerShortcodes(array $shortcodes)
+	{
+		if (count($shortcodes))
+		{
+			foreach ($shortcodes as $shortcode => $callback)
+			{
+				$this->registerShortcode($shortcode, $callback);
+			}
+		}
+	}
+
+	/**
+	 * Registers a new shortcode and its associated callback|class
+	 *
+	 * @note
+	 * Supported shortcode registration syntax
+	 * shortcode            |   callback
+	 * ----                 |   --------
+	 * 'shortcode'          |   'function'
+	 * 'shortcode:another'  |   function(DoxterShortcodeModel $code) {}
+	 *                      |   'Namespace\\Class'
+	 *                      |   'Namespace\\Class@method'
+	 *
+	 * @param string $shortcode
+	 * @param mixed  $callback
 	 *
 	 * @return void
 	 */
-	public function init()
+	public function registerShortcode($shortcode, $callback)
 	{
-		if (!$this->initialized)
+		if (is_string($shortcode))
 		{
-			$responses = craft()->plugins->call('registerDoxterShortcodes');
-
-			if ($responses)
+			if (strpos($shortcode, ':') !== false)
 			{
-				foreach ($responses as $plugin => $shortcodes)
+				$shortcodes = array_filter(array_map('trim', explode(':', $shortcode)));
+
+				foreach ($shortcodes as $code)
 				{
-					if (is_array($shortcodes) && count($shortcodes))
-					{
-						foreach ($shortcodes as $name => $callback)
-						{
-							$this->register($name, $callback);
-						}
-					}
+					$this->registerShortcode($code, $callback);
 				}
 			}
+			else
+			{
+				$this->shortcodes[$shortcode] = $callback;
+			}
+		}
+	}
 
-			$this->initialized = true;
+	/**
+	 * Unregisters the specified shortcode by given name
+	 *
+	 * @param string $name
+	 *
+	 * @return void
+	 */
+	public function unregisterShortcode($name)
+	{
+		if ($this->exists($name))
+		{
+			unset($this->shortcodes[$name]);
 		}
 	}
 
@@ -81,13 +115,11 @@ class DoxterShortcodeParser extends DoxterBaseParser
 			return $source;
 		}
 
-		$this->init();
-
 		return $this->compile($source);
 	}
 
 	/**
-	 * Compile the given content.
+	 * Compiles the shortcodes in content provided
 	 *
 	 * @param  string $content
 	 *
@@ -106,7 +138,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	}
 
 	/**
-	 * Render the current called shortcode
+	 * Renders the current called shortcode
 	 *
 	 * @param  array $matches
 	 *
@@ -120,58 +152,6 @@ class DoxterShortcodeParser extends DoxterBaseParser
 		$shortcode->content = $matches[5];
 
 		return call_user_func_array($this->getCallback($matches[2]), array($shortcode));
-	}
-
-	/**
-	 * Register new shortcode and its associated callback|class
-	 *
-	 * @note
-	 * Supported shortcode registration syntax
-	 * name                 |   callback
-	 * ----                 |   --------
-	 * 'shortcode'          |   'function'
-	 * 'shortcode:another'  |   function(DoxterShortcodeModel $code) {}
-	 *                      |   'Namespace\\Class'
-	 *                      |   'Namespace\\Class@method'
-	 *
-	 * @param string $name
-	 * @param mixed  $callback
-	 *
-	 * @return void
-	 */
-	public function register($name, $callback)
-	{
-		if (is_string($name))
-		{
-			if (strpos($name, ':') !== false)
-			{
-				$names = array_filter(array_map('trim', explode(':', $name)));
-
-				foreach ($names as $n)
-				{
-					$this->register($n, $callback);
-				}
-			}
-			else
-			{
-				$this->shortcodes[$name] = $callback;
-			}
-		}
-	}
-
-	/**
-	 * Unregister the specified shortcode by given name
-	 *
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	public function unregister($name)
-	{
-		if ($this->exists($name))
-		{
-			unset($this->shortcodes[$name]);
-		}
 	}
 
 	/**
@@ -216,7 +196,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	}
 
 	/**
-	 * Parse string to attributes array.
+	 * Parses shortcode string to an attributes array
 	 *
 	 * @param string $text
 	 *
@@ -224,11 +204,9 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	 */
 	protected function parseAttributes($text)
 	{
-		$atts = [];
-
-		$pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
-
-		$text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
+		$attributes = array();
+		$pattern    = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+		$text       = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
 
 		if (preg_match_all($pattern, $text, $match, PREG_SET_ORDER))
 		{
@@ -236,36 +214,36 @@ class DoxterShortcodeParser extends DoxterBaseParser
 			{
 				if (!empty($m[1]))
 				{
-					$atts[strtolower($m[1])] = stripcslashes($m[2]);
+					$attributes[strtolower($m[1])] = stripcslashes($m[2]);
 				}
 				elseif (!empty($m[3]))
 				{
-					$atts[strtolower($m[3])] = stripcslashes($m[4]);
+					$attributes[strtolower($m[3])] = stripcslashes($m[4]);
 				}
 				elseif (!empty($m[5]))
 				{
-					$atts[strtolower($m[5])] = stripcslashes($m[6]);
+					$attributes[strtolower($m[5])] = stripcslashes($m[6]);
 				}
 				elseif (isset($m[7]) and strlen($m[7]))
 				{
-					$atts[] = stripcslashes($m[7]);
+					$attributes[] = stripcslashes($m[7]);
 				}
 				elseif (isset($m[8]))
 				{
-					$atts[] = stripcslashes($m[8]);
+					$attributes[] = stripcslashes($m[8]);
 				}
 			}
 		}
 		else
 		{
-			$atts = ltrim($text);
+			$attributes = ltrim($text);
 		}
 
-		return $atts;
+		return $attributes;
 	}
 
 	/**
-	 * Strip any shortcodes.
+	 * Strips any shortcodes from content provided
 	 *
 	 * @param  string $content
 	 *
@@ -317,16 +295,16 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	}
 
 	/**
-	 * Return true is the given content contain the given name shortcode.
+	 * Return true is the given content contains the given name shortcode.
 	 *
 	 * @param  string $content
-	 * @param  string $name
+	 * @param  string $shortcode
 	 *
 	 * @return boolean
 	 */
-	public function contains($content, $name)
+	public function contains($content, $shortcode)
 	{
-		if ($this->exists($name))
+		if ($this->exists($shortcode))
 		{
 			preg_match_all('/'.$this->getRegex().'/s', $content, $matches, PREG_SET_ORDER);
 
@@ -337,7 +315,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 
 			foreach ($matches as $shortcode)
 			{
-				if ($name === $shortcode[2])
+				if ($shortcode === $shortcode[2])
 				{
 					return true;
 				}
@@ -348,7 +326,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 	}
 
 	/**
-	 * Get parameters.
+	 * Returns parameters found in the shortcodes
 	 *
 	 * @param  array $matches
 	 *
@@ -361,6 +339,17 @@ class DoxterShortcodeParser extends DoxterBaseParser
 		if (!is_array($params))
 		{
 			$params = array($params);
+		}
+
+		foreach ($params as $param => $value)
+		{
+			// Handles attributes without values ([shortcode attribute])
+			if (is_numeric($param) && is_string($value))
+			{
+				$params[$value] = true;
+
+				unset($params[$param]);
+			}
 		}
 
 		return $params;

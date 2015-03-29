@@ -18,7 +18,7 @@ abstract class DoxterBaseParser
 	/**
 	 * Returns an instance of the class in called static context
 	 *
-	 * @return object
+	 * @return DoxterReferenceTagParser|DoxterShortcodeParser|DoxterCodeBlockParser|DoxterHeaderParser
 	 */
 	public static function instance()
 	{

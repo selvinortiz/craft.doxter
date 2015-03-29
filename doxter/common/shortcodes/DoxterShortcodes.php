@@ -56,9 +56,11 @@ class DoxterShortcodes
 			}
 
 			$vars = array(
-				'src'   => $src,
-				'name'  => $code->name,
-				'color' => $code->getParam('color'),
+				'src'    => $src,
+				'name'   => $code->name,
+				'title'  => (int) $code->getParam('title', 0),
+				'byline' => (int) $code->getParam('byline', 0),
+				'color'  => $code->getParam('color'),
 			);
 
 			return doxter()->renderPluginTemplate('shortcodes/_video', $vars);

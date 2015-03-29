@@ -35,16 +35,33 @@ class DoxterService extends BaseApplicationComponent
 		// Parsing reference tags first so that we can parse markdown within them
 		if ($parseReferenceTags)
 		{
-			$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
+			if ($this->onBeforeReferenceTagParsing(compact('source', 'options')))
+			{
+				$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
+			}
 		}
 
-		$source = DoxterShortcodeParser::instance()->parse($source);
-		$source = \ParsedownExtra::instance()->text($source);
-		$source = DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
+		if ($this->onBeforeShortcodeParsing(compact('source')))
+		{
+			$source = DoxterShortcodeParser::instance()->parse($source);
+		}
+
+		if ($this->onBeforeMarkdownParsing(compact('source')))
+		{
+			$source = \ParsedownExtra::instance()->text($source);
+		}
+
+		if ($this->onBeforeCodeBlockParsing(compact('source', 'codeBlockSnippet')))
+		{
+			$source = DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
+		}
 
 		if ($addHeaderAnchors)
 		{
-			$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo'));
+			if ($this->onBeforeHeaderParsing(compact('source', 'addHeaderAnchorsTo')))
+			{
+				$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo'));
+			}
 		}
 
 		return TemplateHelper::getRaw($source);
@@ -139,5 +156,88 @@ class DoxterService extends BaseApplicationComponent
 		craft()->path->setTemplatesPath($path);
 
 		return $rendered;
+	}
+
+	/**
+	 * @param array $shortcodes
+	 */
+	public function registerShortcodes(array $shortcodes)
+	{
+		DoxterShortcodeParser::instance()->registerShortcodes($shortcodes);
+	}
+
+	/**
+	 * @param $shortcode
+	 * @param $callback
+	 */
+	public function registerShortcode($shortcode, $callback)
+	{
+		DoxterShortcodeParser::instance()->registerShortcode($shortcode, $callback);
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function onBeforeReferenceTagParsing(array $params = array())
+	{
+		return $this->raiseOwnEvent(__FUNCTION__, $params);
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function onBeforeShortcodeParsing(array $params = array())
+	{
+		return $this->raiseOwnEvent(__FUNCTION__, $params);
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function onBeforeMarkdownParsing(array $params = array())
+	{
+		return $this->raiseOwnEvent(__FUNCTION__, $params);
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function onBeforeCodeBlockParsing(array $params = array())
+	{
+		return $this->raiseOwnEvent(__FUNCTION__, $params);
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return bool
+	 */
+	public function onBeforeHeaderParsing(array $params = array())
+	{
+		return $this->raiseOwnEvent(__FUNCTION__, $params);
+	}
+
+	/**
+	 * @param string $name
+	 * @param array  $params
+	 *
+	 * @return bool
+	 * @throws \CException
+	 */
+	protected function raiseOwnEvent($name, array $params = array())
+	{
+		$event = new Event($this, $params);
+
+		$this->raiseEvent(array_pop(explode('\\', $name)), $event);
+
+		return $event->performAction;
 	}
 }
