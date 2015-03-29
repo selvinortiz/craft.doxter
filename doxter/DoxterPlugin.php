@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.7
+ * Doxter @v1.0.8
  *
  * Documentation friendly markdown for Craft
  *
@@ -37,7 +37,7 @@ class DoxterPlugin extends BasePlugin
 		require_once(dirname(__FILE__).'/common/parsedown/Typography.php');
 
 		// Registers default shortcodes on the fly before parsing
-		craft()->on('doxter.beforeShortcodeParsing', function()
+		craft()->on('doxter.beforeShortcodeParsing', function ()
 		{
 			$shortcodes = array(
 				'image'         => 'Craft\\DoxterShortcodes@image',
@@ -67,7 +67,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.0.5';
+		return '1.0.8';
 	}
 
 	/**
@@ -121,17 +121,14 @@ class DoxterPlugin extends BasePlugin
 	public function defineSettings()
 	{
 		return array(
-			'codeBlockSnippet'              => array(
-				AttributeType::String,
-				'default' => $this->getCodeBlockSnippet(),
-				'column'  => ColumnType::Text
-			),
-			'addHeaderAnchors'              => array(AttributeType::Bool, 'default' => true),
-			'addHeaderAnchorsTo'            => array(AttributeType::String, 'default' => array('h1', 'h2', 'h3')),
-			'parseReferenceTags'            => array(AttributeType::Bool, 'default' => true),
-			'parseReferenceTagsRecursively' => array(AttributeType::Bool, 'default' => true),
-			'enableCpTab'                   => array(AttributeType::Bool, 'default' => false),
-			'pluginAlias'                   => array(AttributeType::String, 'default' => 'Doxter')
+			'codeBlockSnippet'    => array(AttributeType::String, 'default' => $this->getCodeBlockSnippet()),
+			'addHeaderAnchors'    => array(AttributeType::Bool, 'default' => true),
+			'addHeaderAnchorsTo'  => array(AttributeType::String, 'default' => array('h1', 'h2', 'h3')),
+			'startingHeaderLevel' => array(AttributeType::Number, 'default' => 1),
+			'parseReferenceTags'  => array(AttributeType::Bool, 'default' => true),
+			'parseShortcodes'     => array(AttributeType::Bool, 'default' => true),
+			'enableCpTab'         => array(AttributeType::Bool, 'default' => false),
+			'pluginAlias'         => array(AttributeType::String, 'default' => 'Doxter')
 		);
 	}
 

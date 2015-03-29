@@ -42,7 +42,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 	}
 
 	/**
-	 * Parses reference tags recursively (optional)
+	 * Parses reference tags recursively
 	 *
 	 * @param string $source
 	 * @param array $options
@@ -57,11 +57,6 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 		}
 
 		$source	= preg_replace_callback(static::getPattern(), array($this, 'handleTagMatch'), $source);
-
-		if (!isset($options['parseReferenceTagsRecursively']) || $options['parseReferenceTagsRecursively'] == false)
-		{
-			return $source;
-		}
 
 		if ($this->parsedContent === $source)
 		{

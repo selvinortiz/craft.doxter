@@ -22,11 +22,12 @@ class DoxterService extends BaseApplicationComponent
 	 */
 	public function parse($source, array $options = array())
 	{
-		$codeBlockSnippet              = null;
-		$addHeaderAnchors              = true;
-		$addHeaderAnchorsTo            = array('h1', 'h2', 'h3');
-		$parseReferenceTags            = true;
-		$parseReferenceTagsRecursively = true;
+		$codeBlockSnippet    = null;
+		$addHeaderAnchors    = true;
+		$addHeaderAnchorsTo  = array('h1', 'h2', 'h3');
+		$startingHeaderLevel = 1;
+		$parseReferenceTags  = true;
+		$parseShortcodes     = true;
 
 		$options = array_merge(craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes(), $options);
 
@@ -37,13 +38,16 @@ class DoxterService extends BaseApplicationComponent
 		{
 			if ($this->onBeforeReferenceTagParsing(compact('source', 'options')))
 			{
-				$source = DoxterReferenceTagParser::instance()->parse($source, compact('parseReferenceTagsRecursively'));
+				$source = DoxterReferenceTagParser::instance()->parse($source);
 			}
 		}
 
-		if ($this->onBeforeShortcodeParsing(compact('source')))
+		if ($parseShortcodes)
 		{
-			$source = DoxterShortcodeParser::instance()->parse($source);
+			if ($this->onBeforeShortcodeParsing(compact('source')))
+			{
+				$source = DoxterShortcodeParser::instance()->parse($source);
+			}
 		}
 
 		if ($this->onBeforeMarkdownParsing(compact('source')))
@@ -60,7 +64,7 @@ class DoxterService extends BaseApplicationComponent
 		{
 			if ($this->onBeforeHeaderParsing(compact('source', 'addHeaderAnchorsTo')))
 			{
-				$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo'));
+				$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo', 'startingHeaderLevel'));
 			}
 		}
 

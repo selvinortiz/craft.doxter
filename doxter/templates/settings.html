@@ -13,6 +13,13 @@
 
 		<div class="doxterSection">
 			<h3 class="ico syntax">Parsing Settings</h3>
+			<p>Enable Shortcode Parsing?</p>
+			{{
+				forms.lightswitch({
+					name:	"parseShortcodes",
+					on:		settings.parseShortcodes
+				})
+			}}
 			<p>Enable <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Reference Tag</a> Parsing?</p>
 			<p class="subtle">This tells Doxter to parse reference tags</p>
 			{{
@@ -47,6 +54,17 @@
 					})
 				}}
 			</div>
+			{{
+				forms.selectField({
+					id:				"startingHeaderLevel",
+					name:			"startingHeaderLevel",
+					label:			"Starting Header Level" | t,
+					instructions:	"Allows you to define what `h1` should out put as, levels will go up from there."|t,
+					options:		{"1": "H1", "2": "H2", "3": "H3", "4": "H4", "5": "H5", "6": "H6"},
+					selected:		settings.startingHeaderLevel,
+					errors:			""
+				})
+			}}
 			<hr>
 			{{
 				forms.textareaField({
