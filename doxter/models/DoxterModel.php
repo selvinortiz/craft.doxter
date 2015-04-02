@@ -66,7 +66,7 @@ class DoxterModel extends BaseModel
 	{
 		$html = $this->html;
 
-		if (empty($options))
+		if (!empty($options))
 		{
 			$html = doxter()->parse($this->text, $options);
 		}
