@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.8
+ * Doxter @v1.0.9
  *
  * Documentation friendly markdown for Craft
  *
@@ -23,14 +23,15 @@ class DoxterPlugin extends BasePlugin
 	{
 		parent::init();
 
-		Craft::import('plugins.doxter.models.DoxterShortcodeModel');
 		Craft::import('plugins.doxter.common.DoxterBaseParser');
+		Craft::import('plugins.doxter.common.DoxterMarkdownParser');
 		Craft::import('plugins.doxter.common.DoxterHeaderParser');
 		Craft::import('plugins.doxter.common.DoxterCodeBlockParser');
 		Craft::import('plugins.doxter.common.DoxterShortcodeParser');
 		Craft::import('plugins.doxter.common.DoxterReferenceTagParser');
 		Craft::import('plugins.doxter.common.shortcodes.DoxterShortcodes');
 		Craft::import('plugins.doxter.twigextensions.DoxterTwigExtension');
+		Craft::import('plugins.doxter.models.DoxterShortcodeModel');
 
 		require_once(dirname(__FILE__).'/common/parsedown/Parsedown.php');
 		require_once(dirname(__FILE__).'/common/parsedown/ParsedownExtra.php');
@@ -67,7 +68,7 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.0.8';
+		return '1.0.9';
 	}
 
 	/**
@@ -123,7 +124,8 @@ class DoxterPlugin extends BasePlugin
 		return array(
 			'codeBlockSnippet'    => array(AttributeType::String, 'default' => $this->getCodeBlockSnippet()),
 			'addHeaderAnchors'    => array(AttributeType::Bool, 'default' => true),
-			'addHeaderAnchorsTo'  => array(AttributeType::String, 'default' => array('h1', 'h2', 'h3')),
+			'addHeaderAnchorsTo'  => array(AttributeType::Mixed, 'default' => array('h1', 'h2', 'h3')),
+			'addTypgraphyStyles'  => array(AttributeType::Bool, 'default' => true),
 			'startingHeaderLevel' => array(AttributeType::Number, 'default' => 1),
 			'parseReferenceTags'  => array(AttributeType::Bool, 'default' => true),
 			'parseShortcodes'     => array(AttributeType::Bool, 'default' => true),

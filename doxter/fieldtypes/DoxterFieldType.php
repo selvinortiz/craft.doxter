@@ -30,10 +30,10 @@ class DoxterFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		$tabs			= $this->getSettings()->getAttribute('enabledSoftTabs') ? 'true' : 'false';
-		$tabSize		= $this->getSettings()->getAttribute('tabSize');
-		$inputId		= craft()->templates->formatInputId($name);
-		$namespacedId	= craft()->templates->namespaceInputId($inputId);
+		$tabs         = $this->getSettings()->getAttribute('enabledSoftTabs') ? 'true' : 'false';
+		$tabSize      = $this->getSettings()->getAttribute('tabSize');
+		$inputId      = craft()->templates->formatInputId($name);
+		$namespacedId = craft()->templates->namespaceInputId($inputId);
 
 		craft()->templates->includeCssResource('doxter/css/doxter.css');
 		craft()->templates->includeJsResource('doxter/js/behave.js');

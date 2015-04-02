@@ -151,6 +151,11 @@ class DoxterShortcodeParser extends DoxterBaseParser
 		$shortcode->params  = $this->getParameters($matches);
 		$shortcode->content = $matches[5];
 
+		if (isset($shortcode->params['raw']))
+		{
+			return str_replace(' raw', '', $matches[0]);
+		}
+
 		return call_user_func_array($this->getCallback($matches[2]), array($shortcode));
 	}
 
@@ -258,8 +263,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 
 		$pattern = $this->getRegex();
 
-		return preg_replace_callback(
-			"/{$pattern}/s", function ($m)
+		return preg_replace_callback("/{$pattern}/s", function ($m)
 		{
 			if ($m[1] == '[' && $m[6] == ']')
 			{
@@ -267,9 +271,7 @@ class DoxterShortcodeParser extends DoxterBaseParser
 			}
 
 			return $m[1].$m[6];
-		},
-			$content
-		);
+		}, $content);
 	}
 
 	/**

@@ -25,11 +25,11 @@ class DoxterService extends BaseApplicationComponent
 		$codeBlockSnippet    = null;
 		$addHeaderAnchors    = true;
 		$addHeaderAnchorsTo  = array('h1', 'h2', 'h3');
+		$addTypographyStyles = true;
 		$startingHeaderLevel = 1;
 		$parseReferenceTags  = true;
 		$parseShortcodes     = true;
-
-		$options = array_merge(craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes(), $options);
+		$options             = array_merge(craft()->plugins->getPlugin('doxter')->getSettings()->getAttributes(), $options);
 
 		extract($options);
 
@@ -52,7 +52,8 @@ class DoxterService extends BaseApplicationComponent
 
 		if ($this->onBeforeMarkdownParsing(compact('source')))
 		{
-			$source = \ParsedownExtra::instance()->text($source);
+
+			$source = DoxterMarkdownParser::instance()->parse($source);
 		}
 
 		if ($this->onBeforeCodeBlockParsing(compact('source', 'codeBlockSnippet')))
@@ -66,6 +67,16 @@ class DoxterService extends BaseApplicationComponent
 			{
 				$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo', 'startingHeaderLevel'));
 			}
+		}
+
+		if ($addTypographyStyles)
+		{
+			if (!function_exists('typogrify'))
+			{
+				require_once(craft()->path->getPluginsPath().'doxter/common/parsedown/Typography.php');
+			}
+
+			$source = \typogrify($source);
 		}
 
 		return TemplateHelper::getRaw($source);

@@ -63,6 +63,9 @@ class DoxterShortcodes
 				'color'  => $code->getParam('color'),
 			);
 
+			craft()->templates->includeJsResource('doxter/js/fitvids.js');
+			craft()->templates->includeJs('$(".doxter-video").fitVids();');
+			
 			return doxter()->renderPluginTemplate('shortcodes/_video', $vars);
 		}
 	}

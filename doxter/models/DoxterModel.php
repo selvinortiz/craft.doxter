@@ -7,6 +7,10 @@ namespace Craft;
  * Class DoxterModel
  *
  * @package Craft
+ * --
+ *
+ * @property string $text
+ * @property string $html
  */
 class DoxterModel extends BaseModel
 {
@@ -25,7 +29,7 @@ class DoxterModel extends BaseModel
 	 */
 	public function __toString()
 	{
-		return (string) $this->getHtml();
+		return (string) $this->getText();
 	}
 
 	/**
@@ -60,11 +64,19 @@ class DoxterModel extends BaseModel
 	 */
 	public function parse(array $options=array())
 	{
-		$html = (array() === $options) ? $this->getAttribute('html') : doxter()->parse($this->getAttribute('text'), $options);
+		$html = $this->html;
+
+		if (empty($options))
+		{
+			$html = doxter()->parse($this->text, $options);
+		}
 
         return TemplateHelper::getRaw(typogrify($html));
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineAttributes()
 	{
 		return array(
