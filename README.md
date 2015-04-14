@@ -1,3 +1,5 @@
+![Patrol](doxter/resources/img/doxter.png)
+
 # Doxter 1.1.0
 Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
 
@@ -136,4 +138,4 @@ Doxter is open source software licensed under the [MIT license][license]
 [parsedown]:https://github.com/erusev/parsedown-extra "Parsedown Extra"
 [changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
 [license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
-[osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"
+[osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/doxter/resources/img/osilogo.png "Open Source Initiative"
