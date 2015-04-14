@@ -8,7 +8,11 @@ namespace Craft;
  */
 class DoxterReferenceTagParser extends DoxterBaseParser
 {
+	/**
+	 * @var DoxterReferenceTagParser
+	 */
 	protected static $instance;
+
 	protected static $openingTag	= '{';
 	protected static $closingTag	= '}';
 	protected static $references	= array(

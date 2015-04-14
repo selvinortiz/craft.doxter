@@ -4,6 +4,67 @@ Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
 
 ## Changes
 
+### 1.1.0
+Public release with updated license and docs
+
+* Adds the `updates` shortcode for elegant styling of update notes
+* Adds responsive `image` and fluid video `vimeo|youtube` shortcodes
+* Adds the ability to place the toolbar at the top, bottom or both #15
+* Improves default shortcodes with the ability to provide custom templates
+* Improves parsing by triggering events before each parsing routine
+* Removes all traces of ace editor which proved inconsistent
+* Updates license, docs, and changelog
+
+### 1.0.9
+Lots of refactoring but remains backwards compatible.
+
+* Adds a dedicated DoxterMarkdownParser for further abstraction
+* Adds support for a raw parameter for all shortcodes to use if verbatim
+* Adds a new addTypographyStyles setting to let Doxter typogrify content
+* Updates to the latest stable version of Parsedown and ParsedownExtra
+* Updates the fitvids.js lib for vimeo|youtube shortcode
+* Updates DoxterModel::__toString() to return the source markdown/text
+* Updates field type name/lable from Doxter Markdown to Doxter
+* Updates tests to target the recent updates
+
+### 1.0.8
+* Adds support for defining a custom starting header level #13
+* Adds a new startingHeaderLevel setting
+* Adds a new parseShortcodes setting
+* Updates settings UI with cleaner field definitions
+* Fixes version number behind in plugin class
+* Removes the need for the parseReferenceTagsRecursively setting
+
+### 1.0.7
+* Adds shortcodes via `doxter.beforeShortcodeParsing` event for optimal loading
+* Adds better return type hinting on DoxterBaseParser::instance()
+* Adds doxter()->registerShortcode() and doxter()->registerShortcodes()
+* Adds support for attributes w/o values in shortcode definition
+* Adds the ability to modify or skip all parsing via event.performAction
+* Adds a complete set of events to allow hooking into before parsing
+* Improves the way shortcodes are registered with Doxter
+* Improves video shortcode by allowing title and byline to be used for vimeo
+* Improves the doxter filter by returning RichTextData if necessary
+* Remove DoxterShortcodeParser::init() when made unnecessary
+
+### 1.0.6
+* Adds DoxterShortcodeParser
+* Adds DoxterShortcodeModel
+* Adds the ability to use and register shortcodes
+* Adds initial implementation of custom shortcodes
+* Adds the ability to render plugin templates if site request
+* Updates version number in plugin to 1.0.6
+* Updates developer URL to user the HTTPS version
+* Updates import statements to avoid wildcard slowness
+
+### 1.0.5
+* Fixes asset selector modal
+* Updates DoxterModel to return html from its __toString method
+
+### 1.0.4
+* Adds support for parsing globals by handle
+* Improves recursive parsing of md with reftags
+
 ### 1.0.3
 * Fixes issue where editor undo/redo behavior was unstable
 * Improves doxter with a complete rewrite of the core

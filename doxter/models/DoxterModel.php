@@ -64,14 +64,12 @@ class DoxterModel extends BaseModel
 	 */
 	public function parse(array $options=array())
 	{
-		$html = $this->html;
-
 		if (!empty($options))
 		{
-			$html = doxter()->parse($this->text, $options);
+			$this->html = doxter()->parse($this->text, $options);
 		}
 
-        return TemplateHelper::getRaw(typogrify($html));
+		return $this->html;
 	}
 
 	/**

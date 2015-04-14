@@ -11,7 +11,7 @@ namespace Craft;
 class DoxterCodeBlockParser extends DoxterBaseParser
 {
 	/**
-	 * @var object
+	 * @var DoxterCodeBlockParser
 	 */
 	protected static $instance;
 

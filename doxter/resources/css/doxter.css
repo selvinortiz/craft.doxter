@@ -22,6 +22,15 @@
 	background-image: url(../img/settings.png);
 }
 
+.doxterBlock {
+	padding-top: 30px;
+	display: block;
+}
+
+.doxterFirst {
+	padding-top: 0;
+}
+
 .doxterSettings .subtle {
 	color: #bbb;
 }
@@ -52,7 +61,7 @@
 	font-family: Craft, sans-serif;
 	padding: 0.25em 0.5em;
 	margin-bottom: .25em;
-	text-align: middle;
+	text-align: center;
 	text-decoration: none;
 	background-color: #eee;
 	border: 1px solid #ddd;

@@ -39,28 +39,38 @@ class DoxterFieldType extends BaseFieldType
 		craft()->templates->includeJsResource('doxter/js/behave.js');
 		craft()->templates->includeJsResource('doxter/js/doxter.js');
 
-		craft()->templates->includeJs("new Behave(
-		{
-			textarea: document.getElementById('{$namespacedId}'),
-			replaceTabs: true,
-			softTabs: {$tabs},
-			tabSize: {$tabSize}
-		});");
+		craft()->templates->includeJs(
+			"new Behave(
+			{
+				textarea: document.getElementById('{$namespacedId}'),
+				replaceTabs: true,
+				softTabs: {$tabs},
+				tabSize: {$tabSize}
+			});"
+		);
 
 		craft()->templates->includeJs("var {$name}DoxterField = new Craft.DoxterFieldType('{$namespacedId}');");
 
-		$field = craft()->templates->renderMacro('_includes/forms', 'textarea', array(
+		$field = craft()->templates->renderMacro(
+			'_includes/forms', 'textarea', array(
 				array(
 					'id'    => $inputId,
 					'name'  => $name,
 					'value' => $value instanceof DoxterModel ? $value->getText() : $value,
 					'class' => 'nicetext code doxter',
-					'rows'  => $this->getSettings()->getAttribute('rows')
+					'rows'  => $this->getSettings()->getAttribute('rows'),
 				)
 			)
 		);
 
-		return craft()->templates->render('doxter/fields/doxter/input', array('field' => $field, 'inputId' => $inputId));
+		return craft()->templates->render(
+			'doxter/fields/doxter/input',
+			array(
+				'field'            => $field,
+				'inputId'          => $inputId,
+				'toolbarPlacement' => $this->getSettings()->getAttribute('toolbarPlacement')
+			)
+		);
 	}
 
 	/**
@@ -69,15 +79,20 @@ class DoxterFieldType extends BaseFieldType
 	public function defineSettings()
 	{
 		return array(
-			'enableSoftTabs'	=> array(AttributeType::Bool,	'maxLength'	=> 3, 'default' => true),
-			'tabSize'			=> array(AttributeType::Number,	'default'	=> 4),
-			'rows'				=> array(AttributeType::Number,	'default'	=> 4)
+			'toolbarPlacement' => array(AttributeType::String, 'default' => 'bottom'),
+			'enableSoftTabs'   => array(AttributeType::Bool, 'maxLength' => 3, 'default' => true),
+			'tabSize'          => array(AttributeType::Number, 'default' => 4),
+			'rows'             => array(AttributeType::Number, 'default' => 4),
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSettingsHtml()
 	{
-		return craft()->templates->render('doxter/fields/doxter/settings',
+		return craft()->templates->render(
+			'doxter/fields/doxter/settings',
 			array(
 				'settings' => $this->getSettings()
 			)

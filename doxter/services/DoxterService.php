@@ -18,10 +18,15 @@ class DoxterService extends BaseApplicationComponent
 	 * @param string $source  The markdown source to parse
 	 * @param array  $options Passed in parameters via a template filter call
 	 *
-	 * @return \Twig_Markup The parsed content flagged as safe to output
+	 * @return \Twig_Markup|DoxterModel The parsed content flagged as safe to output
 	 */
 	public function parse($source, array $options = array())
 	{
+		if ($source instanceof DoxterModel)
+		{
+			return $source;
+		}
+
 		$codeBlockSnippet    = null;
 		$addHeaderAnchors    = true;
 		$addHeaderAnchorsTo  = array('h1', 'h2', 'h3');
@@ -38,7 +43,7 @@ class DoxterService extends BaseApplicationComponent
 		{
 			if ($this->onBeforeReferenceTagParsing(compact('source', 'options')))
 			{
-				$source = DoxterReferenceTagParser::instance()->parse($source);
+				$source = $this->parseReferenceTags($source, $options);
 			}
 		}
 
@@ -46,40 +51,122 @@ class DoxterService extends BaseApplicationComponent
 		{
 			if ($this->onBeforeShortcodeParsing(compact('source')))
 			{
-				$source = DoxterShortcodeParser::instance()->parse($source);
+				$source = $this->parseShortcodes($source);
 			}
 		}
 
 		if ($this->onBeforeMarkdownParsing(compact('source')))
 		{
-
-			$source = DoxterMarkdownParser::instance()->parse($source);
+			$source = $this->parseMarkdown($source);
 		}
 
 		if ($this->onBeforeCodeBlockParsing(compact('source', 'codeBlockSnippet')))
 		{
-			$source = DoxterCodeBlockParser::instance()->parse($source, compact('codeBlockSnippet'));
+			$source = $this->parseCodeBlocks($source, compact('codeBlockSnippet'));
 		}
 
 		if ($addHeaderAnchors)
 		{
 			if ($this->onBeforeHeaderParsing(compact('source', 'addHeaderAnchorsTo')))
 			{
-				$source = DoxterHeaderParser::instance()->parse($source, compact('addHeaderAnchorsTo', 'startingHeaderLevel'));
+				$source = $this->parseHeaders($source, compact('addHeaderAnchorsTo', 'startingHeaderLevel'));
 			}
 		}
 
 		if ($addTypographyStyles)
 		{
-			if (!function_exists('typogrify'))
-			{
-				require_once(craft()->path->getPluginsPath().'doxter/common/parsedown/Typography.php');
-			}
-
-			$source = \typogrify($source);
+			$source = $this->addTypographyStyles($source, $options);
 		}
 
 		return TemplateHelper::getRaw($source);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseMarkdown($source, array $options = array())
+	{
+		return DoxterMarkdownParser::instance()->parse($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseMarkdownInline($source, array $options = array())
+	{
+		return DoxterMarkdownParser::instance()->parseInline($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseReferenceTags($source, array $options = array())
+	{
+		return DoxterReferenceTagParser::instance()->parse($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseHeaders($source, array $options = array())
+	{
+		return DoxterHeaderParser::instance()->parse($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseCodeBlocks($source, array $options = array())
+	{
+		return DoxterCodeBlockParser::instance()->parse($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parseShortcodes($source, array $options = array())
+	{
+		return DoxterShortcodeParser::instance()->parse($source, $options);
+	}
+
+	/**
+	 * @param string $source
+	 *
+	 * @return string
+	 */
+	public function addTypographyStyles($source)
+	{
+		if (!function_exists('typogrify'))
+		{
+			require_once(dirname(__FILE__).'/../common/parsedown/Typography.php');
+		}
+
+		try
+		{
+			return \typogrify($source);
+		}
+		catch (\Exception $e)
+		{
+			return $source;
+		}
 	}
 
 	/**
@@ -109,6 +196,31 @@ class DoxterService extends BaseApplicationComponent
 		}
 
 		return $headers;
+	}
+
+	/**
+	 * Renders a plugin template whether the request is for the control panel or the site
+	 *
+	 * @param string $template
+	 * @param array  $vars
+	 *
+	 * @return string
+	 */
+	public function renderPluginTemplate($template, array $vars = array())
+	{
+		$path     = craft()->path->getTemplatesPath();
+		$rendered = null;
+
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'doxter/templates/');
+
+		if (craft()->templates->doesTemplateExist($template))
+		{
+			$rendered = craft()->templates->render($template, $vars);
+		}
+
+		craft()->path->setTemplatesPath($path);
+
+		return $rendered;
 	}
 
 	/**
@@ -145,32 +257,6 @@ class DoxterService extends BaseApplicationComponent
 		}
 
 		return array_key_exists($key, $data) ? $data[$key] : $default;
-	}
-
-
-	/**
-	 * Renders a plugin template whether the request is for the control panel or the site
-	 *
-	 * @param string $template
-	 * @param array  $vars
-	 *
-	 * @return string
-	 */
-	public function renderPluginTemplate($template, array $vars = array())
-	{
-		$path     = craft()->path->getTemplatesPath();
-		$rendered = null;
-
-		craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'doxter/templates/');
-
-		if (craft()->templates->doesTemplateExist($template))
-		{
-			$rendered = craft()->templates->render($template, $vars);
-		}
-
-		craft()->path->setTemplatesPath($path);
-
-		return $rendered;
 	}
 
 	/**

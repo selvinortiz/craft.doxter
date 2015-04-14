@@ -1,31 +1,35 @@
 {% import "_includes/forms" as forms %}
 
 <hr>
+<p>{{ "Convert Tabs To Spaces?"|t }}</p>
+{{ forms.lightswitch({
+	name: "enableSoftTabs",
+	on:   settings.enableSoftTabs
+}) }}
 
-<p>{{ "Convert Tabs To Spaces?" | t }}</p>
-{{
-	forms.lightswitch({
-		name:		"enableSoftTabs",
-		on:			settings.enableSoftTabs
-	})
-}}
-{{
-	forms.textField({
-		id:				"tabSize",
-		name:			"tabSize",
-		size:			true,
-		label:			"Tab Size"|t,
-		value:			settings.tabSize ? settings.tabSize : 4,
-		errors:			""
-	})
-}}
-{{
-	forms.textField({
-		id:				"rows",
-		name:			"rows",
-		size:			true,
-		label:			"Initial Rows"|t,
-		value:			settings.rows ? settings.rows : 4,
-		errors:			""
-	})
-}}
+{{ forms.textField({
+	id:     "tabSize",
+	name:   "tabSize",
+	size:   5,
+	label:  "Tab Size"|t,
+	value:  settings.tabSize ? settings.tabSize : 4,
+	errors: ""
+}) }}
+
+{{ forms.textField({
+	id:     "rows",
+	name:   "rows",
+	size:   5,
+	label:  "Initial Rows"|t,
+	value:  settings.rows ? settings.rows : 4,
+	errors: ""
+}) }}
+
+{{ forms.selectField({
+	id:       "toolbarPlacement",
+	name:     "toolbarPlacement",
+	label:    "Toolbar Placement"|t,
+	options:  { "bottom": "Bottom"|t, "top": "Top"|t, "both": "Both" },
+	selected: settings.toolbarPlacement,
+	errors:   ""
+}) }}

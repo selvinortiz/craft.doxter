@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.0.9
+ * Doxter @v1.1.0
  *
  * Documentation friendly markdown for Craft
  *
@@ -42,6 +42,7 @@ class DoxterPlugin extends BasePlugin
 		{
 			$shortcodes = array(
 				'image'         => 'Craft\\DoxterShortcodes@image',
+				'updates'       => 'Craft\\DoxterShortcodes@updates',
 				'vimeo:youtube' => 'Craft\\DoxterShortcodes@video',
 			);
 
@@ -88,6 +89,14 @@ class DoxterPlugin extends BasePlugin
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getPluginUrl()
+	{
+		return 'https://selv.in/work/craft/doxter';
+	}
+
+	/**
 	 * Whether a control panel tab should be display for Doxter
 	 *
 	 * @return bool
@@ -123,13 +132,13 @@ class DoxterPlugin extends BasePlugin
 	{
 		return array(
 			'codeBlockSnippet'    => array(AttributeType::String, 'default' => $this->getCodeBlockSnippet()),
-			'addHeaderAnchors'    => array(AttributeType::Bool, 'default' => true),
-			'addHeaderAnchorsTo'  => array(AttributeType::Mixed, 'default' => array('h1', 'h2', 'h3')),
-			'addTypgraphyStyles'  => array(AttributeType::Bool, 'default' => true),
+			'addHeaderAnchors'    => array(AttributeType::Bool,   'default' => true),
+			'addHeaderAnchorsTo'  => array(AttributeType::Mixed,  'default' => array('h1', 'h2', 'h3')),
+			'addTypographyStyles' => array(AttributeType::Bool,   'default' => false),
 			'startingHeaderLevel' => array(AttributeType::Number, 'default' => 1),
-			'parseReferenceTags'  => array(AttributeType::Bool, 'default' => true),
-			'parseShortcodes'     => array(AttributeType::Bool, 'default' => true),
-			'enableCpTab'         => array(AttributeType::Bool, 'default' => false),
+			'parseReferenceTags'  => array(AttributeType::Bool,   'default' => true),
+			'parseShortcodes'     => array(AttributeType::Bool,   'default' => true),
+			'enableCpTab'         => array(AttributeType::Bool,   'default' => false),
 			'pluginAlias'         => array(AttributeType::String, 'default' => 'Doxter')
 		);
 	}

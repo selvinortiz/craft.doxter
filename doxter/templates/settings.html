@@ -1,108 +1,109 @@
 {% import "_includes/forms" as forms %}
 
-{% set name		= craft.doxter.getName(true) %}
-{% set alias	= craft.doxter.getName() %}
-{% set version	= craft.doxter.getVersion() %}
+{% set name    = craft.doxter.getName(true) %}
+{% set alias   = craft.doxter.getName(false) %}
+{% set version = craft.doxter.getVersion() %}
 
 {% block content %}
 	<div class="doxterSettings">
-		<h2>{{ name }} <span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span></h2>
-		<p>
-			<em>{{ name }}</em> is a <strong>markdown</strong> plugin designed to improve the way you write documentation
-		</p>
+		<h2>
+			{{ name }}
+			<span class="subtle">V{{ version }} {% if alias != name %}AKA ({{ alias }}){% endif %}</span>
+		</h2>
 
 		<div class="doxterSection">
-			<h3 class="ico syntax">Parsing Settings</h3>
-			<p>Enable Shortcode Parsing?</p>
-			{{
-				forms.lightswitch({
-					name:	"parseShortcodes",
-					on:		settings.parseShortcodes
-				})
-			}}
-			<p>Enable <a href="http://buildwithcraft.com/docs/reference-tags" title="Reference Tags">Reference Tag</a> Parsing?</p>
-			<p class="subtle">This tells Doxter to parse reference tags</p>
-			{{
-				forms.lightswitch({
-					name:	"parseReferenceTags",
-					on:		settings.parseReferenceTags
-				})
-			}}
-			<p>Enable Header Parsing?</p>
-			<p class="subtle">
-				This tells Doxter to parse headers and make them linkable without requiring the
-				<a href="https://github.com/pixelandtonic/Anchors" title="Anchors Plugin">Anchors Plugin</a>
-			</p>
-			{{
-				forms.lightswitch({
-					name:	"addHeaderAnchors",
-					on:		settings.addHeaderAnchors
-				})
-			}}
-			<p>Headers To Parse</p>
-			<p class="subtle">This tells Doxter what headers to parse if header parsing is enabled.</p>
-			<div class="checkboxGroup">
-				{{
-					forms.checkboxGroup({
-						id:				"addHeaderAnchorsTo",
-						name:			"addHeaderAnchorsTo",
-						label:			"Headers To Parse" | t,
-						instructions:	"Check the headers you want to make linkable by default."|t,
-						options:		{"h1": "H1", "h2": "H2", "h3": "H3", "h4": "H4", "h5": "H5", "h6": "H6"},
-						values:			settings.addHeaderAnchorsTo,
-						errors:			""
-					})
-				}}
+			<h3 class="ico syntax">{{ "Default Parsing Settings"|t }}</h3>
+
+			<div class="doxterBlock doxterFirst">
+				<p>{{ "Enable Typography Styles?"|t }}</p>
+				{{ forms.lightswitch({
+					name: "addTypographyStyles",
+					on:   settings.addTypographyStyles
+				}) }}
 			</div>
-			{{
-				forms.selectField({
-					id:				"startingHeaderLevel",
-					name:			"startingHeaderLevel",
-					label:			"Starting Header Level" | t,
-					instructions:	"Allows you to define what `h1` should out put as, levels will go up from there."|t,
-					options:		{"1": "H1", "2": "H2", "3": "H3", "4": "H4", "5": "H5", "6": "H6"},
-					selected:		settings.startingHeaderLevel,
-					errors:			""
-				})
-			}}
+
+			<div class="doxterBlock">
+				<p>{{ "Enable Shortcode Parsing?"|t }}</p>
+				{{ forms.lightswitch({
+					name: "parseShortcodes",
+					on:   settings.parseShortcodes
+				}) }}
+			</div>
+
+			<div class="doxterBlock">
+				<p>{{ "Enable Reference Tag Parsing?"|t }} </p>
+				{{ forms.lightswitch({
+					name:    "parseReferenceTags",
+					on:        settings.parseReferenceTags
+				}) }}
+			</div>
+
+			<div class="doxterBlock">
+				<p>{{ "Enable Header Parsing?"|t }}</p>
+				{{ forms.lightswitch({
+					name: "addHeaderAnchors",
+					on:   settings.addHeaderAnchors
+				}) }}
+			</div>
+
+			<div class="doxterBlock">
+				<p>{{ "Which headers do you want to make linkable by default?"|t }}</p>
+				<div class="checkboxGroup">
+					{{ forms.checkboxGroup({
+						id:      "addHeaderAnchorsTo",
+						name:    "addHeaderAnchorsTo",
+						options: {"h1": "H1", "h2": "H2", "h3": "H3", "h4": "H4", "h5": "H5", "h6": "H6"},
+						values:  settings.addHeaderAnchorsTo,
+						errors:  ""
+					}) }}
+				</div>
+			</div>
+
+			<div class="doxterBlock">
+				{{ forms.selectField({
+					id:           "startingHeaderLevel",
+					name:         "startingHeaderLevel",
+					label:        "What do you want the starting header level to be?"|t,
+					options:      { "1": "H1", "2": "H2", "3": "H3", "4": "H4", "5": "H5", "6": "H6" },
+					selected:     settings.startingHeaderLevel,
+					errors:       ""
+				}) }}
+			</div>
+
 			<hr>
-			{{
-				forms.textareaField({
-					id:				"codeBlockSnippet",
-					name:			"codeBlockSnippet",
-					class:			"code codeBlockSnippet",
-					rows:			5,
-					label:			"Code Block Snippet",
-					instructions:	"A snippet to wrap fenced code blocks for your syntax highlighter to use.",
-					value:			settings.codeBlockSnippet,
-					error:			""
-				})
-			}}
 
-			<button class="addPrismSnippetBtn btn" data-highlighter="PrismJs">PrismJs</button>
-			<button class="addRainbowSnippetBtn btn" data-highlighter="RainbowJs">RainbowJs</button>
+			<div class="doxterBlock">
+				{{ forms.textareaField({
+					id:           "codeBlockSnippet",
+					name:         "codeBlockSnippet",
+					class:        "code codeBlockSnippet",
+					rows:         3,
+					label:        "Code Block Snippet",
+					instructions: "A snippet to wrap fenced code blocks for your syntax highlighter to use."|t,
+					value:        settings.codeBlockSnippet,
+					error:        ""
+				}) }}
 
+				<button class="addPrismSnippetBtn btn" data-highlighter="PrismJs">PrismJs</button>
+				<button class="addRainbowSnippetBtn btn" data-highlighter="RainbowJs">RainbowJs</button>
+			</div>
 		</div>
 
 		<div class="doxterSection">
-			<h3 class="ico settings">Plugin Settings</h3>
-			<p>Display Plugin Tab?</p>
-			{{
-				forms.lightswitch({
-					name:	"enableCpTab",
-					on:		settings.enableCpTab
-				})
-			}}
-			{{
-				forms.textField({
-					id:				"pluginAlias",
-					name:			"pluginAlias",
-					label:			"Plugin Alias"|t,
-					instructions:	"Allows you to rename <strong>"~name~"</strong> to something more meaningful while retaining its name internally."|t,
-					value:			alias,
-					errors:			""
-				})
-			}}
+			<h3 class="ico settings">{{ "Plugin Settings"|t }}</h3>
+			<p>{{ "Display Plugin Tab?"|t }}</p>
+			{{ forms.lightswitch({
+				name: "enableCpTab",
+				on:   settings.enableCpTab
+			}) }}
+			{{ forms.textField({
+				id:           "pluginAlias",
+				name:         "pluginAlias",
+				label:        "Plugin Alias"|t,
+				instructions: "Allows you to rename <strong>"~name~"</strong> to something more meaningful while retaining its name internally."|t,
+				value:        alias,
+				errors:       ""
+			}) }}
 		</div>
 
 		<div class="doxterSection credits">
@@ -110,7 +111,7 @@
 				&copy; {{ "now" | date("Y") }}
 				<strong>{{ name }} <span class="subtle">({{ version }})</span></strong>
 				<em>by</em>
-				<a href="http://selv.in" title="Selvin Ortiz" target="_blank">Selvin Ortiz</a>
+				<a href="{{ craft.doxter.getDeveloperUrl() }}" title="{{ craft.doxter.getDeveloper() }}" target="_blank">Selvin Ortiz</a>
 			</p>
 		</div>
 	</div>

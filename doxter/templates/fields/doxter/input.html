@@ -1,6 +1,4 @@
-
-<div id="{{ inputId }}Canvas">
-	{{ field }}
+{% set toolbar %}
 	<div class="doxterToolbar">
 		<p>
 			<a id="{{ inputId }}SelectEntry" href="#" title="Entries">|</a>
@@ -11,4 +9,10 @@
 			<a id="{{ inputId }}SelectCategory" href="#" title="Categories"></a>
 		</p>
 	</div>
+{% endset %}
+
+<div id="{{ inputId }}Canvas">
+	{{ toolbarPlacement == "top" or toolbarPlacement == "both" ? toolbar : null }}
+	{{ field }}
+	{{ toolbarPlacement == "bottom" or toolbarPlacement == "both" ? toolbar : null }}
 </div>

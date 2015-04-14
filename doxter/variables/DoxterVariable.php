@@ -35,4 +35,14 @@ class DoxterVariable
 	{
 		return $this->getPlugin()->getDeveloper();
 	}
+
+	public function getPluginUrl()
+	{
+		return $this->getPlugin()->getPluginUrl();
+	}
+
+	public function getDeveloperUrl()
+	{
+		return $this->getPlugin()->getDeveloperUrl();
+	}
 }

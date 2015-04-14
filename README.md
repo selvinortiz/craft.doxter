@@ -1,87 +1,95 @@
-# Doxter 1.0
-Lovingly crafted by [Selvin Ortiz][developer] for [Craft CMS][craft]
+# Doxter 1.1.0
+Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
 
 **Doxter** is a markdown plugin designed to improve the way you write documentation
+
+<a href='https://pledgie.com/campaigns/27296'>
+<img alt='Support Craft Plugin Development By Selvin Ortiz' src='https://pledgie.com/campaigns/27296.png?skin_name=chrome' border='0'>
+</a>
 
 ## Installation
 1. Download the [latest release][release] or clone this repo
 2. Extract the archive and place `doxter` inside your `craft/plugins` directory
 4. Install **Doxter** from the Control Panel **@** `Settings > Plugins`
 5. Adjust plugin settings from the Control Panel **@** `Settings > Plugins > Doxter`
-6. FieldType settings can be adjusted when you create your **Doxter Markdown** field
+6. FieldType settings can be adjusted when you create your **Doxter** field
 
 ## Features
 * [Live Preview][preview] Support
-* [Github Flavored Markdown][gfm] Parsing
-* Creates **Linkable Headers** based on parsing settings
-* Fast and consistent **parsing** based on [Parsedown][parsedown]
+* Fast and consitent [Github Flavored Markdown][gfm] Parsing
+* **Linkable Headers** based on parsing settings
+* Advanced [Reference Tags][refTags] parsing
 * Minimalist editor with custom toolbar for [Reference Tags][refTags]
-* Support for multiple fieldtypes within a single [Entry Type][entrytypes]
-* Support for multiple fieldtypes within [Matrix Fields][matrix]
+* Extensible **Shortcode** parsing support
+* Event driven parsing API for developers
+* Advanced fenced codeblock parsing
+* Support for typography styles for better web typography
+* Support for multiple fieldtypes in single [Entry Type][entrytypes] or  [Matrix Field][matrix]
 * **Unit Tested** with care
 
 ---
 
-## Doxter Markdown
+## Doxter Field
 
-**Doxter Markdown** is a field type that allows you to write and parse markdown content.
+**Doxter** is a field type that allows you to write and parse markdown content.
 
 ## Workflow
 
-1. Create a new **Doxter Markdown** field
+1. Create a new **Doxter** field
 2. Add the new field to a **field layout** in your **entry type**
 3. Write your _markdown_ and save it along with your **entry**
 
-The content will be saved as _plain text_ and returned as a **DoxterModel** when fetched via `craft.entries`
+The content will be saved as _plain text_ and returned as a **DoxterModel**
 
 ## Doxter Model
 
-### getText()
+### text()
 Returns the _plain text_ content stored via the field type
 
 ```twig
-{{ entry.doxterField.getText() }}
+{{ entry.doxterField.text() }}
 ```
 
-It is also worth noting that this is the default behavior when you use you the **Doxter Model** in string context.
+It is also worth noting that this is the default behavior when you use you the **Doxter** in string context.
 
 ```twig
-{# __toString() returns the getText() equivalent #}
+{# __toString() returns the text() equivalent #}
 {{ entry.doxterField }}
 ```
 
-### getHtml()
+### html()
 
-Returns properly formatted **HTML** parsed from the the _plain text_ content stored via the **Doxter Markdown** field type.
-
-```twig
-{{ entry.doxterField.getHtml() }}
-```
-
-### parse()
-Alias of `getHtml()`
+Returns properly formatted **HTML** parsed from the the _plain text_ content stored via the **Doxter** field type.
 
 ```twig
-{{ entry.doxterField.parse() }}
+{{ entry.doxterField.html() }}
 ```
+
+Calling `html()` without any params will use the default parsing option defined in your settings.
+Passing an options object `html({})` gives you full control on a per field basis.
 
 ## Doxter Filter
-The `doxter` filter is still supported and can be used to parse markdown from any source
+The `doxter` filter is still supported and can be used to parse markdown from any source.
 
 ```twig
 {{ "Doxter _markdown_"|doxter }}
+{# or #}
+{{ "Doxter _markdown_"|doxter({}) }}
 ```
 
 ## Options
-The **Doxter Model** `getHtml() | parse()` methods and the **Doxter Filter** accept an array of options to override those you set on the plugin settings screen.
+The **Doxter Model** `html()` method and the **Doxter Filter** accept an array of options to override your defaults.
 
 | Option                | Type      | Default            | Description                                                           |
 |-----------------------|-----------|--------------------|----------------------------------------------------------             |
-| `parseRecursively`    | `boolean` | `true`             | Whether markdown within [reference tags][refTags] should be parsed    |
-| `parseReferenceTags`  | `boolean` | `true`             | Whether [reference tags][refTags] should be parsed                    |
-| `addHeaderAnchors`    | `boolean` | `true`             | Whether to parse headers and add anchors                              |
-| `addHeaderAnchorsTo`  | `array`   | `[h1, h2, h3]`     | Which headers to add anchors to if header parsing is enabled          |
 | `codeBlockSnippet`    | `string`  | _see snippet below_|                                                                       |
+| `addHeaderAnchors`    | `boolean` | `true`             | Whether to parse headers and add anchors for direct linking           |
+| `addHeaderAnchorsTo`  | `array`   | `[h1, h2, h3]`     | Which headers to add anchors to if header parsing is enabled          |
+| `addTypographyStyles` | `bool`    | `false`            | Whether [typography styles](http://kingdesk.com/projects/php-typography/) should be applied |
+| `startingHeaderLevel` | `string`  | `h1`               | Which tag should be use for the initial header discussed on issue #13 |
+| `parseReferenceTags`  | `boolean` | `true`             | Whether [reference tags][refTags] should be parsed                    |
+| `parseShortcodes`     | `boolean` | `true`             | Whether Doxter supported shortcodes should be parsed                  |
+
 
 ## Default Code Block Snippet
 The code block snippet allows you to define how fenced code blocks should be rendered by providing two variables you can use in your snippet.
@@ -93,7 +101,7 @@ The code block snippet allows you to define how fenced code blocks should be ren
 
 | Variable      | Description                                                         | Example          |
 |---------------|---------------------------------------------------------------------|------------------|
-|`languageClass`| The programming/scripting language added in the fenced code block   |`js`, `php`       |
+|`languageClass`| The programming/scripting language added in the fenced code block   | `js`, `php`      |
 |`sourceCode`   | The actual code inside the fenced code block                        | `echo "Code";`   |
 
 ## Changes
@@ -106,8 +114,7 @@ If you have any feedback, questions, or concerns, please reach out to me on twit
 Doxter was lovingly crafted by [Selvin Ortiz][developer] with the help of these third party libraries.
 
 1. [Parsedown][parsedown] _for lightening fast and consistent markdown parsing_
-1. [Parsedown Extra][parsedown] _for lightening fast and consistent markdown extra parsing_
-2. [Ace Editor][ace] _for an enjoyable experience writing markdown_
+2. [Parsedown Extra][parsedown] _for lightening fast and consistent markdown_
 
 _Special thanks to their developer and maintainers!_
 
@@ -130,4 +137,3 @@ Doxter is open source software licensed under the [MIT license][license]
 [changelog]:https://github.com/selvinortiz/craft.doxter/blob/master/CHANGELOG.md "The Changelog"
 [license]:https://raw.github.com/selvinortiz/craft.doxter/master/LICENSE "MIT License"
 [osilogo]:https://github.com/selvinortiz/craft.doxter/raw/master/resources/img/osilogo.png "Open Source Initiative"
-[ace]:http://ace.c9.io "Ace Editor"
