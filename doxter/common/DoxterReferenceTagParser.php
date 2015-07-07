@@ -41,8 +41,7 @@ class DoxterReferenceTagParser extends DoxterBaseParser
 	{
 		$references = implode('|', array_keys(static::$references));
 
-		return 	sprintf('/%s(%s):([a-z0-9\@\.\-\_\/]+):?(.+)?%s/i', static::$openingTag, $references, static::$closingTag);
-
+		return 	sprintf('/%s(%s):([a-z0-9\@\.\-\_\/]+):?(.*?)%s/i', static::$openingTag, $references, static::$closingTag);
 	}
 
 	/**
