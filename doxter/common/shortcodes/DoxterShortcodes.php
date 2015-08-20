@@ -17,6 +17,9 @@ class DoxterShortcodes
 
 		if ($asset && ($image = craft()->elements->getElementById($asset)))
 		{
+			/**
+			 * @var AssetFileModel $image
+			 */
 			$src = $image->getUrl($transform);
 
 			if (empty($alt))
@@ -55,7 +58,7 @@ class DoxterShortcodes
 
 		if (!empty($src))
 		{
-			if (strpos($src, '/'))
+			if (strpos($src, '/') !== false)
 			{
 				$src = array_pop(explode('/', $src));
 			}
@@ -77,6 +80,32 @@ class DoxterShortcodes
 			}
 
 			return doxter()->renderPluginTemplate('shortcodes/_video', $vars);
+		}
+	}
+
+	/**
+	 * @param DoxterShortcodeModel $code
+	 *
+	 * @return string
+	 */
+	public function audio(DoxterShortcodeModel $code)
+	{
+		$src = $code->getParam('src');
+
+		if (!empty($src))
+		{
+			$vars = array(
+				'src'   => $src,
+				'size'  => $code->getParam('size', 'large'),
+				'color' => $code->getParam('color', '00aabb'),
+			);
+
+			if (craft()->templates->doesTemplateExist('_doxter/shortcodes/audio'))
+			{
+				return craft()->templates->render('_doxter/shortcodes/audio', $vars);
+			}
+
+			return doxter()->renderPluginTemplate('shortcodes/_audio', $vars);
 		}
 	}
 
