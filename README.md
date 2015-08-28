@@ -1,4 +1,4 @@
-![Patrol](doxter/resources/img/doxter.png)
+![Doxter](doxter/resources/img/doxter.png)
 
 # Doxter 1.1.0
 Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
