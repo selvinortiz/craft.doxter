@@ -188,6 +188,20 @@ class DoxterShortcodes
 					return 'removed';
 					break;
 				}
+				case 'rename':
+				case 'renames':
+				case 'renamed':
+				{
+					return 'renamed';
+					break;
+				}
+				case 'introduce':
+				case 'introduces':
+				case 'introduced':
+				{
+					return 'renamed';
+					break;
+				}
 				default:
 				{
 					return false;
