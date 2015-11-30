@@ -92,6 +92,14 @@ class DoxterPlugin extends BasePlugin
 	/**
 	 * @return string
 	 */
+	public function getDocumentationUrl()
+	{
+		return 'https://github.com/selvinortiz/craft.doxter';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getPluginUrl()
 	{
 		return 'https://selv.in/work/craft/doxter';
