@@ -13,6 +13,6 @@
 
 <div id="{{ inputId }}Canvas">
 	{{ toolbarPlacement == "top" or toolbarPlacement == "both" ? toolbar : null }}
-	{{ field }}
+	{{ field|raw }}
 	{{ toolbarPlacement == "bottom" or toolbarPlacement == "both" ? toolbar : null }}
 </div>
