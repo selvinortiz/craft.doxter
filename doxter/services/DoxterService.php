@@ -336,8 +336,10 @@ class DoxterService extends BaseApplicationComponent
 	protected function raiseOwnEvent($name, array $params = array())
 	{
 		$event = new Event($this, $params);
+		$name  = explode('\\', $name);
+		$name  = array_pop($name);
 
-		$this->raiseEvent(array_pop(explode('\\', $name)), $event);
+		$this->raiseEvent($name, $event);
 
 		return $event->performAction;
 	}
