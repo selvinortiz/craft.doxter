@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * Doxter @v1.1.1
+ * Doxter @v1.1.2
  *
  * Documentation friendly markdown for Craft
  *
@@ -70,7 +70,12 @@ class DoxterPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '1.1.1';
+		return '1.2.0';
+	}
+
+	public function getSchemaVersion()
+	{
+		return '1.0.0';
 	}
 
 	/**
