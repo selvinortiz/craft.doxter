@@ -92,6 +92,7 @@ require_once CRAFT_APP_PATH.'tests/TestApplication.php';
 
 new Craft\TestApplication($config);
 
+require_once '../vendor/autoload.php';
 /**
  * Imports the abstract test case so that all other tests can extend it
  */

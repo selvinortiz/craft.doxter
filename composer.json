@@ -1,0 +1,14 @@
+{
+    "name": "selvinortiz/doxter",
+    "require-dev": {
+        "mockery/mockery": "^0.9.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Selvin Ortiz",
+            "email": "selvin@selvin.co"
+        }
+    ],
+    "require": {}
+}
