@@ -18,7 +18,7 @@ Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
 
 ## Features
 * [Live Preview][preview] Support
-* Fast and consitent [Github Flavored Markdown][gfm] Parsing
+* Fast and consistent [Github Flavored Markdown][gfm] Parsing
 * **Linkable Headers** based on parsing settings
 * Advanced [Reference Tags][refTags] parsing
 * Minimalist editor with custom toolbar for [Reference Tags][refTags]
