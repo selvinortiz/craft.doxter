@@ -8,67 +8,86 @@ namespace Craft;
  */
 class DoxterHeaderParser extends DoxterBaseParser
 {
-	/**
-	 * @var DoxterHeaderParser
-	 */
-	protected static $instance;
+    /**
+     * @var DoxterHeaderParser
+     */
+    protected static $instance;
 
-	/**
-	 * The header level to start output at
-	 * @var int
-	 */
-	protected $startingHeaderLevel;
+    /**
+     * Whether or not anchors should be added
+     *
+     * @var int
+     */
+    protected $addHeaderAnchors;
 
-	/**
-	 * Parses headers and adds anchors to them if necessary
-	 *
-	 * @param string $source  HTML source to search for headers within
-	 * @param array  $options Passed in parsing options
-	 *
-	 * @return string
-	 */
-	public function parse($source, array $options = array())
-	{
-		$addHeaderAnchorsTo  = array('h1', 'h2', 'h3');
-		$startingHeaderLevel = 1;
+    /**
+     * The header level to start output at
+     *
+     * @var int
+     */
+    protected $startingHeaderLevel;
 
-		extract($options);
+    /**
+     * Parses headers and adds anchors to them if necessary
+     *
+     * @param string $source  HTML source to search for headers within
+     * @param array  $options Passed in parsing options
+     *
+     * @return string
+     */
+    public function parse($source, array $options = array())
+    {
+        $addHeaderAnchors    = null;
+        $addHeaderAnchorsTo  = array('h1', 'h2', 'h3');
+        $startingHeaderLevel = 1;
 
-		if (!is_array($addHeaderAnchorsTo))
-		{
-			$addHeaderAnchorsTo = doxter()->getHeadersToParse($addHeaderAnchorsTo);
-		}
+        extract($options);
 
-		$this->startingHeaderLevel = $startingHeaderLevel;
 
-		$headers = implode('|', array_map('trim', $addHeaderAnchorsTo));
-		$pattern = sprintf('/<(?<tag>%s)>(?<text>.*?)<\/(%s)>/i', $headers, $headers);
-		$source  = preg_replace_callback($pattern, array($this, 'handleMatch'), $source);
+        if ($addHeaderAnchors) {
+            if (!is_array($addHeaderAnchorsTo)) {
+                $addHeaderAnchorsTo = doxter()->getHeadersToParse($addHeaderAnchorsTo);
+            }
 
-		return $source;
-	}
+            $headers = implode('|', array_map('trim', $addHeaderAnchorsTo));
+        } else {
+            $headers = 'h1|h2|h3|h4|h5|h6';
+        }
 
-	/**
-	 * Uses the matched headers to create an anchor for them
-	 *
-	 * @param array $matches
-	 *
-	 * @return string
-	 */
-	public function handleMatch(array $matches = array())
-	{
-		$tag   = $matches['tag'];
-		$text  = $matches['text'];
-		$slug  = ElementHelper::createSlug($text);
-		$clean = strip_tags($text);
+        $this->addHeaderAnchors    = $addHeaderAnchors;
+        $this->startingHeaderLevel = $startingHeaderLevel;
 
-		$currentHeaderLevel  = (int) substr($tag, 1, 1);
+        $pattern = sprintf('/<(?<tag>%s)>(?<text>.*?)<\/(%s)>/i', $headers, $headers);
+        $source  = preg_replace_callback($pattern, array($this, 'handleMatch'), $source);
 
-		if ($this->startingHeaderLevel)
-		{
-			$tag = sprintf('h%s', min(6, $currentHeaderLevel + ($this->startingHeaderLevel - 1)));
-		}
+        return $source;
+    }
 
-		return "<{$tag} id=\"{$slug}\">{$text} <a class=\"anchor\" href=\"#{$slug}\" title=\"{$clean}\">#</a></{$tag}>";
-	}
+    /**
+     * Uses the matched headers to modify level and create an anchor for them
+     *
+     * @param array $matches
+     *
+     * @return string
+     */
+    public function handleMatch(array $matches = array())
+    {
+        $tag  = $matches['tag'];
+        $text = $matches['text'];
+
+        $currentHeaderLevel = (int)substr($tag, 1, 1);
+
+        if ($this->startingHeaderLevel) {
+            $tag = sprintf('h%s', min(6, $currentHeaderLevel + ($this->startingHeaderLevel - 1)));
+        }
+
+        if ($this->addHeaderAnchors) {
+            $slug  = ElementHelper::createSlug($text);
+            $clean = strip_tags($text);
+
+            return "<{$tag} id=\"{$slug}\">{$text} <a class=\"anchor\" href=\"#{$slug}\" title=\"{$clean}\">#</a></{$tag}>";
+        }
+
+        return "<{$tag}>{$text}</{$tag}>";
+    }
 }

@@ -1,8 +1,11 @@
 {
     "name": "selvinortiz/doxter",
     "require-dev": {
-        "mockery/mockery": "^0.9.4"
+        "mockery/mockery": "^0.9.4",
+        "phpunit/phpunit": "^4.8"
     },
+    "description": "Documentation friendly markdown for Craft",
+    "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
         {
@@ -10,5 +13,5 @@
             "email": "selvin@selvin.co"
         }
     ],
-    "require": {}
+    "type": "craft-plugin"
 }

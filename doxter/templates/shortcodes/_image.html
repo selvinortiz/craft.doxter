@@ -1,10 +1,10 @@
 {%- set image %}<img src="{{ src }}" alt="{{ alt }}" class="{{ class }}" />{% endset -%}
 {%- if wrapper is defined -%}
 	{% spaceless %}
-	<{{ wrapper }}>
+		<{{ wrapper }}>
 		{{ image }}
 		{{ content is defined ? content : null }}
-	</{{ wrapper }}>
+		</{{ wrapper }}>
 	{% endspaceless %}
 {% else %}
 	{{- image -}}

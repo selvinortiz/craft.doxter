@@ -10,7 +10,6 @@
 	processIsolation="false"
 	stopOnFailure="false"
 	syntaxCheck="true"
-	strict="false"
 
 	bootstrap="bootstrap.php">
 

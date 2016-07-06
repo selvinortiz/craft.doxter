@@ -65,7 +65,7 @@
 					name:         "startingHeaderLevel",
 					label:        "What do you want the starting header level to be?"|t,
 					options:      { "1": "H1", "2": "H2", "3": "H3", "4": "H4", "5": "H5", "6": "H6" },
-					selected:     settings.startingHeaderLevel,
+					value:        settings.startingHeaderLevel,
 					errors:       ""
 				}) }}
 			</div>
@@ -111,7 +111,8 @@
 				&copy; {{ "now" | date("Y") }}
 				<strong>{{ name }} <span class="subtle">({{ version }})</span></strong>
 				<em>by</em>
-				<a href="{{ craft.doxter.getDeveloperUrl() }}" title="{{ craft.doxter.getDeveloper() }}" target="_blank">Selvin Ortiz</a>
+				<a href="{{ craft.doxter.getDeveloperUrl() }}" title="{{ craft.doxter.getDeveloper() }}"
+				   target="_blank">Selvin Ortiz</a>
 			</p>
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 ![Doxter](doxter/resources/img/doxter.png)
 
-# Doxter 1.X
+# Doxter
 Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
 
 **Doxter** is a markdown plugin designed to improve the way you write documentation

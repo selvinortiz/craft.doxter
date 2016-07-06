@@ -1,0 +1,46 @@
+[
+  {
+    "version": "1.3.0",
+    "downloadUrl": "https://github.com/selvinortiz/craft.doxter/archive/v1.3.0.zip",
+    "date": "2016-07-05T12:30:00-06:00",
+    "notes": [
+      "# PSR-2 and Improvements",
+      "[Fixed] Fixed issue where `startingHeaderLevel` was not reflected in settings",
+      "[Fixed] Fixed issue where `startingHeaderLevel` was not applied unless `addHeaderAnchors` was `true`",
+      "[Updated] Updated to the latest version of the external markdown parser",
+      "[Updated] Updated the codebase to be more in line with PSR-2 and new Craft coding style"
+    ]
+  },
+  {
+    "version": "1.2.0",
+    "downloadUrl": "https://github.com/selvinortiz/craft.doxter/archive/v1.2.0.zip",
+    "date": "2016-04-13T12:30:00-06:00",
+    "notes": [
+      "# Compatibility & Improvements",
+      "[Updated] Updated several parts of the codebase to be compatible with Craft 2.5+ and PHP 7+."
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "downloadUrl": "https://github.com/selvinortiz/craft.doxter/archive/v1.1.0.zip",
+    "date": "2015-08-28T12:30:00-06:00",
+    "notes": [
+      "# Stable & Feature Complete",
+      "[Added] Added the `updates` shortcode for elegant styling of update notes",
+      "[Added] Added responsive `image` and fluid video `vimeo|youtube` shortcodes",
+      "[Added] Added the ability to place the toolbar at the top, bottom or both #15",
+      "[Updated] Updated default shortcodes with the ability to provide custom templates",
+      "[Updated] Updated parsing by triggering events before each parsing routine",
+      "[Updated] Updated license, docs, and changelog",
+      "[Removed] Removed all traces of ace editor which proved inconsistent"
+    ]
+  },
+  {
+    "version": "1.0.3",
+    "downloadUrl": "https://github.com/selvinortiz/craft.doxter/archive/v1.0.3.zip",
+    "date": "2014-09-23T12:30:00-06:00",
+    "notes": [
+      "# Public Beta"
+    ]
+  }
+]
