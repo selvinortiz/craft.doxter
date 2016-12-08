@@ -62,20 +62,20 @@
         this.addListener(this.$selectGlobalButton, 'click', 'createGlobalSetSelectorModal');
       },
 
-      createSelectorModal: function (type) {
+      createSelectorModal: function (type, event, property) {
         var self = this;
         Craft.createElementSelectorModal(type,
           {
             id      : this.id + 'Select' + type + 'Modal',
             onSelect: function (elements) {
-              var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
+              var tags = self.createReferenceTags(type.toLowerCase(), elements, property);
               self.writeToEditor(tags);
             }
           });
       },
 
       createEntrySelectorModal: function (e) {
-        this.createSelectorModal('Entry', e);
+        this.createSelectorModal('Entry', e, 'link');
         e.preventDefault();
       },
 
@@ -92,7 +92,7 @@
             multiSelect: false,
             criteria   : {kind: 'image'},
             onSelect   : function (elements) {
-              var tags = self.createReferenceTags('asset', elements, 'image');
+              var tags = self.createReferenceTags('asset', elements, 'img');
               self.writeToEditor(tags);
             }
           });
@@ -115,18 +115,40 @@
       },
 
       writeToEditor: function (text) {
-        prompt('Copy Reference Tag', text);
+        this.insertAtCursor(this.$textarea.get(0), text);
+        this.$textarea.focus();
       },
 
-      createReferenceTags: function (type, elements) {
+      createReferenceTags: function (type, elements, property) {
         var i = 0, tags = "", tag;
 
         for (; i < elements.length; i++) {
-          tag = type.toLowerCase() + ":" + elements[i].id;
+          tag = type.toLowerCase() + ":" + elements[i].id + (property? ":" + property : '');
           tags = tags + "{" + tag + "}"
         }
 
         return tags;
+      },
+
+      insertAtCursor: function (myField, myValue) {
+        //IE support
+        if (document.selection) {
+          myField.focus();
+          sel = document.selection.createRange();
+          sel.text = myValue;
+        }
+        //MOZILLA and others
+        else if (myField.selectionStart || myField.selectionStart == '0') {
+          var startPos = myField.selectionStart;
+          var endPos = myField.selectionEnd;
+          myField.value = myField.value.substring(0, startPos)
+            + myValue
+            + myField.value.substring(endPos, myField.value.length);
+          myField.selectionStart = startPos + myValue.length;
+          myField.selectionEnd = startPos + myValue.length;
+        } else {
+          myField.value += myValue;
+        }
       }
     });
 
