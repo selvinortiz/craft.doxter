@@ -131,8 +131,8 @@
       },
 
       insertAtCursor: function (myField, myValue) {
-        // Chrome support
-        if (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())) {
+        // Chrome/Safari support
+        if (/applewebkit/.test(navigator.userAgent.toLowerCase())) {
           myField.focus();
           document.execCommand('insertText', false, myValue);
         } else if (document.selection) {
@@ -141,11 +141,17 @@
           sel = document.selection.createRange();
           sel.text = myValue;
         } else {
-        // MOZILLA and others
+        // Firefox and others
+          var selection = {start: myField.selectionStart, end: myField.selectionEnd};
           var str = myField.value.substr(0, myField.selectionStart)
               + myValue + myField.value.substr(myField.selectionEnd);
 
           myField.value = str;
+          myField.focus();
+
+          // Place the cursor at the end of what we just inserted
+          myField.selectionStart = selection.start + myValue.length;
+          myField.selectionEnd = selection.start + myValue.length;
         }
       }
     });
