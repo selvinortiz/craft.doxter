@@ -131,23 +131,21 @@
       },
 
       insertAtCursor: function (myField, myValue) {
-        //IE support
-        if (document.selection) {
+        // Chrome support
+        if (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())) {
+          myField.focus();
+          document.execCommand('insertText', false, myValue);
+        } else if (document.selection) {
+        // IE Support
           myField.focus();
           sel = document.selection.createRange();
           sel.text = myValue;
-        }
-        //MOZILLA and others
-        else if (myField.selectionStart || myField.selectionStart == '0') {
-          var startPos = myField.selectionStart;
-          var endPos = myField.selectionEnd;
-          myField.value = myField.value.substring(0, startPos)
-            + myValue
-            + myField.value.substring(endPos, myField.value.length);
-          myField.selectionStart = startPos + myValue.length;
-          myField.selectionEnd = startPos + myValue.length;
         } else {
-          myField.value += myValue;
+        // MOZILLA and others
+          var str = myField.value.substr(0, myField.selectionStart)
+              + myValue + myField.value.substr(myField.selectionEnd);
+
+          myField.value = str;
         }
       }
     });
