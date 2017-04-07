@@ -62,20 +62,20 @@
         this.addListener(this.$selectGlobalButton, 'click', 'createGlobalSetSelectorModal');
       },
 
-      createSelectorModal: function (type) {
+      createSelectorModal: function (type, event, property) {
         var self = this;
         Craft.createElementSelectorModal(type,
           {
             id      : this.id + 'Select' + type + 'Modal',
             onSelect: function (elements) {
-              var tags = self.createReferenceTags(type.toLowerCase(), elements, 'image');
+              var tags = self.createReferenceTags(type.toLowerCase(), elements, property);
               self.writeToEditor(tags);
             }
           });
       },
 
       createEntrySelectorModal: function (e) {
-        this.createSelectorModal('Entry', e);
+        this.createSelectorModal('Entry', e, 'link');
         e.preventDefault();
       },
 
@@ -92,7 +92,7 @@
             multiSelect: false,
             criteria   : {kind: 'image'},
             onSelect   : function (elements) {
-              var tags = self.createReferenceTags('asset', elements, 'image');
+              var tags = self.createReferenceTags('asset', elements, 'img');
               self.writeToEditor(tags);
             }
           });
@@ -115,18 +115,44 @@
       },
 
       writeToEditor: function (text) {
-        prompt('Copy Reference Tag', text);
+        this.insertAtCursor(this.$textarea.get(0), text);
+        this.$textarea.focus();
       },
 
-      createReferenceTags: function (type, elements) {
+      createReferenceTags: function (type, elements, property) {
         var i = 0, tags = "", tag;
 
         for (; i < elements.length; i++) {
-          tag = type.toLowerCase() + ":" + elements[i].id;
+          tag = type.toLowerCase() + ":" + elements[i].id + (property? ":" + property : '');
           tags = tags + "{" + tag + "}"
         }
 
         return tags;
+      },
+
+      insertAtCursor: function (myField, myValue) {
+        // Chrome/Safari support
+        if (/applewebkit/.test(navigator.userAgent.toLowerCase())) {
+          myField.focus();
+          document.execCommand('insertText', false, myValue);
+        } else if (document.selection) {
+        // IE Support
+          myField.focus();
+          sel = document.selection.createRange();
+          sel.text = myValue;
+        } else {
+        // Firefox and others
+          var selection = {start: myField.selectionStart, end: myField.selectionEnd};
+          var str = myField.value.substr(0, myField.selectionStart)
+              + myValue + myField.value.substr(myField.selectionEnd);
+
+          myField.value = str;
+          myField.focus();
+
+          // Place the cursor at the end of what we just inserted
+          myField.selectionStart = selection.start + myValue.length;
+          myField.selectionEnd = selection.start + myValue.length;
+        }
       }
     });
 
