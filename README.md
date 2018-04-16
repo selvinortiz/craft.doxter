@@ -5,6 +5,8 @@ Lovingly crafted by [Selvin Ortiz](https://selv.in) for [Craft CMS][craft]
 
 **Doxter** is a markdown plugin designed to improve the way you write documentation
 
+For the Craft 3 version of this plugin, see [craft-plugin-doxter](https://github.com/selvinortiz/craft-plugin-doxter).
+
 <a href='https://pledgie.com/campaigns/27296'>
 <img alt='Support Craft Plugin Development By Selvin Ortiz' src='https://pledgie.com/campaigns/27296.png?skin_name=chrome' border='0'>
 </a>
